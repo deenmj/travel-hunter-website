@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/client'
 import type { Destination, BlogPost, Video, Profile } from '@/lib/types'
 
 // Placeholder data for when Supabase is not configured
@@ -136,7 +136,7 @@ const PLACEHOLDER_BLOG_POSTS: BlogPost[] = [
 // Destination queries
 export async function getDestinations(category?: string): Promise<Destination[]> {
   try {
-    const supabase = await createClient()
+    const supabase = createClient()
 
     let query = supabase.from('destinations').select('*')
 
@@ -163,7 +163,7 @@ export async function getDestinations(category?: string): Promise<Destination[]>
 }
 
 export async function getDestinationBySlug(slug: string): Promise<Destination | null> {
-  const supabase = await createClient()
+  const supabase = createClient()
 
   const { data, error } = await supabase
     .from('destinations')
@@ -181,7 +181,7 @@ export async function getDestinationBySlug(slug: string): Promise<Destination | 
 
 export async function getFeaturedDestinations(limit: number = 4): Promise<Destination[]> {
   try {
-    const supabase = await createClient()
+    const supabase = createClient()
 
     const { data, error } = await supabase
       .from('destinations')
@@ -204,7 +204,7 @@ export async function getFeaturedDestinations(limit: number = 4): Promise<Destin
 // Blog post queries
 export async function getBlogPosts(): Promise<BlogPost[]> {
   try {
-    const supabase = await createClient()
+    const supabase = createClient()
 
     const { data, error } = await supabase
       .from('blog_posts')
@@ -224,7 +224,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
 }
 
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
-  const supabase = await createClient()
+  const supabase = createClient()
 
   const { data, error } = await supabase
     .from('blog_posts')
@@ -242,7 +242,7 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
 
 export async function getLatestBlogPosts(limit: number = 4): Promise<BlogPost[]> {
   try {
-    const supabase = await createClient()
+    const supabase = createClient()
 
     const { data, error } = await supabase
       .from('blog_posts')
@@ -264,7 +264,7 @@ export async function getLatestBlogPosts(limit: number = 4): Promise<BlogPost[]>
 
 // Video queries
 export async function getVideos(): Promise<Video[]> {
-  const supabase = await createClient()
+  const supabase = createClient()
 
   const { data, error } = await supabase
     .from('videos')
@@ -280,7 +280,7 @@ export async function getVideos(): Promise<Video[]> {
 }
 
 export async function getVideoBySlug(slug: string): Promise<Video | null> {
-  const supabase = await createClient()
+  const supabase = createClient()
 
   const { data, error } = await supabase
     .from('videos')
@@ -298,7 +298,7 @@ export async function getVideoBySlug(slug: string): Promise<Video | null> {
 
 export async function getLatestVideos(limit: number = 6): Promise<Video[]> {
   try {
-    const supabase = await createClient()
+    const supabase = createClient()
 
     const { data, error } = await supabase
       .from('videos')
@@ -319,7 +319,7 @@ export async function getLatestVideos(limit: number = 6): Promise<Video[]> {
 }
 
 export async function getVideosByDestination(destinationId: string): Promise<Video[]> {
-  const supabase = await createClient()
+  const supabase = createClient()
 
   const { data, error } = await supabase
     .from('videos')
@@ -337,7 +337,7 @@ export async function getVideosByDestination(destinationId: string): Promise<Vid
 
 // Profile queries
 export async function getUserProfile(): Promise<Profile | null> {
-  const supabase = await createClient()
+  const supabase = createClient()
 
   const {
     data: { user },
@@ -362,7 +362,7 @@ export async function getUserProfile(): Promise<Profile | null> {
 }
 
 export async function getProfileById(id: string): Promise<Profile | null> {
-  const supabase = await createClient()
+  const supabase = createClient()
 
   const { data, error } = await supabase
     .from('profiles')
