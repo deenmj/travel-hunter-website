@@ -7,12 +7,10 @@ export function HeroSection() {
   return (
     <section className="relative w-full flex items-center justify-center overflow-hidden">
       {/* Background Image */}
-      <Image
-        src="https://images.unsplash.com/photo-1546708453-15743b0d268d?q=80&w=2000&auto=format&fit=crop"
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Nine_Arches_Bridge_in_Ella.jpg"
         alt="Nine Arch Bridge, Ella, Sri Lanka"
-        fill
-        priority
-        className="object-cover object-center z-0"
+        className="absolute inset-0 w-full h-full object-cover object-center z-0"
       />
       
       {/* Gradient Overlay for Text Readability */}

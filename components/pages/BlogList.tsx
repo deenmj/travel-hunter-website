@@ -47,12 +47,10 @@ export function BlogList() {
               <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-full flex flex-col">
                 {post.featured_image && (
                   <div className="relative h-48 w-full bg-gray-200 dark:bg-slate-700 overflow-hidden flex-shrink-0">
-                    <Image
+                    <img
                       src={post.featured_image}
                       alt={post.title}
-                      fill
-                      className="object-cover hover:scale-105 transition-transform duration-300"
-                      sizes="(max-width: 640px) 100vw, 50vw"
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                     />
                   </div>
                 )}

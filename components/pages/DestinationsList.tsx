@@ -82,12 +82,10 @@ export function DestinationsList() {
               <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-full flex flex-col">
                 <div className="relative h-48 w-full bg-gray-200 dark:bg-slate-700 overflow-hidden flex-shrink-0">
                   {destination.featured_image ? (
-                    <Image
+                    <img
                       src={destination.featured_image}
                       alt={destination.name}
-                      fill
-                      className="object-cover hover:scale-105 transition-transform duration-300"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-emerald-400 to-blue-500 flex items-center justify-center">

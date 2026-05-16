@@ -4,7 +4,18 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
+    domains: ['upload.wikimedia.org', 'images.unsplash.com'],
     unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'upload.wikimedia.org',
+      },
+    ],
   },
 }
 
