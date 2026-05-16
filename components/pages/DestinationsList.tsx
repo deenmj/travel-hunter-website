@@ -34,7 +34,7 @@ export function DestinationsList() {
   }, [selectedCategory, destinations])
 
   return (
-    <section className="max-w-6xl mx-auto px-4 py-8">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
           All Destinations
