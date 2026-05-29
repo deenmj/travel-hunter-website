@@ -39,12 +39,14 @@ export const ROUTES = {
   VIDEOS: '/videos',
   BLOG: '/blog',
   ABOUT: '/about',
-  LOGIN: '/auth/login',
+  LOGIN: '/admin/login',
   ADMIN: '/admin',
   ADMIN_DASHBOARD: '/admin/dashboard',
   ADMIN_DESTINATIONS: '/admin/destinations',
-  ADMIN_BLOG: '/admin/blog',
+  ADMIN_BLOG: '/admin/blogs',
   ADMIN_VIDEOS: '/admin/videos',
+  ADMIN_MEDIA: '/admin/media',
+  ADMIN_SETTINGS: '/admin/settings',
 } as const
 
 // Responsive breakpoints (Tailwind CSS)

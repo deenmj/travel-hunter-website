@@ -1,9 +1,19 @@
 import { type NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
+import { updateSession } from '@/lib/supabase/proxy'
 
 export async function middleware(request: NextRequest) {
-  // Allow all requests to pass through
-  // Auth will be handled at route/component level when env vars are set
+  // Protect /admin routes (except /admin/login)
+  if (
+    request.nextUrl.pathname.startsWith('/admin') &&
+    !request.nextUrl.pathname.startsWith('/admin/login')
+  ) {
+    // Use updateSession to refresh cookies and check auth
+    const response = await updateSession(request)
+    return response
+  }
+
+  // Allow all other requests to pass through
   return NextResponse.next()
 }
 

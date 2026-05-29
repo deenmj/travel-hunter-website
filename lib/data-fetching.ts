@@ -329,19 +329,24 @@ export async function getLatestBlogPosts(limit: number = 4): Promise<BlogPost[]>
 
 // Video queries
 export async function getVideos(): Promise<Video[]> {
-  const supabase = createClient()
+  try {
+    const supabase = createClient()
 
-  const { data, error } = await supabase
-    .from('videos')
-    .select('*')
-    .order('created_at', { ascending: false })
+    const { data, error } = await supabase
+      .from('videos')
+      .select('*')
+      .order('created_at', { ascending: false })
 
-  if (error) {
-    console.error('Error fetching videos:', error)
-    return []
+    if (error || !data) {
+      console.error('Error fetching videos, using placeholder:', error)
+      return PLACEHOLDER_VIDEOS
+    }
+
+    return data
+  } catch (error) {
+    console.error('Exception fetching videos, using placeholder:', error)
+    return PLACEHOLDER_VIDEOS
   }
-
-  return data || []
 }
 
 export async function getVideoBySlug(slug: string): Promise<Video | null> {
