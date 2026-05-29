@@ -8,6 +8,7 @@ import { getVideoById, updateVideo } from '@/lib/admin-actions'
 import { getDestinations } from '@/lib/data-fetching'
 import { ROUTES } from '@/lib/constants'
 import type { Video as VideoType, Destination } from '@/lib/types'
+import ImageUpload from '@/components/admin/ImageUpload'
 
 export default function EditVideoPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -213,20 +214,13 @@ export default function EditVideoPage({ params }: { params: Promise<{ id: string
         </div>
 
         {/* Thumbnail Preview Card */}
-        {form.thumbnail && (
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700/50 p-6 space-y-4">
-            <h2 className="text-base font-semibold text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-3">
-              Thumbnail Preview
-            </h2>
-            <div className="relative aspect-video rounded-xl overflow-hidden max-w-md bg-slate-100 border border-slate-200">
-              <img
-                src={form.thumbnail}
-                alt="Thumbnail"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-        )}
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700/50 p-6">
+          <ImageUpload
+            value={form.thumbnail}
+            onChange={(url) => setForm((prev) => ({ ...prev, thumbnail: url }))}
+            label="Video Thumbnail (Auto-Fetched from YouTube, or Custom Upload/URL)"
+          />
+        </div>
 
         {/* Submit */}
         <div className="flex items-center gap-3 justify-end pt-2">

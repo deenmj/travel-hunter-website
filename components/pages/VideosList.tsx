@@ -50,7 +50,7 @@ export function VideosList() {
               <div className="group cursor-pointer">
                 <div className="relative h-48 w-full bg-gray-200 dark:bg-slate-700 rounded-lg overflow-hidden mb-4">
                   <img
-                    src={getYouTubeThumbnail(video.youtube_id)}
+                    src={video.thumbnail || getYouTubeThumbnail(video.youtube_id)}
                     alt={video.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     loading="lazy"

@@ -7,6 +7,7 @@ import { ArrowLeft, Save } from 'lucide-react'
 import { getBlogPostById, updateBlogPost } from '@/lib/admin-actions'
 import { ROUTES } from '@/lib/constants'
 import type { BlogPost } from '@/lib/types'
+import ImageUpload from '@/components/admin/ImageUpload'
 
 export default function EditBlogPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -182,27 +183,11 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
           </h2>
 
           {/* Featured Image */}
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-              Featured Image URL
-            </label>
-            <input
-              type="url"
-              value={form.featured_image}
-              onChange={(e) => setForm((prev) => ({ ...prev, featured_image: e.target.value }))}
-              className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
-            />
-            {form.featured_image && (
-              <div className="mt-2 relative w-full h-48 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800">
-                <img
-                  src={form.featured_image}
-                  alt="Preview"
-                  className="w-full h-full object-cover"
-                  onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')}
-                />
-              </div>
-            )}
-          </div>
+          <ImageUpload
+            value={form.featured_image}
+            onChange={(url) => setForm((prev) => ({ ...prev, featured_image: url }))}
+            label="Featured Image"
+          />
 
           {/* YouTube Video option */}
           <div className="space-y-2">

@@ -22,17 +22,17 @@ export function HeroSection() {
           Authentic Sri Lanka
         </span>
         
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white mb-4 drop-shadow-lg max-w-4xl leading-tight">
-          Discover the Heart of <span className="text-emerald-400">Sri Lanka</span>
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-white mb-4 drop-shadow-lg max-w-4xl leading-tight">
+          Discover the Heart of <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-500 bg-clip-text text-transparent">Sri Lanka</span>
         </h1>
 
-        <p className="text-base sm:text-lg md:text-xl text-gray-200 mb-8 max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium">
+        <p className="text-base sm:text-lg md:text-xl text-slate-100/90 mb-8 max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium">
           Explore hidden waterfalls, pristine beaches, and ancient ruins curated by local experts who know the island best.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center w-full max-w-md mx-auto">
           <Link href={ROUTES.DESTINATIONS} className="w-full sm:w-auto">
-            <Button className="h-12 sm:h-14 px-6 sm:px-8 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-full w-full shadow-lg shadow-emerald-900/50 transition-all hover:scale-105 text-base sm:text-lg">
+            <Button className="h-12 sm:h-14 px-8 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-bold rounded-full w-full shadow-lg shadow-emerald-500/25 transition-all hover:scale-105 active:scale-95 text-base sm:text-lg border-0">
               Start Exploring
             </Button>
           </Link>
@@ -40,7 +40,7 @@ export function HeroSection() {
           <Link href={ROUTES.VIDEOS} className="w-full sm:w-auto">
             <Button
               variant="outline"
-              className="h-12 sm:h-14 px-6 sm:px-8 border-2 border-white/70 text-white hover:bg-white/10 hover:border-white font-bold rounded-full w-full backdrop-blur-sm transition-all text-base sm:text-lg bg-transparent"
+              className="h-12 sm:h-14 px-8 border border-white/40 text-white hover:bg-white/10 hover:border-white/80 font-bold rounded-full w-full backdrop-blur-md transition-all hover:scale-105 active:scale-95 text-base sm:text-lg bg-white/5"
             >
               Watch Stories
             </Button>

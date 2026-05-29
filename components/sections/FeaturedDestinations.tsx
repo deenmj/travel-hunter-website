@@ -12,57 +12,63 @@ export async function FeaturedDestinations() {
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
         <div>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+          <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Recommended</span>
+          <h2 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white mt-1 mb-2">
             Featured Destinations
           </h2>
-          <p className="text-gray-600 dark:text-gray-400">Discover the most popular places travelers love</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Discover the most popular places travelers love</p>
         </div>
         <Link href={ROUTES.DESTINATIONS}>
-          <Button variant="ghost" className="gap-2">
-            View All <ChevronRight className="w-4 h-4" />
+          <Button variant="outline" className="group h-11 px-5 border-slate-200 dark:border-slate-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/20 hover:text-emerald-600 hover:border-emerald-500/30 rounded-xl transition-all gap-1.5 font-semibold text-sm">
+            View All <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Button>
         </Link>
       </div>
 
       {destinations.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-gray-600 dark:text-gray-400">No destinations found yet.</p>
+        <div className="text-center py-16 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
+          <p className="text-slate-500 dark:text-slate-400 font-medium">No destinations found yet.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {destinations.map((destination) => (
             <Link key={destination.id} href={`${ROUTES.DESTINATIONS}/${destination.slug}`}>
-              <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-full">
-                <div className="relative h-48 w-full bg-gray-200 dark:bg-slate-700 overflow-hidden">
+              <Card className="group overflow-hidden border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:shadow-xl hover:shadow-emerald-500/5 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer h-full flex flex-col">
+                <div className="relative h-56 w-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
                   {destination.featured_image ? (
                     <img
                       src={destination.featured_image}
                       alt={destination.name}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-emerald-400 to-blue-500 flex items-center justify-center">
-                      <span className="text-white text-4xl">📍</span>
+                    <div className="w-full h-full bg-gradient-to-br from-emerald-400 via-teal-500 to-blue-500 flex items-center justify-center">
+                      <span className="text-white text-4xl transform group-hover:scale-110 transition-transform">📍</span>
                     </div>
                   )}
-                  <div className="absolute top-2 right-2">
-                    <span className="inline-block px-3 py-1 bg-emerald-600 text-white text-xs font-semibold rounded-full capitalize">
-                      {destination.category}
+                  <div className="absolute top-3 right-3 z-10">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-900/85 backdrop-blur-md text-white text-[10px] font-bold rounded-full border border-white/10 uppercase tracking-widest shadow-md">
+                      {destination.category === 'visit' ? '🗺️ Visit' : destination.category === 'eat' ? '🍽️ Eat' : '🏨 Stay'}
                     </span>
                   </div>
                 </div>
 
-                <CardContent className="p-4">
-                  <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1 line-clamp-2">
-                    {destination.name}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
-                    {destination.description}
-                  </p>
+                <CardContent className="p-5 flex-1 flex flex-col justify-between">
+                  <div className="space-y-2">
+                    <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-1">
+                      {destination.name}
+                    </h3>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                      {destination.description}
+                    </p>
+                  </div>
                   {destination.location && (
-                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">📍 {destination.location}</p>
+                    <div className="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 font-semibold mt-4">
+                      <span>📍</span>
+                      <span className="truncate">{destination.location}</span>
+                    </div>
                   )}
                 </CardContent>
               </Card>

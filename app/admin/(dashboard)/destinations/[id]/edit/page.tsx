@@ -7,6 +7,7 @@ import { ArrowLeft, Save, Plus, X } from 'lucide-react'
 import { getDestinationById, updateDestination } from '@/lib/admin-actions'
 import { ROUTES, CATEGORY_LABELS } from '@/lib/constants'
 import type { Destination } from '@/lib/types'
+import ImageUpload from '@/components/admin/ImageUpload'
 
 export default function EditDestinationPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
