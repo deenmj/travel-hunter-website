@@ -47,6 +47,11 @@ export default function ImageUpload({ value, onChange, label = 'Featured Image' 
         .upload(filePath, file)
 
       if (uploadError) {
+        if (uploadError.message.toLowerCase().includes('bucket not found')) {
+          throw new Error(
+            'Storage bucket "media" is missing. Run supabase-storage-setup.sql in your Supabase SQL Editor, then try again.',
+          )
+        }
         throw new Error(uploadError.message)
       }
 

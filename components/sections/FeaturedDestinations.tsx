@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { getFeaturedDestinations } from '@/lib/data-fetching'
 import { ROUTES } from '@/lib/constants'
 import { getDestinationThumbnail } from '@/lib/video-utils'
+import { getDestinationHref } from '@/lib/destination-utils'
 
 export async function FeaturedDestinations() {
   const destinations = await getFeaturedDestinations(4)
@@ -47,7 +48,7 @@ export async function FeaturedDestinations() {
             return (
             <Link
               key={destination.id}
-              href={`${ROUTES.DESTINATIONS}/${destination.slug}`}
+              href={getDestinationHref(destination)}
               className={index === 0 ? 'sm:col-span-2 lg:col-span-1' : ''}
             >
               <Card className="group overflow-hidden border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:shadow-2xl hover:shadow-emerald-500/10 hover:-translate-y-2 transition-all duration-300 cursor-pointer h-full flex flex-col">

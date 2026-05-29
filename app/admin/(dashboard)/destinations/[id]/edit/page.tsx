@@ -9,6 +9,7 @@ import { ROUTES, CATEGORY_LABELS } from '@/lib/constants'
 import type { Destination } from '@/lib/types'
 import ImageUpload from '@/components/admin/ImageUpload'
 import VideoInput from '@/components/admin/VideoInput'
+import GalleryInput from '@/components/admin/GalleryInput'
 
 export default function EditDestinationPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -250,6 +251,12 @@ export default function EditDestinationPage({ params }: { params: Promise<{ id: 
               setForm((prev) => ({ ...prev, video_id: youtubeId, video_url: videoUrl }))
             }
             label="Destination Video (Optional)"
+          />
+
+          <GalleryInput
+            value={form.images}
+            onChange={(images) => setForm((prev) => ({ ...prev, images }))}
+            label="Gallery Photos (Optional)"
           />
         </div>
 

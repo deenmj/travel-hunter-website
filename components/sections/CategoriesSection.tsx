@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { getDestinations } from '@/lib/data-fetching'
 import { CATEGORIES, CATEGORY_LABELS, ROUTES } from '@/lib/constants'
 import { getDestinationThumbnail } from '@/lib/video-utils'
+import { getDestinationHref } from '@/lib/destination-utils'
 
 export async function CategoriesSection() {
   const destinations = await getDestinations()
@@ -67,7 +68,7 @@ export async function CategoriesSection() {
                     {items.map((destination) => {
                       const thumbnail = getDestinationThumbnail(destination)
                       return (
-                      <Link key={destination.id} href={`${ROUTES.DESTINATIONS}/${destination.slug}`}>
+                      <Link key={destination.id} href={getDestinationHref(destination)}>
                         <Card className="overflow-hidden border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900/80 hover:bg-white dark:hover:bg-slate-900 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 cursor-pointer rounded-xl group">
                           <CardContent className="p-0 flex items-center gap-3">
                             {thumbnail ? (

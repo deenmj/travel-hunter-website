@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { ensureSlug } from '@/lib/slug'
 
 // ─── Auth helpers ─────────────────────────────────────────────────────────────
 
@@ -43,10 +44,13 @@ export async function createDestination(formData: {
 }) {
   const { supabase, user } = await requireAdmin()
 
+  const slug = ensureSlug(formData.slug, formData.name)
+
   const { data, error } = await supabase
     .from('destinations')
     .insert({
       ...formData,
+      slug,
       created_by: user.id,
     })
     .select()
@@ -79,9 +83,17 @@ export async function updateDestination(
 ) {
   const { supabase } = await requireAdmin()
 
+  const payload = { ...formData, updated_at: new Date().toISOString() }
+  if (formData.name !== undefined) {
+    payload.slug = ensureSlug(formData.slug, formData.name)
+  } else if (formData.slug !== undefined) {
+    const trimmed = formData.slug.trim()
+    if (trimmed) payload.slug = trimmed
+  }
+
   const { data, error } = await supabase
     .from('destinations')
-    .update({ ...formData, updated_at: new Date().toISOString() })
+    .update(payload)
     .eq('id', id)
     .select()
     .single()

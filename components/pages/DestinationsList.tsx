@@ -9,6 +9,7 @@ import { getDestinations } from '@/lib/data-fetching'
 import type { Destination } from '@/lib/types'
 import { CATEGORIES, CATEGORY_LABELS, ROUTES } from '@/lib/constants'
 import { getDestinationThumbnail } from '@/lib/video-utils'
+import { getDestinationHref } from '@/lib/destination-utils'
 
 export function DestinationsList() {
   const [destinations, setDestinations] = useState<Destination[]>([])
@@ -81,7 +82,7 @@ export function DestinationsList() {
           {filteredDestinations.map((destination) => {
             const thumbnail = getDestinationThumbnail(destination)
             return (
-            <Link key={destination.id} href={`${ROUTES.DESTINATIONS}/${destination.slug}`}>
+            <Link key={destination.id} href={getDestinationHref(destination)}>
               <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-full flex flex-col">
                 <div className="relative h-48 w-full bg-gray-200 dark:bg-slate-700 overflow-hidden flex-shrink-0">
                   {thumbnail ? (
