@@ -8,6 +8,7 @@ import { getBlogPostById, updateBlogPost } from '@/lib/admin-actions'
 import { ROUTES } from '@/lib/constants'
 import type { BlogPost } from '@/lib/types'
 import ImageUpload from '@/components/admin/ImageUpload'
+import VideoInput from '@/components/admin/VideoInput'
 
 export default function EditBlogPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -24,6 +25,7 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
     content: '',
     featured_image: '',
     video_id: '',
+    video_url: '',
   })
 
   useEffect(() => {
@@ -37,8 +39,8 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
           excerpt: post.excerpt || '',
           content: post.content || '',
           featured_image: post.featured_image || '',
-          // Add fallback in case video_id is not in the db
-          video_id: (post as any).video_id || '',
+          video_id: post.video_id || '',
+          video_url: post.video_url || '',
         })
       } else {
         setError('Blog post not found')
@@ -58,6 +60,7 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
       excerpt: form.excerpt || undefined,
       featured_image: form.featured_image || undefined,
       video_id: form.video_id || undefined,
+      video_url: form.video_url || undefined,
     }
 
     const result = await updateBlogPost(id, payload)
@@ -189,25 +192,13 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
             label="Featured Image"
           />
 
-          {/* YouTube Video option */}
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-              Optional YouTube Video ID
-            </label>
-            <input
-              type="text"
-              value={form.video_id}
-              onChange={(e) => {
-                let val = e.target.value
-                const match = val.match(
-                  /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-                )
-                if (match) val = match[1]
-                setForm((prev) => ({ ...prev, video_id: val }))
-              }}
-              className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
-            />
-          </div>
+          <VideoInput
+            value={{ youtubeId: form.video_id, videoUrl: form.video_url }}
+            onChange={({ youtubeId, videoUrl }) =>
+              setForm((prev) => ({ ...prev, video_id: youtubeId, video_url: videoUrl }))
+            }
+            label="Optional Video"
+          />
         </div>
 
         {/* Submit */}

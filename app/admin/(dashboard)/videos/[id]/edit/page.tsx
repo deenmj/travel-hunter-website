@@ -9,6 +9,7 @@ import { getDestinations } from '@/lib/data-fetching'
 import { ROUTES } from '@/lib/constants'
 import type { Video as VideoType, Destination } from '@/lib/types'
 import ImageUpload from '@/components/admin/ImageUpload'
+import VideoInput from '@/components/admin/VideoInput'
 
 export default function EditVideoPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -23,6 +24,7 @@ export default function EditVideoPage({ params }: { params: Promise<{ id: string
     title: '',
     slug: '',
     youtube_id: '',
+    video_url: '',
     description: '',
     thumbnail: '',
     destination_id: '',
@@ -43,6 +45,7 @@ export default function EditVideoPage({ params }: { params: Promise<{ id: string
           title: video.title || '',
           slug: video.slug || '',
           youtube_id: video.youtube_id || '',
+          video_url: video.video_url || '',
           description: video.description || '',
           thumbnail: video.thumbnail || '',
           destination_id: video.destination_id || '',
@@ -62,6 +65,8 @@ export default function EditVideoPage({ params }: { params: Promise<{ id: string
 
     const payload = {
       ...form,
+      youtube_id: form.youtube_id || undefined,
+      video_url: form.video_url || undefined,
       description: form.description || undefined,
       thumbnail: form.thumbnail || undefined,
       destination_id: form.destination_id || undefined,
@@ -128,30 +133,20 @@ export default function EditVideoPage({ params }: { params: Promise<{ id: string
             Video details
           </h2>
 
-          {/* YouTube Link / ID */}
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-              YouTube Video ID <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              value={form.youtube_id}
-              onChange={(e) => {
-                let val = e.target.value
-                const match = val.match(
-                  /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-                )
-                if (match) val = match[1]
-                setForm((prev) => ({
-                  ...prev,
-                  youtube_id: val,
-                  thumbnail: `https://img.youtube.com/vi/${val}/maxresdefault.jpg`,
-                }))
-              }}
-              required
-              className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all font-mono"
-            />
-          </div>
+          <VideoInput
+            value={{ youtubeId: form.youtube_id, videoUrl: form.video_url }}
+            onChange={({ youtubeId, videoUrl }) =>
+              setForm((prev) => ({ ...prev, youtube_id: youtubeId, video_url: videoUrl }))
+            }
+            label="Video"
+            required
+            onYoutubeMeta={(meta) => {
+              setForm((prev) => ({
+                ...prev,
+                thumbnail: meta.thumbnail || prev.thumbnail,
+              }))
+            }}
+          />
 
           {/* Title */}
           <div className="space-y-2">
@@ -218,7 +213,7 @@ export default function EditVideoPage({ params }: { params: Promise<{ id: string
           <ImageUpload
             value={form.thumbnail}
             onChange={(url) => setForm((prev) => ({ ...prev, thumbnail: url }))}
-            label="Video Thumbnail (Auto-Fetched from YouTube, or Custom Upload/URL)"
+            label="Video Thumbnail (Upload or URL)"
           />
         </div>
 

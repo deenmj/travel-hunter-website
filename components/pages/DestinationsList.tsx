@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { getDestinations } from '@/lib/data-fetching'
 import type { Destination } from '@/lib/types'
 import { CATEGORIES, CATEGORY_LABELS, ROUTES } from '@/lib/constants'
+import { getDestinationThumbnail } from '@/lib/video-utils'
 
 export function DestinationsList() {
   const [destinations, setDestinations] = useState<Destination[]>([])
@@ -77,13 +78,15 @@ export function DestinationsList() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredDestinations.map((destination) => (
+          {filteredDestinations.map((destination) => {
+            const thumbnail = getDestinationThumbnail(destination)
+            return (
             <Link key={destination.id} href={`${ROUTES.DESTINATIONS}/${destination.slug}`}>
               <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-full flex flex-col">
                 <div className="relative h-48 w-full bg-gray-200 dark:bg-slate-700 overflow-hidden flex-shrink-0">
-                  {destination.featured_image ? (
+                  {thumbnail ? (
                     <img
-                      src={destination.featured_image}
+                      src={thumbnail}
                       alt={destination.name}
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                     />
@@ -112,7 +115,8 @@ export function DestinationsList() {
                 </CardContent>
               </Card>
             </Link>
-          ))}
+            )
+          })}
         </div>
       )}
     </section>

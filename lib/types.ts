@@ -18,6 +18,7 @@ export interface Destination {
   featured_image?: string
   images?: string[]
   video_id?: string
+  video_url?: string
   best_time?: string
   location?: string
   highlights?: string[]
@@ -34,6 +35,8 @@ export interface BlogPost {
   excerpt?: string
   content: string
   featured_image?: string
+  video_id?: string
+  video_url?: string
   author_id: string
   created_at: string
   updated_at: string
@@ -44,7 +47,8 @@ export interface Video {
   id: string
   slug: string
   title: string
-  youtube_id: string
+  youtube_id?: string
+  video_url?: string
   description?: string
   thumbnail?: string
   destination_id?: string

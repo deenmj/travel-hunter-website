@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS destinations (
   featured_image TEXT,
   images TEXT[],
   video_id TEXT,
+  video_url TEXT,
   best_time TEXT,
   location TEXT,
   highlights TEXT[],
@@ -42,6 +43,8 @@ CREATE TABLE IF NOT EXISTS blog_posts (
   excerpt TEXT,
   content TEXT NOT NULL,
   featured_image TEXT,
+  video_id TEXT,
+  video_url TEXT,
   author_id TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
@@ -52,7 +55,8 @@ CREATE TABLE IF NOT EXISTS videos (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   slug TEXT UNIQUE NOT NULL,
   title TEXT NOT NULL,
-  youtube_id TEXT NOT NULL,
+  youtube_id TEXT,
+  video_url TEXT,
   description TEXT,
   thumbnail TEXT,
   destination_id UUID REFERENCES destinations(id) ON DELETE SET NULL,
@@ -338,6 +342,16 @@ INSERT INTO videos (slug, title, youtube_id, description, thumbnail) VALUES
   'https://img.youtube.com/vi/V1bFr2SWP1I/maxresdefault.jpg'
 )
 ON CONFLICT (slug) DO NOTHING;
+
+
+-- ============================================================================
+-- MIGRATION: Run this if you already have the database set up
+-- ============================================================================
+-- ALTER TABLE destinations ADD COLUMN IF NOT EXISTS video_url TEXT;
+-- ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS video_id TEXT;
+-- ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS video_url TEXT;
+-- ALTER TABLE videos ADD COLUMN IF NOT EXISTS video_url TEXT;
+-- ALTER TABLE videos ALTER COLUMN youtube_id DROP NOT NULL;
 
 
 -- 7. CREATE STORAGE BUCKET FOR MEDIA LIBRARY

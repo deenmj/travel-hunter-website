@@ -8,6 +8,7 @@ import { getDestinationById, updateDestination } from '@/lib/admin-actions'
 import { ROUTES, CATEGORY_LABELS } from '@/lib/constants'
 import type { Destination } from '@/lib/types'
 import ImageUpload from '@/components/admin/ImageUpload'
+import VideoInput from '@/components/admin/VideoInput'
 
 export default function EditDestinationPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -25,6 +26,7 @@ export default function EditDestinationPage({ params }: { params: Promise<{ id: 
     category: 'visit' as 'visit' | 'eat' | 'stay',
     featured_image: '',
     video_id: '',
+    video_url: '',
     best_time: '',
     location: '',
     highlights: [] as string[],
@@ -43,6 +45,7 @@ export default function EditDestinationPage({ params }: { params: Promise<{ id: 
           category: d.category || 'visit',
           featured_image: d.featured_image || '',
           video_id: d.video_id || '',
+          video_url: d.video_url || '',
           best_time: d.best_time || '',
           location: d.location || '',
           highlights: d.highlights || [],
@@ -82,6 +85,7 @@ export default function EditDestinationPage({ params }: { params: Promise<{ id: 
       ...form,
       featured_image: form.featured_image || undefined,
       video_id: form.video_id || undefined,
+      video_url: form.video_url || undefined,
       best_time: form.best_time || undefined,
       location: form.location || undefined,
       images: form.images.length > 0 ? form.images : undefined,
@@ -240,25 +244,13 @@ export default function EditDestinationPage({ params }: { params: Promise<{ id: 
             label="Featured Image"
           />
 
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">YouTube Video ID or Link</label>
-            <input
-              type="text"
-              value={form.video_id}
-              onChange={(e) => {
-                let val = e.target.value
-                const match = val.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/)
-                if (match) val = match[1]
-                setForm((prev) => ({ ...prev, video_id: val }))
-              }}
-              className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
-            />
-            {form.video_id && (
-              <div className="mt-2 aspect-video rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800 max-w-md">
-                <iframe src={`https://www.youtube.com/embed/${form.video_id}`} className="w-full h-full" allowFullScreen />
-              </div>
-            )}
-          </div>
+          <VideoInput
+            value={{ youtubeId: form.video_id, videoUrl: form.video_url }}
+            onChange={({ youtubeId, videoUrl }) =>
+              setForm((prev) => ({ ...prev, video_id: youtubeId, video_url: videoUrl }))
+            }
+            label="Destination Video (Optional)"
+          />
         </div>
 
         {/* Highlights */}

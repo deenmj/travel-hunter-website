@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
-import { Upload, Trash2, Copy, Check, FileImage, RefreshCw } from 'lucide-react'
+import { Upload, Trash2, Copy, Check, FileImage, RefreshCw, Link as LinkIcon } from 'lucide-react'
 import { listMedia, uploadMedia, deleteMedia } from '@/lib/admin-actions'
 
 interface MediaFile {
@@ -17,6 +17,8 @@ export default function MediaLibraryPage() {
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [copiedPath, setCopiedPath] = useState<string | null>(null)
+  const [showUrlInput, setShowUrlInput] = useState(false)
+  const [externalUrl, setExternalUrl] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -88,7 +90,7 @@ export default function MediaLibraryPage() {
     if (!confirmDelete) return
 
     // If it's a mock Object URL or placeholder, just filter it out locally
-    if (file.url.startsWith('blob:') || file.url.includes('wikimedia.org')) {
+    if (file.url.startsWith('blob:') || file.url.includes('wikimedia.org') || file.path.startsWith('external/')) {
       setFiles((prev) => prev.filter((f) => f.path !== file.path))
       return
     }
@@ -107,13 +109,29 @@ export default function MediaLibraryPage() {
     setTimeout(() => setCopiedPath(null), 2000)
   }
 
+  const handleAddExternalUrl = () => {
+    const trimmed = externalUrl.trim()
+    if (!trimmed || !/^https?:\/\/.+/i.test(trimmed)) {
+      setError('Please enter a valid image URL starting with http:// or https://')
+      return
+    }
+    const name = trimmed.split('/').pop()?.split('?')[0] || 'external-image'
+    setFiles((prev) => [
+      { name, url: trimmed, path: `external/${Date.now()}-${name}` },
+      ...prev,
+    ])
+    setExternalUrl('')
+    setShowUrlInput(false)
+    setError(null)
+  }
+
   return (
     <div className="space-y-6 max-w-7xl">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Media Library</h1>
-          <p className="text-sm text-slate-500 mt-1">Upload and manage image assets for your content</p>
+          <p className="text-sm text-slate-500 mt-1">Upload images or add external URLs for use in your content</p>
         </div>
 
         <div className="flex items-center gap-2">
@@ -123,6 +141,13 @@ export default function MediaLibraryPage() {
             title="Refresh assets"
           >
             <RefreshCw className="w-4 h-4 animate-spin-hover" />
+          </button>
+          <button
+            onClick={() => setShowUrlInput((v) => !v)}
+            className="flex items-center gap-2 px-5 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl font-medium text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-all border border-slate-200 dark:border-slate-700"
+          >
+            <LinkIcon className="w-4 h-4" />
+            Add URL
           </button>
           <button
             onClick={() => fileInputRef.current?.click()}
@@ -145,6 +170,25 @@ export default function MediaLibraryPage() {
           />
         </div>
       </div>
+
+      {showUrlInput && (
+        <div className="flex gap-2 p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700/50">
+          <input
+            type="url"
+            value={externalUrl}
+            onChange={(e) => setExternalUrl(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleAddExternalUrl()}
+            placeholder="https://example.com/image.jpg"
+            className="flex-1 h-11 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+          />
+          <button
+            onClick={handleAddExternalUrl}
+            className="px-5 h-11 bg-emerald-600 text-white rounded-xl text-sm font-medium hover:bg-emerald-700 transition-colors"
+          >
+            Add
+          </button>
+        </div>
+      )}
 
       {error && (
         <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700/50 text-red-700 dark:text-red-300 px-4 py-3 rounded-xl text-sm font-medium">

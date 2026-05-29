@@ -6,6 +6,7 @@ import { HeroSection } from '@/components/sections/HeroSection'
 import { FeaturedDestinations } from '@/components/sections/FeaturedDestinations'
 import { CategoriesSection } from '@/components/sections/CategoriesSection'
 import { LatestVideos } from '@/components/sections/LatestVideos'
+import { CTASection } from '@/components/sections/CTASection'
 import { SITE_NAME, SITE_DESCRIPTION } from '@/lib/constants'
 
 export const metadata: Metadata = {
@@ -22,6 +23,7 @@ export default function Home() {
         <FeaturedDestinations />
         <CategoriesSection />
         <LatestVideos />
+        <CTASection />
       </main>
       <Footer />
       <BottomNav />

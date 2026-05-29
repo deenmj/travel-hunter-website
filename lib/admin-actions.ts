@@ -36,6 +36,7 @@ export async function createDestination(formData: {
   featured_image?: string
   images?: string[]
   video_id?: string
+  video_url?: string
   best_time?: string
   location?: string
   highlights?: string[]
@@ -70,6 +71,7 @@ export async function updateDestination(
     featured_image?: string
     images?: string[]
     video_id?: string
+    video_url?: string
     best_time?: string
     location?: string
     highlights?: string[]
@@ -132,6 +134,7 @@ export async function createBlogPost(formData: {
   content: string
   featured_image?: string
   video_id?: string
+  video_url?: string
 }) {
   const { supabase, user } = await requireAdmin()
 
@@ -162,6 +165,7 @@ export async function updateBlogPost(
     content?: string
     featured_image?: string
     video_id?: string
+    video_url?: string
   },
 ) {
   const { supabase } = await requireAdmin()
@@ -217,7 +221,8 @@ export async function getBlogPostById(id: string) {
 export async function createVideo(formData: {
   title: string
   slug: string
-  youtube_id: string
+  youtube_id?: string
+  video_url?: string
   description?: string
   thumbnail?: string
   destination_id?: string
@@ -248,6 +253,7 @@ export async function updateVideo(
     title?: string
     slug?: string
     youtube_id?: string
+    video_url?: string
     description?: string
     thumbnail?: string
     destination_id?: string
