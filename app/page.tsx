@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { BottomNav } from '@/components/layout/BottomNav'
+import { ContactBar } from '@/components/sections/ContactBar'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { FeaturedDestinations } from '@/components/sections/FeaturedDestinations'
 import { CategoriesSection } from '@/components/sections/CategoriesSection'
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
+      <ContactBar />
       <Header />
       <main className="flex flex-col bg-white dark:bg-slate-950">
         <HeroSection />

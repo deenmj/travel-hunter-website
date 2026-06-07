@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/client'
-import type { Destination, BlogPost, Video, Profile } from '@/lib/types'
+import type { Destination, BlogPost, Video, Profile, SiteSettings } from '@/lib/types'
 
 // Placeholder data for when Supabase is not configured
 const PLACEHOLDER_DESTINATIONS: Destination[] = [
@@ -142,7 +142,7 @@ const PLACEHOLDER_VIDEOS: Video[] = [
     youtube_id: 'dQw4w9WgXcQ',
     description: 'Explore the best destinations in Sri Lanka',
     thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
-    destination_id: null,
+    destination_id: undefined,
     uploaded_by: '1',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
@@ -154,7 +154,7 @@ const PLACEHOLDER_VIDEOS: Video[] = [
     youtube_id: 'dQw4w9WgXcQ',
     description: 'Discover the best places to eat in Colombo',
     thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
-    destination_id: null,
+    destination_id: undefined,
     uploaded_by: '1',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
@@ -166,7 +166,7 @@ const PLACEHOLDER_VIDEOS: Video[] = [
     youtube_id: 'dQw4w9WgXcQ',
     description: 'Experience the tea plantations of Sri Lanka',
     thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
-    destination_id: null,
+    destination_id: undefined,
     uploaded_by: '1',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
@@ -446,4 +446,41 @@ export async function getProfileById(id: string): Promise<Profile | null> {
   }
 
   return data
+}
+
+// Default site settings fallback
+const DEFAULT_SITE_SETTINGS: SiteSettings = {
+  id: 'default',
+  hero_image: 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Nine_Arches_Bridge_in_Ella.jpg',
+  contact_phone: '+94 778 363 959',
+  contact_email: 'travelhunterlk@gmail.com',
+  contact_address: '188, Kurugoda, Akurana, Kandy, 20850',
+  youtube_url: '',
+  instagram_url: '',
+  facebook_url: '',
+  twitter_url: '',
+  updated_at: new Date().toISOString(),
+}
+
+// Site settings query
+export async function getSiteSettings(): Promise<SiteSettings> {
+  try {
+    const supabase = createClient()
+
+    const { data, error } = await supabase
+      .from('site_settings')
+      .select('*')
+      .limit(1)
+      .single()
+
+    if (error || !data) {
+      console.error('Error fetching site settings, using defaults:', error)
+      return DEFAULT_SITE_SETTINGS
+    }
+
+    return data
+  } catch (error) {
+    console.error('Exception fetching site settings, using defaults:', error)
+    return DEFAULT_SITE_SETTINGS
+  }
 }

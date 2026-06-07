@@ -20,7 +20,8 @@ export function VideosList() {
     fetchVideos()
   }, [])
 
-  const getYouTubeThumbnail = (youtubeId: string) => {
+  const getYouTubeThumbnail = (youtubeId?: string) => {
+    if (!youtubeId) return ''
     return `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`
   }
 

@@ -399,3 +399,68 @@ export async function getAdminStats() {
     videos: videos.count || 0,
   }
 }
+
+// ─── Site Settings ────────────────────────────────────────────────────────────
+
+export async function getSiteSettingsAdmin() {
+  const { supabase } = await requireAdmin()
+
+  const { data, error } = await supabase
+    .from('site_settings')
+    .select('*')
+    .limit(1)
+    .single()
+
+  if (error) {
+    return { data: null, error: error.message }
+  }
+
+  return { data, error: null }
+}
+
+export async function updateSiteSettings(formData: {
+  hero_image?: string
+  contact_phone?: string
+  contact_email?: string
+  contact_address?: string
+  youtube_url?: string
+  instagram_url?: string
+  facebook_url?: string
+  twitter_url?: string
+}) {
+  const { supabase } = await requireAdmin()
+
+  // First try to get the existing settings row
+  const { data: existing } = await supabase
+    .from('site_settings')
+    .select('id')
+    .limit(1)
+    .single()
+
+  let result
+
+  if (existing) {
+    // Update existing row
+    result = await supabase
+      .from('site_settings')
+      .update({ ...formData, updated_at: new Date().toISOString() })
+      .eq('id', existing.id)
+      .select()
+      .single()
+  } else {
+    // Insert new row
+    result = await supabase
+      .from('site_settings')
+      .insert({ ...formData })
+      .select()
+      .single()
+  }
+
+  if (result.error) {
+    return { data: null, error: result.error.message }
+  }
+
+  revalidatePath('/')
+  revalidatePath('/admin/settings')
+  return { data: result.data, error: null }
+}

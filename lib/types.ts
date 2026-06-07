@@ -86,3 +86,17 @@ export interface VideoFormData {
   description?: string
   destination_id?: string
 }
+
+// Site settings (editable from admin panel)
+export interface SiteSettings {
+  id: string
+  hero_image: string
+  contact_phone: string
+  contact_email: string
+  contact_address: string
+  youtube_url: string
+  instagram_url: string
+  facebook_url: string
+  twitter_url: string
+  updated_at: string
+}

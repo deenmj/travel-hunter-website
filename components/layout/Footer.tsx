@@ -1,9 +1,11 @@
 import Link from 'next/link'
-import { Facebook, Instagram, Youtube, Twitter } from 'lucide-react'
-import { ROUTES, SITE_NAME, SOCIAL_LINKS } from '@/lib/constants'
+import { Facebook, Instagram, Youtube, Twitter, Phone, Mail, MapPin } from 'lucide-react'
+import { ROUTES, SITE_NAME } from '@/lib/constants'
+import { getSiteSettings } from '@/lib/data-fetching'
 
-export function Footer() {
+export async function Footer() {
   const currentYear = new Date().getFullYear()
+  const settings = await getSiteSettings()
 
   return (
     <footer className="bg-slate-900 dark:bg-black text-white">
@@ -50,30 +52,32 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Resources */}
+          {/* Contact Details */}
           <div>
-            <h3 className="font-semibold mb-4 text-base">Resources</h3>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Travel Guide
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  FAQ
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Contact Us
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Privacy Policy
-                </a>
-              </li>
+            <h3 className="font-semibold mb-4 text-base">Contact Us</h3>
+            <ul className="space-y-3 text-sm text-gray-400">
+              {settings.contact_phone && (
+                <li className="flex items-center gap-2">
+                  <Phone className="w-4 h-4 text-emerald-500 shrink-0" />
+                  <a href={`tel:${settings.contact_phone}`} className="hover:text-white transition-colors">
+                    {settings.contact_phone}
+                  </a>
+                </li>
+              )}
+              {settings.contact_email && (
+                <li className="flex items-center gap-2">
+                  <Mail className="w-4 h-4 text-emerald-500 shrink-0" />
+                  <a href={`mailto:${settings.contact_email}`} className="hover:text-white transition-colors break-all">
+                    {settings.contact_email}
+                  </a>
+                </li>
+              )}
+              {settings.contact_address && (
+                <li className="flex items-start gap-2">
+                  <MapPin className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                  <span className="leading-relaxed">{settings.contact_address}</span>
+                </li>
+              )}
             </ul>
           </div>
 
@@ -108,34 +112,50 @@ export function Footer() {
 
           {/* Social links */}
           <div className="flex items-center gap-4">
-            <a
-              href={SOCIAL_LINKS.FACEBOOK}
-              className="text-gray-400 hover:text-white transition-colors"
-              aria-label="Facebook"
-            >
-              <Facebook className="w-5 h-5" />
-            </a>
-            <a
-              href={SOCIAL_LINKS.INSTAGRAM}
-              className="text-gray-400 hover:text-white transition-colors"
-              aria-label="Instagram"
-            >
-              <Instagram className="w-5 h-5" />
-            </a>
-            <a
-              href={SOCIAL_LINKS.YOUTUBE}
-              className="text-gray-400 hover:text-white transition-colors"
-              aria-label="YouTube"
-            >
-              <Youtube className="w-5 h-5" />
-            </a>
-            <a
-              href={SOCIAL_LINKS.TWITTER}
-              className="text-gray-400 hover:text-white transition-colors"
-              aria-label="Twitter"
-            >
-              <Twitter className="w-5 h-5" />
-            </a>
+            {settings.facebook_url && (
+              <a
+                href={settings.facebook_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors"
+                aria-label="Facebook"
+              >
+                <Facebook className="w-5 h-5" />
+              </a>
+            )}
+            {settings.instagram_url && (
+              <a
+                href={settings.instagram_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors"
+                aria-label="Instagram"
+              >
+                <Instagram className="w-5 h-5" />
+              </a>
+            )}
+            {settings.youtube_url && (
+              <a
+                href={settings.youtube_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors"
+                aria-label="YouTube"
+              >
+                <Youtube className="w-5 h-5" />
+              </a>
+            )}
+            {settings.twitter_url && (
+              <a
+                href={settings.twitter_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors"
+                aria-label="Twitter"
+              >
+                <Twitter className="w-5 h-5" />
+              </a>
+            )}
           </div>
         </div>
       </div>

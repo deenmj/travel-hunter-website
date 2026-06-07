@@ -1,14 +1,18 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/lib/constants'
+import { getSiteSettings } from '@/lib/data-fetching'
 
-export function HeroSection() {
+export async function HeroSection() {
+  const settings = await getSiteSettings()
+  const heroImage = settings.hero_image || 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Nine_Arches_Bridge_in_Ella.jpg'
+
   return (
     <section className="relative w-full min-h-[88vh] flex items-center justify-center overflow-hidden">
       {/* Background with Ken Burns effect */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Nine_Arches_Bridge_in_Ella.jpg"
+          src={heroImage}
           alt="Nine Arch Bridge, Ella, Sri Lanka"
           className="absolute inset-0 w-full h-full object-cover object-center animate-ken-burns scale-110"
         />
