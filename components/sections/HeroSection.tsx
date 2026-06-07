@@ -8,7 +8,7 @@ export async function HeroSection() {
   const heroImage = settings.hero_image || 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Nine_Arches_Bridge_in_Ella.jpg'
 
   return (
-    <section className="relative w-full min-h-[88vh] flex items-center justify-center overflow-hidden">
+    <section className="relative w-full h-[70vh] md:h-[80vh] flex items-center justify-center overflow-hidden">
       {/* Background with Ken Burns effect */}
       <div className="absolute inset-0 z-0">
         <img
@@ -27,7 +27,7 @@ export async function HeroSection() {
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl animate-blob animation-delay-2000 z-[1]" />
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 lg:py-32 w-full flex flex-col items-center text-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 w-full flex flex-col items-center text-center">
         <span className="inline-block py-1.5 px-4 rounded-full bg-emerald-500/20 text-emerald-300 backdrop-blur-md border border-emerald-500/30 text-xs md:text-sm font-semibold tracking-wider uppercase mb-5 animate-fade-in-up">
           Authentic Sri Lanka
         </span>
