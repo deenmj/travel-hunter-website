@@ -19,6 +19,7 @@ export function Header() {
     { href: ROUTES.VIDEOS, label: 'Videos' },
     { href: ROUTES.BLOG, label: 'Blog' },
     { href: ROUTES.ABOUT, label: 'About' },
+    { href: ROUTES.CONTACT, label: 'Contact' },
   ]
 
   const isActive = (href: string) => pathname === href
