@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { Search, MapPin, ArrowUpDown } from 'lucide-react'
+import { Search, MapPin, ArrowUpDown, ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
@@ -28,6 +28,7 @@ export function DestinationsList() {
   const [sortBy, setSortBy] = useState<'featured' | 'name-asc' | 'name-desc'>('featured')
   const [uniqueLocations, setUniqueLocations] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
+  const [filtersOpen, setFiltersOpen] = useState(false)
 
   useEffect(() => {
     const fetchDestinations = async () => {
@@ -98,8 +99,42 @@ export function DestinationsList() {
         </p>
       </div>
 
-      {/* Category filters - scrolling pills on mobile, normal flex on desktop */}
-      <div className="flex overflow-x-auto whitespace-nowrap pb-3 -mx-4 px-4 sm:mx-0 sm:px-0 gap-2 mb-6 scrollbar-none snap-x snap-mandatory">
+      {/* Search Input - Always visible */}
+      <div className="relative flex-grow mb-4">
+        <input
+          type="text"
+          placeholder="Search destinations..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full h-10 px-3 pl-10 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-800 dark:text-white"
+        />
+        <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+        {searchQuery && (
+          <button
+            onClick={() => setSearchQuery('')}
+            className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 text-sm"
+          >
+            ✕
+          </button>
+        )}
+      </div>
+
+      {/* Filter Toggle Button - Mobile Only */}
+      <div className="flex sm:hidden mb-4">
+        <Button
+          onClick={() => setFiltersOpen(!filtersOpen)}
+          variant="outline"
+          className="w-full h-10 text-sm"
+        >
+          <span className="flex items-center justify-center gap-2">
+            Filters & Sort
+            <ChevronDown className={`w-4 h-4 transition-transform ${filtersOpen ? 'rotate-180' : ''}`} />
+          </span>
+        </Button>
+      </div>
+
+      {/* Category filters - hidden on mobile by default, shown on desktop and when toggle is open on mobile */}
+      <div className={`overflow-x-auto whitespace-nowrap pb-3 -mx-4 px-4 sm:mx-0 sm:px-0 gap-2 mb-6 scrollbar-none snap-x snap-mandatory flex ${filtersOpen ? 'block sm:flex' : 'hidden sm:flex'}`}>
         <Button
           onClick={() => setSelectedCategory(null)}
           variant={selectedCategory === null ? 'default' : 'outline'}
@@ -119,28 +154,8 @@ export function DestinationsList() {
         ))}
       </div>
 
-      {/* Search, Filter & Sort Controls */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-8 w-full">
-        {/* Search Input */}
-        <div className="relative flex-grow">
-          <input
-            type="text"
-            placeholder="Search destinations..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-10 px-3 pl-10 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-800 dark:text-white"
-          />
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 text-sm"
-            >
-              ✕
-            </button>
-          )}
-        </div>
-
+      {/* Location & Sort Controls - shown on desktop and when toggle is open on mobile */}
+      <div className={`flex flex-col sm:flex-row gap-3 mb-8 w-full ${filtersOpen ? 'block sm:flex' : 'hidden sm:flex'}`}>
         {/* Location Dropdown */}
         <div className="w-full sm:w-48">
           <Select value={selectedLocation || 'all'} onValueChange={(val) => setSelectedLocation(val === 'all' ? null : val)}>
