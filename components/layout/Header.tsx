@@ -26,24 +26,24 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2">
         {/* Logo */}
-        <Link href={ROUTES.HOME} className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center">
-            <span className="text-white font-bold text-lg">T</span>
+        <Link href={ROUTES.HOME} className="flex items-center gap-2 flex-shrink-0">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-emerald-600 flex items-center justify-center">
+            <span className="text-white font-bold text-base sm:text-lg">T</span>
           </div>
-          <span className="font-bold text-lg hidden sm:inline text-gray-900 dark:text-white">
+          <span className="font-bold text-base sm:text-lg hidden sm:inline text-gray-900 dark:text-white">
             Travel Hunter
           </span>
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-1">
+        <nav className="hidden md:flex items-center gap-0.5">
           {navLinks.map((link) => (
             <Link key={link.href} href={link.href}>
               <Button
                 variant={isActive(link.href) ? 'default' : 'ghost'}
-                className="h-10 px-4"
+                className="h-9 px-3 text-sm"
               >
                 {link.label}
               </Button>
@@ -52,22 +52,26 @@ export function Header() {
         </nav>
 
         {/* Right actions */}
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="h-10 w-10">
-            <Search className="w-5 h-5" />
+        <div className="flex items-center gap-1 ml-auto">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-8 sm:h-9 w-8 sm:w-9 hidden sm:flex"
+          >
+            <Search className="w-4 sm:w-5 h-4 sm:h-5" />
           </Button>
 
           <Button
             variant="ghost"
             size="icon"
-            className="h-10 w-10"
+            className="h-8 sm:h-9 w-8 sm:w-9"
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           >
-            {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            {theme === 'dark' ? <Sun className="w-4 sm:w-5 h-4 sm:h-5" /> : <Moon className="w-4 sm:w-5 h-4 sm:h-5" />}
           </Button>
 
-          <Link href={ROUTES.LOGIN} className="hidden sm:inline">
-            <Button variant="outline" className="h-10 px-4">
+          <Link href={ROUTES.LOGIN} className="hidden sm:inline ml-1">
+            <Button variant="outline" className="h-8 sm:h-9 px-3 text-sm">
               Sign In
             </Button>
           </Link>
@@ -76,7 +80,7 @@ export function Header() {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden h-10 w-10"
+            className="md:hidden h-8 w-8"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? (
