@@ -39,14 +39,14 @@ export function HeroSection() {
             Discover Sri Lanka
           </div>
 
-          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tight drop-shadow-xl leading-[1.1]">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tight drop-shadow-xl leading-tight">
             Uncover The <br className="hidden sm:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-200">
               Hidden Gems
             </span>
           </h1>
 
-          <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-md">
+          <p className="text-base sm:text-lg md:text-xl text-white/90 max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-md px-2">
             Explore unique destinations, authentic food, and memorable lifestyle experiences curated by local travel experts.
           </p>
 
@@ -54,14 +54,15 @@ export function HeroSection() {
             {/* Prominent Search Bar */}
             <div 
               onClick={() => setSearchOpen(true)}
-              className="w-full max-w-xl h-14 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-white/20 rounded-full flex items-center px-5 shadow-2xl hover:shadow-emerald-500/20 hover:scale-[1.02] transition-all cursor-text group"
+              className="w-full max-w-xl h-14 sm:h-16 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-white/20 rounded-full flex items-center px-3 sm:px-5 shadow-2xl hover:shadow-emerald-500/20 hover:scale-[1.02] transition-all cursor-text group"
             >
-              <Search className="w-5 h-5 text-emerald-600 dark:text-emerald-400 mr-3 shrink-0" />
-              <span className="flex-1 text-left text-slate-500 dark:text-slate-400 text-sm md:text-base">
-                Search destinations, food spots, or videos...
-              </span>
+              <Search className="w-5 h-5 text-emerald-600 dark:text-emerald-400 mr-2 sm:mr-3 shrink-0" />
+              <div className="flex-1 text-left text-slate-500 dark:text-slate-400 text-sm md:text-base overflow-hidden whitespace-nowrap text-ellipsis pr-2">
+                <span className="hidden sm:inline">Search destinations, food spots, or videos...</span>
+                <span className="sm:hidden">Search destinations...</span>
+              </div>
               <Button 
-                className="h-9 px-4 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold shrink-0 shadow-md"
+                className="h-10 sm:h-11 px-4 sm:px-6 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold shrink-0 shadow-md"
               >
                 Search
               </Button>
