@@ -67,6 +67,8 @@ export const viewport: Viewport = {
   ],
 }
 
+export const revalidate = 0
+
 export default function RootLayout({
   children,
 }: Readonly<{

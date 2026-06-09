@@ -87,7 +87,7 @@ export async function Footer() {
           </div>
 
           {/* Newsletter */}
-          <div className="hidden sm:block space-y-3">
+          <div className="col-span-2 sm:col-span-1 space-y-3">
             <h3 className="font-semibold text-base">Newsletter</h3>
             <p className="text-gray-400 text-sm">Subscribe for travel tips and updates.</p>
             <form className="flex flex-col gap-2">
