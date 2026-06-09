@@ -33,14 +33,17 @@ export async function createDestination(formData: {
   name: string
   slug: string
   description: string
-  category: 'visit' | 'eat' | 'stay'
+  category: 'travel' | 'food' | 'lifestyle'
   featured_image?: string
   images?: string[]
   video_id?: string
   video_url?: string
   best_time?: string
   location?: string
+  region?: string
+  budget?: 'low' | 'mid' | 'luxury'
   highlights?: string[]
+  is_top_pick?: boolean
 }) {
   const { supabase, user } = await requireAdmin()
 
@@ -71,14 +74,17 @@ export async function updateDestination(
     name?: string
     slug?: string
     description?: string
-    category?: 'visit' | 'eat' | 'stay'
+    category?: 'travel' | 'food' | 'lifestyle'
     featured_image?: string
     images?: string[]
     video_id?: string
     video_url?: string
     best_time?: string
     location?: string
+    region?: string
+    budget?: 'low' | 'mid' | 'luxury'
     highlights?: string[]
+    is_top_pick?: boolean
   },
 ) {
   const { supabase } = await requireAdmin()

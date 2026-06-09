@@ -9,15 +9,15 @@ import { getDestinationHref } from '@/lib/destination-utils'
 export async function CategoriesSection() {
   const destinations = await getDestinations()
   const categories = {
-    visit: destinations.filter((d) => d.category === CATEGORIES.VISIT).slice(0, 3),
-    eat: destinations.filter((d) => d.category === CATEGORIES.EAT).slice(0, 3),
-    stay: destinations.filter((d) => d.category === CATEGORIES.STAY).slice(0, 3),
+    travel: destinations.filter((d) => d.category === CATEGORIES.TRAVEL).slice(0, 3),
+    food: destinations.filter((d) => d.category === CATEGORIES.FOOD).slice(0, 3),
+    lifestyle: destinations.filter((d) => d.category === CATEGORIES.LIFESTYLE).slice(0, 3),
   }
 
   const categoryMeta = {
-    visit: { gradient: 'from-blue-500 to-cyan-500', emoji: '🗺️', image: 'https://upload.wikimedia.org/wikipedia/commons/8/8e/Sigiriya_Rock_Fortress_View_from_Pidurangala_Rock.jpg' },
-    eat: { gradient: 'from-orange-500 to-yellow-500', emoji: '🍽️', image: 'https://upload.wikimedia.org/wikipedia/commons/f/f0/Colombo_-_Galle_Face.jpg' },
-    stay: { gradient: 'from-emerald-500 to-teal-500', emoji: '🏨', image: 'https://upload.wikimedia.org/wikipedia/commons/e/e9/Negombo_Beach%2C_Sri_Lanka.jpg' },
+    travel: { gradient: 'from-blue-500 to-cyan-500', emoji: '✈️', image: 'https://upload.wikimedia.org/wikipedia/commons/8/8e/Sigiriya_Rock_Fortress_View_from_Pidurangala_Rock.jpg' },
+    food: { gradient: 'from-orange-500 to-yellow-500', emoji: '🍜', image: 'https://upload.wikimedia.org/wikipedia/commons/f/f0/Colombo_-_Galle_Face.jpg' },
+    lifestyle: { gradient: 'from-emerald-500 to-teal-500', emoji: '🌿', image: 'https://upload.wikimedia.org/wikipedia/commons/e/e9/Negombo_Beach%2C_Sri_Lanka.jpg' },
   }
 
   return (
@@ -31,7 +31,7 @@ export async function CategoriesSection() {
             Explore by Category
           </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            Easily filter destinations, food hubs, and accommodation spots across the island.
+            Easily filter travel spots, culinary hubs, and lifestyle experiences.
           </p>
         </div>
 

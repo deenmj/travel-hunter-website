@@ -14,14 +14,17 @@ export interface Destination {
   slug: string
   name: string
   description: string
-  category: 'visit' | 'eat' | 'stay'
+  category: 'travel' | 'food' | 'lifestyle'
   featured_image?: string
   images?: string[]
   video_id?: string
   video_url?: string
   best_time?: string
   location?: string
+  region?: string
+  budget?: 'low' | 'mid' | 'luxury'
   highlights?: string[]
+  is_top_pick?: boolean
   created_by: string
   created_at: string
   updated_at: string
@@ -34,6 +37,7 @@ export interface BlogPost {
   title: string
   excerpt?: string
   content: string
+  category?: 'travel' | 'food' | 'lifestyle'
   featured_image?: string
   video_id?: string
   video_url?: string
@@ -52,6 +56,7 @@ export interface Video {
   description?: string
   thumbnail?: string
   destination_id?: string
+  is_main?: boolean
   uploaded_by: string
   created_at: string
   updated_at: string
@@ -62,13 +67,16 @@ export interface DestinationFormData {
   name: string
   slug: string
   description: string
-  category: 'visit' | 'eat' | 'stay'
+  category: 'travel' | 'food' | 'lifestyle'
   featured_image?: File
   images?: File[]
   video_id?: string
   best_time?: string
   location?: string
+  region?: string
+  budget?: 'low' | 'mid' | 'luxury'
   highlights?: string[]
+  is_top_pick?: boolean
 }
 
 export interface BlogPostFormData {
@@ -77,6 +85,7 @@ export interface BlogPostFormData {
   excerpt?: string
   content: string
   featured_image?: File
+  category?: 'travel' | 'food' | 'lifestyle'
 }
 
 export interface VideoFormData {
@@ -85,6 +94,7 @@ export interface VideoFormData {
   youtube_id: string
   description?: string
   destination_id?: string
+  is_main?: boolean
 }
 
 // Site settings (editable from admin panel)
@@ -99,4 +109,14 @@ export interface SiteSettings {
   facebook_url: string
   twitter_url: string
   updated_at: string
+}
+
+// Wishlist item
+export interface WishlistItem {
+  id: string
+  type: 'destination' | 'blog' | 'video'
+  name: string
+  slug: string
+  image?: string
+  addedAt: string
 }

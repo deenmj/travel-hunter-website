@@ -4,9 +4,10 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
-import { getBlogPosts } from '@/lib/data-fetching'
+import { getBlogPosts, calculateReadingTime } from '@/lib/data-fetching'
 import type { BlogPost } from '@/lib/types'
 import { ROUTES } from '@/lib/constants'
+import { Clock } from 'lucide-react'
 
 export function BlogList() {
   const [posts, setPosts] = useState<BlogPost[]>([])
@@ -66,8 +67,12 @@ export function BlogList() {
                     </p>
                   )}
 
-                  <div className="text-xs text-gray-500 dark:text-gray-500 mt-4">
-                    {new Date(post.created_at).toLocaleDateString()}
+                  <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-500 mt-4">
+                    <span>{new Date(post.created_at).toLocaleDateString()}</span>
+                    <span className="flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5" />
+                      {calculateReadingTime(post.content)} min read
+                    </span>
                   </div>
                 </CardContent>
               </Card>

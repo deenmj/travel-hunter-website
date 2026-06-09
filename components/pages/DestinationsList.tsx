@@ -1,9 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { Search, MapPin, ArrowUpDown, ChevronDown } from 'lucide-react'
+import { Search, ArrowUpDown, ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
@@ -15,20 +14,20 @@ import {
 } from '@/components/ui/select'
 import { getDestinations } from '@/lib/data-fetching'
 import type { Destination } from '@/lib/types'
-import { CATEGORIES, CATEGORY_LABELS, ROUTES } from '@/lib/constants'
 import { getDestinationThumbnail } from '@/lib/video-utils'
 import { getDestinationHref } from '@/lib/destination-utils'
+import { QuickFilters } from '@/components/sections/QuickFilters'
+import { WishlistButton } from '@/components/ui/WishlistButton'
 
 export function DestinationsList() {
   const [destinations, setDestinations] = useState<Destination[]>([])
   const [filteredDestinations, setFilteredDestinations] = useState<Destination[]>([])
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const [selectedLocation, setSelectedLocation] = useState<string | null>(null)
+  
+  const [activeFilters, setActiveFilters] = useState<{ region?: string; budget?: string; category?: string }>({})
   const [searchQuery, setSearchQuery] = useState('')
   const [sortBy, setSortBy] = useState<'featured' | 'name-asc' | 'name-desc'>('featured')
-  const [uniqueLocations, setUniqueLocations] = useState<string[]>([])
+  
   const [loading, setLoading] = useState(true)
-  const [filtersOpen, setFiltersOpen] = useState(false)
 
   useEffect(() => {
     const fetchDestinations = async () => {
@@ -41,30 +40,20 @@ export function DestinationsList() {
   }, [])
 
   useEffect(() => {
-    const locations = Array.from(
-      new Set(
-        destinations
-          .map((d) => d.location)
-          .filter((loc): loc is string => !!loc)
-      )
-    ).sort()
-    setUniqueLocations(locations)
-  }, [destinations])
-
-  useEffect(() => {
     let result = [...destinations]
 
-    // 1. Category Filter
-    if (selectedCategory) {
-      result = result.filter((d) => d.category === selectedCategory)
+    // 1. Quick Filters (Region, Budget, Category)
+    if (activeFilters.category) {
+      result = result.filter((d) => d.category === activeFilters.category)
+    }
+    if (activeFilters.region) {
+      result = result.filter((d) => d.region === activeFilters.region || d.location?.includes(activeFilters.region!))
+    }
+    if (activeFilters.budget) {
+      result = result.filter((d) => d.budget === activeFilters.budget)
     }
 
-    // 2. Location Filter
-    if (selectedLocation) {
-      result = result.filter((d) => d.location === selectedLocation)
-    }
-
-    // 3. Search Query Filter
+    // 2. Search Query Filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim()
       result = result.filter(
@@ -75,7 +64,7 @@ export function DestinationsList() {
       )
     }
 
-    // 4. Sorting
+    // 3. Sorting
     if (sortBy === 'name-asc') {
       result.sort((a, b) => a.name.localeCompare(b.name))
     } else if (sortBy === 'name-desc') {
@@ -86,167 +75,183 @@ export function DestinationsList() {
     }
 
     setFilteredDestinations(result)
-  }, [selectedCategory, selectedLocation, searchQuery, sortBy, destinations])
+  }, [activeFilters, searchQuery, sortBy, destinations])
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-          All Destinations
+        <h1 className="text-4xl font-black text-slate-900 dark:text-white mb-2">
+          Explore Destinations
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          {filteredDestinations.length} destinations to explore
+        <p className="text-slate-600 dark:text-slate-400">
+          Find your perfect getaway from {destinations.length} amazing locations.
         </p>
       </div>
 
-      {/* Search Input - Always visible */}
-      <div className="relative flex-grow mb-4">
-        <input
-          type="text"
-          placeholder="Search destinations..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full h-10 px-3 pl-10 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-800 dark:text-white"
-        />
-        <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-        {searchQuery && (
-          <button
-            onClick={() => setSearchQuery('')}
-            className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 text-sm"
-          >
-            ✕
-          </button>
-        )}
-      </div>
+      <div className="flex flex-col lg:flex-row gap-8 items-start">
+        {/* Left Sidebar - Filters */}
+        <div className="w-full lg:w-1/4 shrink-0 space-y-6 lg:sticky lg:top-24">
+          <QuickFilters onFilterChange={setActiveFilters} />
+        </div>
 
-      {/* Filter Toggle Button - Mobile Only */}
-      <div className="flex sm:hidden mb-4">
-        <Button
-          onClick={() => setFiltersOpen(!filtersOpen)}
-          variant="outline"
-          className="w-full h-10 text-sm"
-        >
-          <span className="flex items-center justify-center gap-2">
-            Filters & Sort
-            <ChevronDown className={`w-4 h-4 transition-transform ${filtersOpen ? 'rotate-180' : ''}`} />
-          </span>
-        </Button>
-      </div>
+        {/* Right Content */}
+        <div className="flex-1 w-full space-y-6">
+          {/* Search and Sort */}
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="relative flex-grow">
+              <input
+                type="text"
+                placeholder="Search by name or location..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full h-12 px-4 pl-11 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 text-slate-800 dark:text-white transition-all shadow-sm"
+              />
+              <Search className="w-5 h-5 text-slate-400 absolute left-4 top-3.5" />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-4 top-3.5 text-slate-400 hover:text-slate-600 text-sm"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+            
+            <div className="w-full sm:w-48 shrink-0">
+              <Select value={sortBy} onValueChange={(val) => setSortBy(val as any)}>
+                <SelectTrigger className="w-full h-12 rounded-xl bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-sm shadow-sm">
+                  <div className="flex items-center gap-2 text-slate-800 dark:text-slate-200">
+                    <ArrowUpDown className="w-4 h-4 text-emerald-500" />
+                    <SelectValue placeholder="Sort By" />
+                  </div>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="featured">Featured / Newest</SelectItem>
+                  <SelectItem value="name-asc">Name (A-Z)</SelectItem>
+                  <SelectItem value="name-desc">Name (Z-A)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
 
-      {/* Category filters - hidden on mobile by default, shown on desktop and when toggle is open on mobile */}
-      <div className={`overflow-x-auto whitespace-nowrap pb-3 -mx-4 px-4 sm:mx-0 sm:px-0 gap-2 mb-6 scrollbar-none snap-x snap-mandatory flex ${filtersOpen ? 'block sm:flex' : 'hidden sm:flex'}`}>
-        <Button
-          onClick={() => setSelectedCategory(null)}
-          variant={selectedCategory === null ? 'default' : 'outline'}
-          className="h-8 md:h-10 text-xs md:text-sm px-3 md:px-4 rounded-full flex-shrink-0 snap-start"
-        >
-          All Categories
-        </Button>
-        {Object.entries(CATEGORIES).map(([key, value]) => (
-          <Button
-            key={value}
-            onClick={() => setSelectedCategory(value)}
-            variant={selectedCategory === value ? 'default' : 'outline'}
-            className="h-8 md:h-10 text-xs md:text-sm px-3 md:px-4 rounded-full capitalize flex-shrink-0 snap-start"
-          >
-            {CATEGORY_LABELS[value as keyof typeof CATEGORY_LABELS]}
-          </Button>
-        ))}
-      </div>
+          <div className="text-sm font-medium text-slate-500 mb-2">
+            Showing {filteredDestinations.length} destinations
+          </div>
 
-      {/* Location & Sort Controls - shown on desktop and when toggle is open on mobile */}
-      <div className={`flex flex-col sm:flex-row gap-3 mb-8 w-full ${filtersOpen ? 'block sm:flex' : 'hidden sm:flex'}`}>
-        {/* Location Dropdown */}
-        <div className="w-full sm:w-48">
-          <Select value={selectedLocation || 'all'} onValueChange={(val) => setSelectedLocation(val === 'all' ? null : val)}>
-            <SelectTrigger className="w-full h-10 rounded-xl bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-sm">
-              <div className="flex items-center gap-1.5 text-slate-800 dark:text-slate-200">
-                <MapPin className="w-4 h-4 text-emerald-500 shrink-0" />
-                <SelectValue placeholder="All Locations" />
-              </div>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Locations</SelectItem>
-              {uniqueLocations.map((loc) => (
-                <SelectItem key={loc} value={loc}>
-                  {loc}
-                </SelectItem>
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="h-[22rem] bg-slate-100 dark:bg-slate-800 rounded-2xl animate-pulse"></div>
               ))}
-            </SelectContent>
-          </Select>
-        </div>
+            </div>
+          ) : filteredDestinations.length === 0 ? (
+            <div className="text-center py-20 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+              <Search className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">No destinations found</h3>
+              <p className="text-slate-500 dark:text-slate-400">Try adjusting your filters or search query.</p>
+              <Button 
+                onClick={() => {
+                  setSearchQuery('')
+                  setActiveFilters({})
+                }}
+                variant="outline" 
+                className="mt-4 rounded-full"
+              >
+                Clear all filters
+              </Button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {filteredDestinations.map((destination) => {
+                const thumbnail = getDestinationThumbnail(destination)
+                return (
+                <div key={destination.id} className="relative group h-full">
+                  <Link href={getDestinationHref(destination)} className="block h-full">
+                    <Card className="overflow-hidden border border-slate-200/60 dark:border-slate-800/60 bg-white dark:bg-slate-900 hover:border-emerald-500/50 dark:hover:border-emerald-500/50 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 cursor-pointer h-full flex flex-col rounded-2xl group">
+                      <div className="relative aspect-[4/3] bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0">
+                        {thumbnail ? (
+                          <img
+                            src={thumbnail}
+                            alt={destination.name}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-4xl bg-gradient-to-br from-emerald-100 to-teal-100 dark:from-emerald-900/40 dark:to-teal-900/40">
+                            🗺️
+                          </div>
+                        )}
+                        
+                        <div className="absolute top-4 right-4 z-10 flex flex-col gap-2 items-end">
+                          {destination.category && (
+                            <span className="inline-flex items-center px-2.5 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-slate-900 dark:text-white text-[10px] font-bold rounded-md shadow-sm uppercase tracking-wider">
+                              {destination.category}
+                            </span>
+                          )}
+                          {destination.budget && (
+                            <span className="inline-flex items-center px-2.5 py-1 bg-emerald-500/90 backdrop-blur-md text-white text-[10px] font-bold rounded-md shadow-sm uppercase tracking-wider">
+                              {destination.budget}
+                            </span>
+                          )}
+                        </div>
 
-        {/* Sort Dropdown */}
-        <div className="w-full sm:w-48">
-          <Select value={sortBy} onValueChange={(val) => setSortBy(val as any)}>
-            <SelectTrigger className="w-full h-10 rounded-xl bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-sm">
-              <div className="flex items-center gap-1.5 text-slate-800 dark:text-slate-200">
-                <ArrowUpDown className="w-4 h-4 text-emerald-500 shrink-0" />
-                <SelectValue placeholder="Sort By" />
-              </div>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="featured">Featured / Newest</SelectItem>
-              <SelectItem value="name-asc">Name (A-Z)</SelectItem>
-              <SelectItem value="name-desc">Name (Z-A)</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+                        
+                        <div className="absolute bottom-4 left-4 right-4 z-10">
+                          <h3 className="font-bold text-xl text-white group-hover:text-emerald-400 transition-colors line-clamp-1 drop-shadow-md">
+                            {destination.name}
+                          </h3>
+                        </div>
+                      </div>
 
-      {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-64 bg-gray-200 dark:bg-slate-700 rounded-lg animate-pulse"></div>
-          ))}
-        </div>
-      ) : filteredDestinations.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-gray-600 dark:text-gray-400">No destinations found.</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredDestinations.map((destination) => {
-            const thumbnail = getDestinationThumbnail(destination)
-            return (
-            <Link key={destination.id} href={getDestinationHref(destination)}>
-              <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-full flex flex-col">
-                <div className="relative h-48 w-full bg-gray-200 dark:bg-slate-700 overflow-hidden flex-shrink-0">
-                  {thumbnail ? (
-                    <img
-                      src={thumbnail}
-                      alt={destination.name}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      <CardContent className="p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                          {destination.location && (
+                            <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium mb-3">
+                              <span>📍</span>
+                              <span className="truncate">{destination.location}</span>
+                            </div>
+                          )}
+                          <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed mb-4">
+                            {destination.description}
+                          </p>
+                        </div>
+                        
+                        <div className="flex flex-wrap gap-1.5 mt-auto">
+                          {destination.highlights?.slice(0, 3).map((highlight, idx) => (
+                            <span key={idx} className="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-2 py-1 rounded-md whitespace-nowrap">
+                              {highlight}
+                            </span>
+                          ))}
+                          {destination.highlights && destination.highlights.length > 3 && (
+                            <span className="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-2 py-1 rounded-md">
+                              +{destination.highlights.length - 3} more
+                            </span>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                  
+                  {/* Floating Wishlist Button */}
+                  <div className="absolute top-4 left-4 z-20">
+                    <WishlistButton 
+                      item={{
+                        id: destination.id,
+                        type: 'destination',
+                        name: destination.name,
+                        slug: destination.slug,
+                        image: thumbnail || undefined
+                      }}
+                      size="sm"
                     />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-emerald-400 to-blue-500 flex items-center justify-center">
-                      <span className="text-white text-5xl">📍</span>
-                    </div>
-                  )}
-                  <div className="absolute top-2 right-2">
-                    <span className="inline-block px-3 py-1 bg-emerald-600 text-white text-xs font-semibold rounded-full capitalize">
-                      {destination.category}
-                    </span>
                   </div>
                 </div>
-
-                <CardContent className="p-4 flex-grow flex flex-col">
-                  <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1 line-clamp-2">
-                    {destination.name}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3 flex-grow">
-                    {destination.description}
-                  </p>
-                  {destination.location && (
-                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-3">📍 {destination.location}</p>
-                  )}
-                </CardContent>
-              </Card>
-            </Link>
-            )
-          })}
+                )
+              })}
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </section>
   )
 }

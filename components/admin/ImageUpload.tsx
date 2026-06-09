@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useRef, ChangeEvent } from 'react'
+import { useState, useRef, ChangeEvent, DragEvent } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Upload, Link as LinkIcon, X, Image as ImageIcon, Loader2 } from 'lucide-react'
+import { Upload, Link as LinkIcon, X, Loader2, CheckCircle2 } from 'lucide-react'
 
 interface ImageUploadProps {
   value: string
@@ -14,14 +14,13 @@ export default function ImageUpload({ value, onChange, label = 'Featured Image' 
   const [activeTab, setActiveTab] = useState<'upload' | 'url'>(value && !value.includes('/storage/v1/object/public/media/') ? 'url' : 'upload')
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [isDragging, setIsDragging] = useState(false)
+  const [uploadSuccess, setUploadSuccess] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const supabase = createClient()
 
-  const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-
+  const uploadFile = async (file: File) => {
     // Validate size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       setError('File size must be less than 5MB')
@@ -60,11 +59,42 @@ export default function ImageUpload({ value, onChange, label = 'Featured Image' 
       } = supabase.storage.from('media').getPublicUrl(data.path)
 
       onChange(publicUrl)
+      setUploadSuccess(true)
+      setTimeout(() => setUploadSuccess(false), 3000)
     } catch (err: any) {
       console.error('Upload error:', err)
       setError(err.message || 'Failed to upload image')
     } finally {
       setUploading(false)
+    }
+  }
+
+  const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    await uploadFile(file)
+  }
+
+  const handleDragOver = (e: DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(true)
+  }
+
+  const handleDragLeave = (e: DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(false)
+  }
+
+  const handleDrop = async (e: DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(false)
+
+    const file = e.dataTransfer.files?.[0]
+    if (file) {
+      await uploadFile(file)
     }
   }
 
@@ -106,6 +136,12 @@ export default function ImageUpload({ value, onChange, label = 'Featured Image' 
               ;(e.target as HTMLImageElement).style.display = 'none'
             }}
           />
+          {uploadSuccess && (
+            <div className="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500 text-white text-xs font-semibold rounded-full shadow-lg animate-fade-in-up">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              Uploaded!
+            </div>
+          )}
           <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
             <button
               type="button"
@@ -149,10 +185,15 @@ export default function ImageUpload({ value, onChange, label = 'Featured Image' 
             {activeTab === 'upload' ? (
               <div
                 onClick={() => !uploading && fileInputRef.current?.click()}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
                 className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all ${
-                  uploading
-                    ? 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50'
-                    : 'border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 hover:bg-slate-50 dark:hover:bg-slate-900/50'
+                  isDragging
+                    ? 'border-emerald-500 bg-emerald-50/50 dark:bg-emerald-900/20 scale-[1.02]'
+                    : uploading
+                      ? 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50'
+                      : 'border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 hover:bg-slate-50 dark:hover:bg-slate-900/50'
                 }`}
               >
                 <input
@@ -171,13 +212,22 @@ export default function ImageUpload({ value, onChange, label = 'Featured Image' 
                       Uploading image...
                     </p>
                   </div>
+                ) : isDragging ? (
+                  <div className="flex flex-col items-center justify-center gap-1.5 py-2">
+                    <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-1 animate-bounce">
+                      <Upload className="w-5 h-5" />
+                    </div>
+                    <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+                      Drop image here!
+                    </p>
+                  </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center gap-1.5 py-2">
                     <div className="w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-1">
                       <Upload className="w-5 h-5" />
                     </div>
                     <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">
-                      Click to upload
+                      Drag & drop or click to upload
                     </p>
                     <p className="text-xs text-slate-400 dark:text-slate-500">
                       PNG, JPG, GIF or WEBP (Max 5MB)

@@ -15,21 +15,50 @@ export const COLORS = {
 
 // Category definitions
 export const CATEGORIES = {
-  VISIT: 'visit',
-  EAT: 'eat',
-  STAY: 'stay',
+  TRAVEL: 'travel',
+  FOOD: 'food',
+  LIFESTYLE: 'lifestyle',
 } as const
 
 export const CATEGORY_LABELS = {
-  visit: 'Places to Visit',
-  eat: 'Where to Eat',
-  stay: 'Where to Stay',
+  travel: 'Travel',
+  food: 'Food',
+  lifestyle: 'Lifestyle',
 } as const
 
 export const CATEGORY_ICONS = {
-  visit: '🗺️',
-  eat: '🍽️',
-  stay: '🏨',
+  travel: '✈️',
+  food: '🍜',
+  lifestyle: '🌿',
+} as const
+
+export const CATEGORY_DESCRIPTIONS = {
+  travel: 'Explore stunning destinations, hidden gems, and unforgettable adventures across Sri Lanka.',
+  food: 'Discover authentic cuisine, street food, and fine dining experiences on the island.',
+  lifestyle: 'Wellness retreats, cultural experiences, and the island lifestyle.',
+} as const
+
+// Sri Lankan regions for quick filters
+export const REGIONS = [
+  'Kandy',
+  'Ella',
+  'Galle',
+  'Colombo',
+  'Sigiriya',
+  'Mirissa',
+  'Negombo',
+  'Nuwara Eliya',
+  'Trincomalee',
+  'Jaffna',
+  'Anuradhapura',
+  'Arugam Bay',
+] as const
+
+// Budget levels for quick filters
+export const BUDGET_LEVELS = {
+  low: { label: 'Budget-Friendly', icon: '💰', description: 'Great value experiences' },
+  mid: { label: 'Mid-Range', icon: '💎', description: 'Balanced quality & cost' },
+  luxury: { label: 'Luxury', icon: '👑', description: 'Premium experiences' },
 } as const
 
 // Navigation routes
@@ -40,6 +69,7 @@ export const ROUTES = {
   BLOG: '/blog',
   ABOUT: '/about',
   CONTACT: '/contact',
+  WISHLIST: '/wishlist',
   LOGIN: '/admin/login',
   ADMIN: '/admin',
   ADMIN_DASHBOARD: '/admin/dashboard',
@@ -101,8 +131,8 @@ export const SITE_KEYWORDS = [
   'travel',
   'destinations',
   'places to visit',
-  'where to eat',
-  'where to stay',
+  'food',
+  'lifestyle',
   'tourism',
   'adventure',
 ]

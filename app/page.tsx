@@ -3,6 +3,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { BottomNav } from '@/components/layout/BottomNav'
 import { HeroSection } from '@/components/sections/HeroSection'
+import { TopPicks } from '@/components/sections/TopPicks'
 import { FeaturedDestinations } from '@/components/sections/FeaturedDestinations'
 import { CategoriesSection } from '@/components/sections/CategoriesSection'
 import { LatestVideos } from '@/components/sections/LatestVideos'
@@ -20,6 +21,7 @@ export default function Home() {
       <Header />
       <main className="flex flex-col bg-white dark:bg-slate-950">
         <HeroSection />
+        <TopPicks />
         <FeaturedDestinations />
         <CategoriesSection />
         <LatestVideos />
