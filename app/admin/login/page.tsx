@@ -12,13 +12,31 @@ export default function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
+  const [isForgotPassword, setIsForgotPassword] = useState(false)
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
+    setSuccess(null)
 
     const supabase = createClient()
+
+    if (isForgotPassword) {
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/admin/reset-password`,
+      })
+
+      if (resetError) {
+        setError(resetError.message)
+      } else {
+        setSuccess('Reset link sent! Please check your email.')
+        setIsForgotPassword(false)
+      }
+      setLoading(false)
+      return
+    }
 
     const { data, error: authError } = await supabase.auth.signInWithPassword({
       email,
@@ -85,8 +103,14 @@ export default function AdminLoginPage() {
         {/* Login Card */}
         <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl">
           <div className="mb-6">
-            <h2 className="text-xl font-semibold text-white">Welcome back</h2>
-            <p className="text-slate-400 text-sm mt-1">Sign in to manage your content</p>
+            <h2 className="text-xl font-semibold text-white">
+              {isForgotPassword ? 'Reset Password' : 'Welcome back'}
+            </h2>
+            <p className="text-slate-400 text-sm mt-1">
+              {isForgotPassword
+                ? 'Enter your email to receive a password reset link'
+                : 'Sign in to manage your content'}
+            </p>
           </div>
 
           {error && (
@@ -95,6 +119,15 @@ export default function AdminLoginPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <span>{error}</span>
+            </div>
+          )}
+
+          {success && (
+            <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-sm text-emerald-300 flex items-start gap-3">
+              <svg className="w-5 h-5 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <span>{success}</span>
             </div>
           )}
 
@@ -116,32 +149,47 @@ export default function AdminLoginPage() {
               />
             </div>
 
-            <div className="space-y-2">
-              <label htmlFor="admin-password" className="block text-sm font-medium text-slate-300">
-                Password
-              </label>
-              <div className="relative">
-                <input
-                  id="admin-password"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  disabled={loading}
-                  autoComplete="current-password"
-                  className="w-full h-12 px-4 pr-12 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all disabled:opacity-50 text-base"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 transition-colors"
-                  tabIndex={-1}
-                >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
+            {!isForgotPassword && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label htmlFor="admin-password" className="block text-sm font-medium text-slate-300">
+                    Password
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsForgotPassword(true)
+                      setError(null)
+                      setSuccess(null)
+                    }}
+                    className="text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors"
+                  >
+                    Forgot Password?
+                  </button>
+                </div>
+                <div className="relative">
+                  <input
+                    id="admin-password"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required={!isForgotPassword}
+                    disabled={loading}
+                    autoComplete="current-password"
+                    className="w-full h-12 px-4 pr-12 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all disabled:opacity-50 text-base"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 transition-colors"
+                    tabIndex={-1}
+                  >
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
 
             <button
               type="submit"
@@ -151,12 +199,26 @@ export default function AdminLoginPage() {
               {loading ? (
                 <>
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Signing in...
+                  {isForgotPassword ? 'Sending...' : 'Signing in...'}
                 </>
               ) : (
-                'Sign In'
+                isForgotPassword ? 'Send Reset Link' : 'Sign In'
               )}
             </button>
+
+            {isForgotPassword && (
+              <button
+                type="button"
+                onClick={() => {
+                  setIsForgotPassword(false)
+                  setError(null)
+                  setSuccess(null)
+                }}
+                className="w-full text-center text-sm text-slate-400 hover:text-slate-300 transition-colors mt-4"
+              >
+                Back to Login
+              </button>
+            )}
           </form>
         </div>
 
