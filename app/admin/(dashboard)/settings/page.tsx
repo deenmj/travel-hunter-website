@@ -42,7 +42,7 @@ export default function SettingsPage() {
     youtube: '',
     instagram: '',
     facebook: '',
-    twitter: '',
+    tiktok: '',
   })
 
   // Load settings from Supabase on mount
@@ -61,7 +61,7 @@ export default function SettingsPage() {
             youtube: result.data.youtube_url || '',
             instagram: result.data.instagram_url || '',
             facebook: result.data.facebook_url || '',
-            twitter: result.data.twitter_url || '',
+            tiktok: result.data.tiktok_url || '',
           })
         }
       } catch (err) {
@@ -87,7 +87,7 @@ export default function SettingsPage() {
         youtube_url: socialSettings.youtube,
         instagram_url: socialSettings.instagram,
         facebook_url: socialSettings.facebook,
-        twitter_url: socialSettings.twitter,
+        tiktok_url: socialSettings.tiktok,
       })
 
       if (result.error) {
@@ -295,18 +295,18 @@ export default function SettingsPage() {
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                 <span className="flex items-center gap-1.5">
                   <svg className="w-3.5 h-3.5 text-slate-800 dark:text-white" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
                   </svg>
-                  Twitter / X
+                  TikTok
                 </span>
               </label>
               <input
                 type="url"
-                value={socialSettings.twitter}
+                value={socialSettings.tiktok}
                 onChange={(e) =>
-                  setSocialSettings({ ...socialSettings, twitter: e.target.value })
+                  setSocialSettings({ ...socialSettings, tiktok: e.target.value })
                 }
-                placeholder="https://x.com/yourhandle"
+                placeholder="https://tiktok.com/@yourpage"
                 className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
               />
             </div>

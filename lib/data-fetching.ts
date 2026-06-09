@@ -501,7 +501,7 @@ const DEFAULT_SITE_SETTINGS: SiteSettings = {
   youtube_url: '',
   instagram_url: '',
   facebook_url: '',
-  twitter_url: '',
+  tiktok_url: '',
   updated_at: new Date().toISOString(),
 }
 

@@ -432,7 +432,7 @@ export async function updateSiteSettings(formData: {
   youtube_url?: string
   instagram_url?: string
   facebook_url?: string
-  twitter_url?: string
+  tiktok_url?: string
 }) {
   const { supabase } = await requireAdmin()
 
