@@ -70,8 +70,9 @@ export async function signUp(
     password,
     options: {
       emailRedirectTo:
-        process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL ??
-        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/callback`,
+        process.env.NEXT_PUBLIC_SITE_URL
+          ? `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`
+          : `${process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL ?? 'http://localhost:3000/auth/callback'}`,
       data: {
         full_name: fullName,
         role: 'editor',

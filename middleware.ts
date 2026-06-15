@@ -6,7 +6,8 @@ export async function middleware(request: NextRequest) {
   // Protect /admin routes (except /admin/login)
   if (
     request.nextUrl.pathname.startsWith('/admin') &&
-    !request.nextUrl.pathname.startsWith('/admin/login')
+    !request.nextUrl.pathname.startsWith('/admin/login') &&
+    !request.nextUrl.pathname.startsWith('/admin/reset-password')
   ) {
     // Use updateSession to refresh cookies and check auth
     const response = await updateSession(request)
