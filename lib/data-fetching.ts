@@ -232,19 +232,15 @@ export async function getDestinations(category?: string): Promise<Destination[]>
 
     const { data, error } = await query.order('created_at', { ascending: false })
 
-    if (error || !data) {
-      console.error('Error fetching destinations, using placeholder:', error)
-      return category
-        ? PLACEHOLDER_DESTINATIONS.filter((d) => d.category === category)
-        : PLACEHOLDER_DESTINATIONS
+    if (error) {
+      console.error('Error fetching destinations:', error)
+      return []
     }
 
-    return data
+    return data || []
   } catch (error) {
-    console.error('Exception fetching destinations, using placeholder:', error)
-    return category
-      ? PLACEHOLDER_DESTINATIONS.filter((d) => d.category === category)
-      : PLACEHOLDER_DESTINATIONS
+    console.error('Exception fetching destinations:', error)
+    return []
   }
 }
 
@@ -275,15 +271,15 @@ export async function getFeaturedDestinations(limit: number = 4): Promise<Destin
       .limit(limit)
       .order('created_at', { ascending: false })
 
-    if (error || !data) {
-      console.error('Error fetching featured destinations, using placeholder:', error)
-      return PLACEHOLDER_DESTINATIONS.slice(0, limit)
+    if (error) {
+      console.error('Error fetching featured destinations:', error)
+      return []
     }
 
-    return data
+    return data || []
   } catch (error) {
-    console.error('Exception fetching featured destinations, using placeholder:', error)
-    return PLACEHOLDER_DESTINATIONS.slice(0, limit)
+    console.error('Exception fetching featured destinations:', error)
+    return []
   }
 }
 
@@ -294,18 +290,18 @@ export async function getTopPicks(limit: number = 4): Promise<Destination[]> {
     const { data, error } = await supabase
       .from('destinations')
       .select('*')
-      .eq('is_top_pick', true)
       .limit(limit)
       .order('created_at', { ascending: false })
 
-    if (error || !data || data.length === 0) {
-      return PLACEHOLDER_DESTINATIONS.filter((d) => d.is_top_pick).slice(0, limit)
+    if (error) {
+      console.error('Error fetching top picks:', error)
+      return []
     }
 
-    return data
+    return data || []
   } catch (error) {
     console.error('Exception fetching top picks:', error)
-    return PLACEHOLDER_DESTINATIONS.filter((d) => d.is_top_pick).slice(0, limit)
+    return []
   }
 }
 
@@ -319,15 +315,15 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
       .select('*')
       .order('created_at', { ascending: false })
 
-    if (error || !data) {
-      console.error('Error fetching blog posts, using placeholder:', error)
-      return PLACEHOLDER_BLOG_POSTS
+    if (error) {
+      console.error('Error fetching blog posts:', error)
+      return []
     }
 
-    return data
+    return data || []
   } catch (error) {
-    console.error('Exception fetching blog posts, using placeholder:', error)
-    return PLACEHOLDER_BLOG_POSTS
+    console.error('Exception fetching blog posts:', error)
+    return []
   }
 }
 
@@ -358,15 +354,15 @@ export async function getLatestBlogPosts(limit: number = 4): Promise<BlogPost[]>
       .limit(limit)
       .order('created_at', { ascending: false })
 
-    if (error || !data) {
-      console.error('Error fetching latest blog posts, using placeholder:', error)
-      return PLACEHOLDER_BLOG_POSTS.slice(0, limit)
+    if (error) {
+      console.error('Error fetching latest blog posts:', error)
+      return []
     }
 
-    return data
+    return data || []
   } catch (error) {
-    console.error('Exception fetching latest blog posts, using placeholder:', error)
-    return PLACEHOLDER_BLOG_POSTS.slice(0, limit)
+    console.error('Exception fetching latest blog posts:', error)
+    return []
   }
 }
 
@@ -380,15 +376,15 @@ export async function getVideos(): Promise<Video[]> {
       .select('*')
       .order('created_at', { ascending: false })
 
-    if (error || !data) {
-      console.error('Error fetching videos, using placeholder:', error)
-      return PLACEHOLDER_VIDEOS
+    if (error) {
+      console.error('Error fetching videos:', error)
+      return []
     }
 
-    return data
+    return data || []
   } catch (error) {
-    console.error('Exception fetching videos, using placeholder:', error)
-    return PLACEHOLDER_VIDEOS
+    console.error('Exception fetching videos:', error)
+    return []
   }
 }
 
@@ -419,15 +415,15 @@ export async function getLatestVideos(limit: number = 6): Promise<Video[]> {
       .limit(limit)
       .order('created_at', { ascending: false })
 
-    if (error || !data) {
-      console.error('Error fetching latest videos, using placeholder:', error)
-      return PLACEHOLDER_VIDEOS.slice(0, limit)
+    if (error) {
+      console.error('Error fetching latest videos:', error)
+      return []
     }
 
-    return data
+    return data || []
   } catch (error) {
-    console.error('Exception fetching latest videos, using placeholder:', error)
-    return PLACEHOLDER_VIDEOS.slice(0, limit)
+    console.error('Exception fetching latest videos:', error)
+    return []
   }
 }
 

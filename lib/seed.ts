@@ -10,7 +10,6 @@ const supabase = createClient(supabaseUrl, supabaseKey)
 
 const destinationsToSeed = [
   {
-    id: '1',
     slug: 'sigiriya-rock-fortress',
     name: 'Sigiriya Rock Fortress',
     description: 'An ancient palace and fortress complex carved into a massive column of rock. Known as the Eighth Wonder of the World by locals, it offers breathtaking views and features ancient frescoes.',
@@ -21,10 +20,10 @@ const destinationsToSeed = [
     best_time: 'January to April',
     location: 'Central Province',
     highlights: ['Ancient ruins', 'Panoramic views', 'Mirror wall frescoes', 'Lion Paws'],
+    is_top_pick: true,
     created_by: 'admin',
   },
   {
-    id: '2',
     slug: 'galle-fort',
     name: 'Galle Dutch Fort',
     description: 'A beautifully preserved colonial-era fort on the southwest coast. Wander through cobblestone streets, boutique shops, and cafes while watching stunning sunsets from the ramparts.',
@@ -35,10 +34,10 @@ const destinationsToSeed = [
     best_time: 'December to March',
     location: 'Southern Province',
     highlights: ['Colonial architecture', 'Lighthouse', 'Boutique shopping', 'Sunset walks'],
+    is_top_pick: true,
     created_by: 'admin',
   },
   {
-    id: '3',
     slug: 'nine-arch-bridge',
     name: 'Nine Arch Bridge',
     description: 'A spectacular colonial-era railway bridge hidden deep in the jungle. An iconic spot for photography, especially when the iconic blue train passes through the misty mountains of Ella.',
@@ -52,7 +51,6 @@ const destinationsToSeed = [
     created_by: 'admin',
   },
   {
-    id: '4',
     slug: 'yala-national-park',
     name: 'Yala National Park',
     description: 'The most famous wildlife park in Sri Lanka, offering the highest leopard density in the world. Embark on a thrilling safari to spot elephants, sloth bears, and diverse birdlife.',
@@ -63,10 +61,10 @@ const destinationsToSeed = [
     best_time: 'February to July',
     location: 'Southern Province',
     highlights: ['Leopard spotting', 'Jeep safari', 'Wild elephants', 'Nature photography'],
+    is_top_pick: true,
     created_by: 'admin',
   },
   {
-    id: '5',
     slug: 'galle-face-street-food',
     name: 'Galle Face Green Street Food',
     description: 'Experience the bustling heart of Colombo at sunset. The promenade comes alive with dozens of food carts offering spicy isso vadei (prawn fritters), kottu roti, and local sweets.',
@@ -80,7 +78,6 @@ const destinationsToSeed = [
     created_by: 'admin',
   },
   {
-    id: '6',
     slug: 'mirissa-seafood',
     name: 'Mirissa Beach Seafood',
     description: 'Dine right on the sand under fairy lights. Mirissa beach is famous for its massive displays of freshly caught seafood that you can pick and have grilled to order.',
@@ -94,7 +91,6 @@ const destinationsToSeed = [
     created_by: 'admin',
   },
   {
-    id: '7',
     slug: 'jetwing-beach',
     name: 'Jetwing Beach Hotel',
     description: 'A luxurious beachfront property in Negombo designed by the legendary architect Geoffrey Bawa. Offers stunning Indian Ocean views, a world-class spa, and exceptional dining.',
@@ -108,7 +104,6 @@ const destinationsToSeed = [
     created_by: 'admin',
   },
   {
-    id: '8',
     slug: '98-acres-resort',
     name: '98 Acres Resort & Spa',
     description: 'An elegant, eco-friendly boutique hotel standing on a scenic 98-acre tea estate. Experience ultimate luxury in chalets made of recyclable materials with majestic views of Little Adams Peak.',
@@ -119,6 +114,7 @@ const destinationsToSeed = [
     best_time: 'February to June',
     location: 'Ella',
     highlights: ['Eco-luxury', 'Mountain views', 'Tea estate', 'Infinity pool'],
+    is_top_pick: true,
     created_by: 'admin',
   },
 ]
