@@ -17,7 +17,7 @@ import type { Destination } from '@/lib/types'
 import { getDestinationThumbnail } from '@/lib/video-utils'
 import { getDestinationHref, getRating } from '@/lib/destination-utils'
 import { WishlistButton } from '@/components/ui/WishlistButton'
-import { Star, ShieldCheck, MapPin, X, SlidersHorizontal, Trash2 } from 'lucide-react'
+import { Star, ShieldCheck, MapPin, X, SlidersHorizontal, Trash2, Wallet } from 'lucide-react'
 import { CATEGORIES, CATEGORY_LABELS, CATEGORY_ICONS, BUDGET_LEVELS, ALL_DISTRICTS } from '@/lib/constants'
 
 interface Filters {
@@ -265,100 +265,109 @@ export function DestinationsList() {
                 const rating = getRating(destination.slug || destination.id)
                 return (
                 <div key={destination.id} className="relative group h-full">
-                  <Link href={getDestinationHref(destination)} className="block h-full">
-                    <Card className="overflow-hidden border-0 bg-white dark:bg-slate-900 shadow-[0_4px_20px_rgb(0,0,0,0.04)] dark:shadow-[0_4px_20px_rgb(0,0,0,0.2)] hover:shadow-2xl hover:-translate-y-1 md:hover:-translate-y-2 transition-all duration-500 cursor-pointer h-full flex flex-col rounded-2xl md:rounded-[2rem] group ring-1 ring-slate-100 dark:ring-slate-800 hover:ring-emerald-500/50 dark:hover:ring-emerald-500/50">
-                      <div className="relative aspect-[4/3] bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0">
+                  <Link href={getDestinationHref(destination)} className="block h-full relative group">
+                    <Card className="overflow-hidden border border-slate-200/60 dark:border-slate-800/60 bg-white dark:bg-slate-900 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 cursor-pointer h-full flex flex-col rounded-[1.5rem] md:rounded-[2rem]">
+                      
+                      {/* ── Image Section ── */}
+                      <div className="relative aspect-[16/9] bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0">
                         {thumbnail ? (
                           <img
                             src={thumbnail}
                             alt={destination.name}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-3xl md:text-4xl bg-gradient-to-br from-emerald-100 to-teal-100 dark:from-emerald-900/40 dark:to-teal-900/40">
+                          <div className="w-full h-full flex items-center justify-center text-4xl bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20">
                             🗺️
                           </div>
                         )}
                         
-                        <div className="absolute top-3 md:top-4 right-3 md:right-4 z-10 flex flex-col gap-1.5 items-end">
-                          {destination.is_top_pick && (
-                            <span className="inline-flex items-center gap-1 px-2 md:px-2.5 py-1 md:py-1.5 bg-amber-500/95 backdrop-blur-md text-white text-[10px] md:text-xs font-black rounded-lg md:rounded-xl shadow-lg uppercase tracking-wider">
-                              <ShieldCheck className="w-3 h-3 md:w-3.5 md:h-3.5" /> Approved
-                            </span>
-                          )}
-                        </div>
-
-                        <div className="absolute top-3 md:top-4 left-3 md:left-4 z-10">
-                          <div className="flex gap-1 md:gap-1.5">
+                        {/* Top Left Badges */}
+                        <div className="absolute top-3 left-3 md:top-4 md:left-4 z-10 flex flex-col gap-1.5 items-start">
+                          <div className="flex gap-1.5">
                             {destination.category && (
-                              <span className="inline-flex items-center px-2 md:px-2.5 py-1 md:py-1.5 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-slate-900 dark:text-white text-[10px] md:text-xs font-black rounded-lg md:rounded-xl shadow-lg uppercase tracking-wider">
+                              <span className="inline-flex items-center px-2.5 py-1 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-slate-900 dark:text-white text-[10px] font-black rounded-lg shadow-sm uppercase tracking-wider">
                                 {destination.category}
                               </span>
                             )}
-                            {destination.budget && (
-                              <span className="inline-flex items-center px-2 md:px-2.5 py-1 md:py-1.5 bg-emerald-500/95 backdrop-blur-md text-white text-[10px] md:text-xs font-black rounded-lg md:rounded-xl shadow-lg uppercase tracking-wider">
-                                {destination.budget === 'low' ? '₹' : destination.budget === 'mid' ? '₹₹' : '₹₹₹'}
+                            {destination.is_top_pick && (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-500/95 backdrop-blur-md text-white text-[10px] font-black rounded-lg shadow-sm uppercase tracking-wider">
+                                <ShieldCheck className="w-3.5 h-3.5" /> Approved
                               </span>
                             )}
                           </div>
                         </div>
 
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
-                        
-                        <div className="absolute bottom-3 md:bottom-5 left-3 md:left-5 right-3 md:right-5 z-10">
-                          <h3 className="font-black text-xl sm:text-2xl md:text-3xl text-white group-hover:text-emerald-400 transition-colors line-clamp-1 drop-shadow-md mb-1 md:mb-2">
-                            {destination.name}
-                          </h3>
-                          <div className="flex items-center gap-2 md:gap-3">
-                            {destination.location && (
-                              <div className="flex items-center gap-1 text-xs md:text-sm text-slate-200 font-medium">
-                                <MapPin className="w-3 h-3 md:w-4 md:h-4 text-emerald-400 shrink-0" />
-                                <span className="truncate">{destination.location}</span>
-                              </div>
-                            )}
-                            <div className="flex items-center gap-1 text-xs md:text-sm text-amber-400 font-bold shrink-0">
-                              <Star className="w-3 h-3 md:w-4 md:h-4 fill-amber-400" />
-                              {rating}
-                            </div>
-                          </div>
+                        {/* Top Right Wishlist Button */}
+                        <div className="absolute top-3 right-3 md:top-4 md:right-4 z-20">
+                          <WishlistButton 
+                            item={{
+                              id: destination.id,
+                              type: 'destination',
+                              name: destination.name,
+                              slug: destination.slug,
+                              image: thumbnail || undefined
+                            }}
+                          />
                         </div>
+
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       </div>
 
-                      <CardContent className="p-4 md:p-6 flex-1 flex flex-col justify-between relative bg-white dark:bg-slate-900">
-                        <div>
-                          <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed mb-4 md:mb-6">
-                            {destination.description}
-                          </p>
+                      {/* ── Content Section ── */}
+                      <CardContent className="p-5 md:p-6 flex-1 flex flex-col bg-white dark:bg-slate-900 relative">
+                        
+                        {/* Title and Rating Row */}
+                        <div className="flex justify-between items-start gap-3 mb-2">
+                          <h3 className="font-black text-xl md:text-2xl text-slate-900 dark:text-white line-clamp-1 group-hover:text-emerald-500 transition-colors">
+                            {destination.name}
+                          </h3>
+                          <div className="flex items-center gap-1 text-sm font-bold text-slate-900 dark:text-white shrink-0 bg-slate-50 dark:bg-slate-800 px-2 py-1 rounded-lg border border-slate-100 dark:border-slate-700">
+                            <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                            {rating}
+                          </div>
+                        </div>
+
+                        {/* Location */}
+                        <div className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 mb-3">
+                          <MapPin className="w-4 h-4 text-emerald-500 shrink-0" />
+                          <span className="truncate">{destination.location || 'Sri Lanka'}</span>
                         </div>
                         
-                        <div className="flex flex-wrap gap-2 mt-auto">
-                          {destination.highlights?.slice(0, 3).map((highlight, idx) => (
-                            <span key={idx} className="text-xs font-medium bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-300 px-3 py-1.5 rounded-lg border border-slate-100 dark:border-slate-800">
-                              {highlight}
+                        {/* Description */}
+                        <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed mb-5 flex-1">
+                          {destination.description}
+                        </p>
+                        
+                        {/* Footer Data Row */}
+                        <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                          
+                          {/* Budget Indicator */}
+                          <div className="flex items-center gap-1.5">
+                            <Wallet className="w-4 h-4 text-slate-400" />
+                            <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                              {destination.budget === 'low' ? 'Budget' : destination.budget === 'mid' ? 'Mid Range' : destination.budget === 'luxury' ? 'Luxury' : 'Any'}
                             </span>
-                          ))}
-                          {destination.highlights && destination.highlights.length > 3 && (
-                            <span className="text-xs font-medium bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 px-3 py-1.5 rounded-lg border border-slate-100 dark:border-slate-800">
-                              +{destination.highlights.length - 3}
-                            </span>
-                          )}
+                          </div>
+
+                          {/* Highlights Pills */}
+                          <div className="flex gap-1.5">
+                            {destination.highlights?.slice(0, 2).map((highlight, idx) => (
+                              <span key={idx} className="text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-md max-w-[80px] truncate">
+                                {highlight}
+                              </span>
+                            ))}
+                            {destination.highlights && destination.highlights.length > 2 && (
+                              <span className="text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-2 py-1 rounded-md">
+                                +{destination.highlights.length - 2}
+                              </span>
+                            )}
+                          </div>
+                          
                         </div>
                       </CardContent>
                     </Card>
                   </Link>
-                  
-                  {/* Floating Wishlist Button */}
-                  <div className="absolute -top-2 -right-2 md:-top-3 md:-right-3 z-20 scale-90 group-hover:scale-100 transition-transform duration-300">
-                    <WishlistButton 
-                      item={{
-                        id: destination.id,
-                        type: 'destination',
-                        name: destination.name,
-                        slug: destination.slug,
-                        image: thumbnail || undefined
-                      }}
-                    />
-                  </div>
                 </div>
                 )
               })}

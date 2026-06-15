@@ -290,6 +290,7 @@ export async function getTopPicks(limit: number = 4): Promise<Destination[]> {
     const { data, error } = await supabase
       .from('destinations')
       .select('*')
+      .eq('is_top_pick', true)
       .limit(limit)
       .order('created_at', { ascending: false })
 

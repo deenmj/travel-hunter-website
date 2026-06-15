@@ -31,6 +31,7 @@ export default function NewDestinationPage() {
     location: '',
     highlights: [] as string[],
     images: [] as string[],
+    is_top_pick: false,
   })
 
   const generateSlug = (name: string) => {
@@ -81,6 +82,7 @@ export default function NewDestinationPage() {
       location: form.location || undefined,
       images: form.images.length > 0 ? form.images : undefined,
       highlights: form.highlights.length > 0 ? form.highlights : undefined,
+      is_top_pick: form.is_top_pick,
     }
 
     const result = await createDestination(payload)
@@ -164,6 +166,21 @@ export default function NewDestinationPage() {
               placeholder="auto-generated-from-name"
               className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
             />
+          </div>
+
+          {/* Top Pick / Front Page Toggle */}
+          <div className="flex items-center justify-between p-4 bg-emerald-50/50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800/50 rounded-xl">
+            <div>
+              <p className="text-sm font-bold text-slate-900 dark:text-white">Show on Front Page (Top Pick)</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Feature this destination prominently on the home page.</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setForm(prev => ({ ...prev, is_top_pick: !prev.is_top_pick }))}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${form.is_top_pick ? 'bg-emerald-500' : 'bg-slate-200 dark:bg-slate-700'}`}
+            >
+              <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${form.is_top_pick ? 'translate-x-6' : 'translate-x-1'}`} />
+            </button>
           </div>
 
           {/* Category */}
