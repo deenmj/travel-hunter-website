@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { Search, ArrowUpDown, ChevronDown } from 'lucide-react'
+import { Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
@@ -67,7 +67,8 @@ export function DestinationsList() {
         (d) =>
           d.name.toLowerCase().includes(query) ||
           d.description.toLowerCase().includes(query) ||
-          (d.location && d.location.toLowerCase().includes(query))
+          (d.location && d.location.toLowerCase().includes(query)) ||
+          (d.region && d.region.toLowerCase().includes(query))
       )
     }
 
@@ -393,6 +394,8 @@ export function DestinationsList() {
                 </div>
                 )
               })}
+            </div>
+          )}
         </div>
       </div>
     </section>
