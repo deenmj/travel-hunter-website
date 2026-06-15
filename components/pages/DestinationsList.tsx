@@ -17,7 +17,7 @@ import type { Destination } from '@/lib/types'
 import { getDestinationThumbnail } from '@/lib/video-utils'
 import { getDestinationHref, getRating } from '@/lib/destination-utils'
 import { WishlistButton } from '@/components/ui/WishlistButton'
-import { Star, ShieldCheck, MapPin, Wallet, SlidersHorizontal, X } from 'lucide-react'
+import { Star, ShieldCheck, MapPin, X, SlidersHorizontal, Trash2 } from 'lucide-react'
 import { CATEGORIES, CATEGORY_LABELS, CATEGORY_ICONS, BUDGET_LEVELS, ALL_DISTRICTS } from '@/lib/constants'
 
 interface Filters {
@@ -37,9 +37,6 @@ export function DestinationsList() {
   const [sortBy, setSortBy] = useState<'featured' | 'name-asc' | 'name-desc'>('featured')
   
   const [loading, setLoading] = useState(true)
-  const [showMobileFilters, setShowMobileFilters] = useState(false)
-
-  const popularRegions = ['Kandy', 'Ella', 'Galle', 'Sigiriya', 'Mirissa', 'Colombo']
 
   const activeFilterCount = [
     activeFilters.category !== 'all' ? 1 : 0,
@@ -92,161 +89,10 @@ export function DestinationsList() {
     setFilteredDestinations(result)
   }, [activeFilters, searchQuery, sortBy, destinations])
 
-  // Lock body scroll when mobile filters are open
-  useEffect(() => {
-    if (showMobileFilters) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
-    return () => { document.body.style.overflow = '' }
-  }, [showMobileFilters])
-
   const clearFilters = useCallback(() => {
     setSearchQuery('')
     setActiveFilters(DEFAULT_FILTERS)
   }, [])
-
-  // ─── Shared Filter Content Function (Returns JSX directly to avoid unmounting bugs) ───
-  const renderFilterContent = (onDone?: () => void) => (
-    <div className="space-y-6">
-      {/* Categories */}
-      <div>
-        <label className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 block">
-          Type
-        </label>
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            onClick={() => setActiveFilters({ ...activeFilters, category: 'all' })}
-            className={`shrink-0 whitespace-nowrap px-4 md:px-5 py-2 md:py-2.5 rounded-full text-sm font-bold transition-all ${
-              activeFilters.category === 'all'
-                ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-md'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700'
-            }`}
-          >
-            All
-          </button>
-          {Object.entries(CATEGORIES).map(([key, val]) => (
-            <button
-              key={val}
-              onClick={() => setActiveFilters({ ...activeFilters, category: val })}
-              className={`shrink-0 whitespace-nowrap px-4 md:px-5 py-2 md:py-2.5 rounded-full text-sm font-bold transition-all flex items-center gap-1.5 ${
-                activeFilters.category === val
-                  ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/25'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700'
-              }`}
-            >
-              <span className="text-base">{CATEGORY_ICONS[val as keyof typeof CATEGORY_ICONS]}</span>
-              {CATEGORY_LABELS[val as keyof typeof CATEGORY_LABELS]}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <hr className="border-slate-100 dark:border-slate-800" />
-
-      {/* Regions */}
-      <div>
-        <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5 mb-3">
-          <MapPin className="w-4 h-4" /> Districts & Regions
-        </label>
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            onClick={() => setActiveFilters({ ...activeFilters, region: 'all' })}
-            className={`shrink-0 whitespace-nowrap px-4 py-2 rounded-xl text-sm font-semibold transition-all border ${
-              activeFilters.region === 'all'
-                ? 'border-emerald-500 bg-emerald-50 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400'
-                : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'
-            }`}
-          >
-            Anywhere
-          </button>
-          {popularRegions.map((region) => (
-            <button
-              key={region}
-              onClick={() => setActiveFilters({ ...activeFilters, region })}
-              className={`shrink-0 whitespace-nowrap px-4 py-2 rounded-xl text-sm font-semibold transition-all border ${
-                activeFilters.region === region
-                  ? 'border-emerald-500 bg-emerald-50 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400'
-                  : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'
-              }`}
-            >
-              {region}
-            </button>
-          ))}
-          <div className="w-full sm:w-48 mt-2 sm:mt-0">
-            <Select 
-              value={activeFilters.region === 'all' || popularRegions.includes(activeFilters.region || '') ? '' : activeFilters.region} 
-              onValueChange={(val) => setActiveFilters({ ...activeFilters, region: val })}
-            >
-              <SelectTrigger className="h-10 rounded-xl bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-sm font-semibold">
-                <SelectValue placeholder="All Districts..." />
-              </SelectTrigger>
-              <SelectContent className="max-h-[300px]">
-                {ALL_DISTRICTS.map((district) => (
-                  <SelectItem key={district} value={district}>{district}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      </div>
-
-      <hr className="border-slate-100 dark:border-slate-800" />
-
-      {/* Budget */}
-      <div>
-        <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5 mb-3">
-          <Wallet className="w-4 h-4" /> Budget Level
-        </label>
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            onClick={() => setActiveFilters({ ...activeFilters, budget: 'all' })}
-            className={`shrink-0 whitespace-nowrap px-4 py-2 rounded-xl text-sm font-semibold transition-all border ${
-              activeFilters.budget === 'all'
-                ? 'border-amber-500 bg-amber-50 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400'
-                : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'
-            }`}
-          >
-            Any
-          </button>
-          {Object.entries(BUDGET_LEVELS).map(([key, data]) => (
-            <button
-              key={key}
-              onClick={() => setActiveFilters({ ...activeFilters, budget: key })}
-              className={`shrink-0 whitespace-nowrap flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all border ${
-                activeFilters.budget === key
-                  ? 'border-amber-500 bg-amber-50 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400'
-                  : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'
-              }`}
-            >
-              <span>{key === 'low' ? '₹' : key === 'mid' ? '₹₹' : '₹₹₹'}</span>
-              <span>{data.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Done button (mobile only) */}
-      {onDone && (
-        <div className="flex gap-3 pt-4">
-          <Button
-            onClick={() => { clearFilters(); onDone(); }}
-            variant="outline"
-            className="flex-1 h-12 rounded-xl text-base font-semibold"
-          >
-            Reset
-          </Button>
-          <Button
-            onClick={onDone}
-            className="flex-1 h-12 rounded-xl text-base font-bold bg-emerald-500 hover:bg-emerald-600 text-white"
-          >
-            Show {filteredDestinations.length} Results
-          </Button>
-        </div>
-      )}
-    </div>
-  )
 
   return (
     <section className="w-full bg-slate-50 dark:bg-slate-950 min-h-screen">
@@ -286,52 +132,84 @@ export function DestinationsList() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
 
-        {/* ── Mobile: Filter Toggle Button ── */}
-        <div className="md:hidden mb-6">
-          <button
-            onClick={() => setShowMobileFilters(true)}
-            className="w-full flex items-center justify-center gap-2 h-12 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-base font-bold text-slate-700 dark:text-slate-200 shadow-sm active:scale-[0.98] transition-transform"
-          >
-            <SlidersHorizontal className="w-5 h-5 text-emerald-500" />
-            Filters
-            {activeFilterCount > 0 && (
-              <span className="bg-emerald-500 text-white text-xs font-black w-6 h-6 rounded-full flex items-center justify-center">
-                {activeFilterCount}
-              </span>
-            )}
-          </button>
-        </div>
-
-        {/* ── Desktop: Inline Filter Panel ── */}
-        <div className="hidden md:block bg-white dark:bg-slate-900 rounded-[2rem] p-6 shadow-sm border border-slate-200 dark:border-slate-800 mb-8">
-          {renderFilterContent()}
-        </div>
-
-        {/* ── Mobile Bottom Sheet ── */}
-        {showMobileFilters && (
-          <div className="fixed inset-0 z-50 md:hidden">
-            {/* Backdrop */}
-            <div
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-              onClick={() => setShowMobileFilters(false)}
-            />
-            {/* Sheet */}
-            <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-slate-900 rounded-t-[2rem] shadow-2xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom duration-300">
-              <div className="sticky top-0 bg-white dark:bg-slate-900 z-10 px-6 pt-5 pb-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                <h3 className="text-lg font-black text-slate-900 dark:text-white">Filter Destinations</h3>
-                <button
-                  onClick={() => setShowMobileFilters(false)}
-                  className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center transition-colors hover:bg-slate-200 dark:hover:bg-slate-700"
-                >
-                  <X className="w-5 h-5 text-slate-600 dark:text-slate-300" />
-                </button>
-              </div>
-              <div className="p-6">
-                {renderFilterContent(() => setShowMobileFilters(false))}
-              </div>
+        {/* ── Compact Professional Filter Toolbar ── */}
+        <div className="bg-white dark:bg-slate-900 rounded-2xl md:rounded-full p-3 md:p-4 shadow-sm border border-slate-200 dark:border-slate-800 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 items-center">
+            
+            {/* Type Filter */}
+            <div className="w-full">
+              <Select value={activeFilters.category} onValueChange={(val) => setActiveFilters({ ...activeFilters, category: val })}>
+                <SelectTrigger className="w-full h-12 rounded-xl md:rounded-full bg-slate-50 dark:bg-slate-800 border-none font-semibold px-5">
+                  <div className="flex items-center gap-2">
+                    <SlidersHorizontal className="w-4 h-4 text-emerald-500" />
+                    <SelectValue placeholder="All Types" />
+                  </div>
+                </SelectTrigger>
+                <SelectContent className="rounded-2xl">
+                  <SelectItem value="all" className="font-medium">All Types</SelectItem>
+                  {Object.entries(CATEGORIES).map(([key, val]) => (
+                    <SelectItem key={val} value={val} className="font-medium">
+                      <span className="mr-2">{CATEGORY_ICONS[val as keyof typeof CATEGORY_ICONS]}</span>
+                      {CATEGORY_LABELS[val as keyof typeof CATEGORY_LABELS]}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
+
+            {/* Region Filter */}
+            <div className="w-full">
+              <Select value={activeFilters.region} onValueChange={(val) => setActiveFilters({ ...activeFilters, region: val })}>
+                <SelectTrigger className="w-full h-12 rounded-xl md:rounded-full bg-slate-50 dark:bg-slate-800 border-none font-semibold px-5">
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-emerald-500" />
+                    <SelectValue placeholder="All Districts" />
+                  </div>
+                </SelectTrigger>
+                <SelectContent className="rounded-2xl max-h-[300px]">
+                  <SelectItem value="all" className="font-medium">Anywhere</SelectItem>
+                  {ALL_DISTRICTS.map((district) => (
+                    <SelectItem key={district} value={district} className="font-medium">{district}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Budget Filter */}
+            <div className="w-full">
+              <Select value={activeFilters.budget} onValueChange={(val) => setActiveFilters({ ...activeFilters, budget: val })}>
+                <SelectTrigger className="w-full h-12 rounded-xl md:rounded-full bg-slate-50 dark:bg-slate-800 border-none font-semibold px-5">
+                  <div className="flex items-center gap-2">
+                    <span className="text-emerald-500 font-bold">₹</span>
+                    <SelectValue placeholder="Any Budget" />
+                  </div>
+                </SelectTrigger>
+                <SelectContent className="rounded-2xl">
+                  <SelectItem value="all" className="font-medium">Any Budget</SelectItem>
+                  {Object.entries(BUDGET_LEVELS).map(([key, data]) => (
+                    <SelectItem key={key} value={key} className="font-medium">
+                      {key === 'low' ? '₹' : key === 'mid' ? '₹₹' : '₹₹₹'} - {data.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Reset Button */}
+            <div className="w-full">
+              <Button 
+                onClick={clearFilters}
+                disabled={activeFilterCount === 0}
+                variant="ghost"
+                className="w-full h-12 rounded-xl md:rounded-full font-bold text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                Reset Filters
+              </Button>
+            </div>
+
           </div>
-        )}
+        </div>
 
         {/* ── Results Header ── */}
         <div className="flex items-center justify-between mb-6 gap-3">
