@@ -29,6 +29,8 @@ export default function EditDestinationPage({ params }: { params: Promise<{ id: 
     video_id: '',
     video_url: '',
     best_time: '',
+    how_to_reach: '',
+    entry_fees: '',
     location: '',
     highlights: [] as string[],
     images: [] as string[],
@@ -48,6 +50,8 @@ export default function EditDestinationPage({ params }: { params: Promise<{ id: 
           video_id: d.video_id || '',
           video_url: d.video_url || '',
           best_time: d.best_time || '',
+          how_to_reach: d.how_to_reach || '',
+          entry_fees: d.entry_fees || '',
           location: d.location || '',
           highlights: d.highlights || [],
           images: d.images || [],
@@ -88,6 +92,8 @@ export default function EditDestinationPage({ params }: { params: Promise<{ id: 
       video_id: form.video_id || undefined,
       video_url: form.video_url || undefined,
       best_time: form.best_time || undefined,
+      how_to_reach: form.how_to_reach || undefined,
+      entry_fees: form.entry_fees || undefined,
       location: form.location || undefined,
       images: form.images.length > 0 ? form.images : undefined,
       highlights: form.highlights.length > 0 ? form.highlights : undefined,
@@ -222,13 +228,36 @@ export default function EditDestinationPage({ params }: { params: Promise<{ id: 
             />
           </div>
 
+          {/* Practical Info Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Best Time to Visit</label>
+              <input
+                type="text"
+                value={form.best_time}
+                onChange={(e) => setForm((prev) => ({ ...prev, best_time: e.target.value }))}
+                className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Entry Fees / Cost</label>
+              <input
+                type="text"
+                value={form.entry_fees}
+                onChange={(e) => setForm((prev) => ({ ...prev, entry_fees: e.target.value }))}
+                className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
+              />
+            </div>
+          </div>
+
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Best Time to Visit</label>
-            <input
-              type="text"
-              value={form.best_time}
-              onChange={(e) => setForm((prev) => ({ ...prev, best_time: e.target.value }))}
-              className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">How to Reach</label>
+            <textarea
+              value={form.how_to_reach}
+              onChange={(e) => setForm((prev) => ({ ...prev, how_to_reach: e.target.value }))}
+              rows={3}
+              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all resize-y"
             />
           </div>
         </div>

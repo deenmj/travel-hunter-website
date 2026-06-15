@@ -22,6 +22,8 @@ export interface Destination {
   best_time?: string
   location?: string
   region?: string
+  how_to_reach?: string
+  entry_fees?: string
   budget?: 'low' | 'mid' | 'luxury'
   highlights?: string[]
   is_top_pick?: boolean
@@ -74,6 +76,8 @@ export interface DestinationFormData {
   best_time?: string
   location?: string
   region?: string
+  how_to_reach?: string
+  entry_fees?: string
   budget?: 'low' | 'mid' | 'luxury'
   highlights?: string[]
   is_top_pick?: boolean

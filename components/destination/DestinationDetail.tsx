@@ -12,8 +12,11 @@ import {
   Lightbulb,
   ChevronRight,
   Play,
+  ShieldCheck,
 } from 'lucide-react'
 import { VideoEmbed } from '@/components/destination/VideoEmbed'
+import { ShareButton } from '@/components/ui/ShareButton'
+import { WishlistButton } from '@/components/ui/WishlistButton'
 import { DestinationGallery } from '@/components/destination/DestinationGallery'
 import type { Destination } from '@/lib/types'
 import { CATEGORY_LABELS, CATEGORY_ICONS, ROUTES } from '@/lib/constants'
@@ -99,12 +102,12 @@ export function DestinationDetail({ destination, related }: DestinationDetailPro
     {
       icon: Car,
       title: 'How to Reach',
-      content: getHowToReach(destination),
+      content: destination.how_to_reach || getHowToReach(destination),
     },
     {
       icon: Ticket,
       title: 'Fees & Costs',
-      content: getEntryFees(destination.category),
+      content: destination.entry_fees || getEntryFees(destination.category),
     },
     {
       icon: Clock,
@@ -128,44 +131,67 @@ export function DestinationDetail({ destination, related }: DestinationDetailPro
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-emerald-600 to-teal-800" />
         )}
-        <div className={`absolute inset-0 bg-gradient-to-t ${styles.gradient} via-black/40 to-black/20`} />
+        <div className={`absolute inset-0 bg-gradient-to-t ${styles.gradient} via-slate-900/60 to-slate-900/30`} />
 
-        <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 md:pb-14 pt-24">
+        <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 md:pb-20 pt-28">
           <Link
             href={ROUTES.DESTINATIONS}
-            className="inline-flex items-center gap-1.5 text-white/80 hover:text-white text-sm font-medium mb-6 transition-colors"
+            className="inline-flex items-center gap-1.5 text-white/80 hover:text-white text-sm font-semibold mb-8 transition-colors bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full backdrop-blur-md"
           >
             <ArrowLeft className="w-4 h-4" />
-            All Destinations
+            Back to Destinations
           </Link>
 
-          <span
-            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4 ${styles.badge}`}
-          >
-            {CATEGORY_ICONS[destination.category]} {CATEGORY_LABELS[destination.category]}
-          </span>
+          <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-6">
+            <span
+              className={`inline-flex items-center gap-1.5 px-3 md:px-4 py-1.5 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-wider shadow-lg whitespace-nowrap ${styles.badge}`}
+            >
+              {CATEGORY_ICONS[destination.category]} {CATEGORY_LABELS[destination.category]}
+            </span>
+            {destination.is_top_pick && (
+              <span className="inline-flex items-center gap-1.5 px-3 md:px-4 py-1.5 bg-amber-500/95 backdrop-blur-md text-white text-[10px] md:text-xs font-black rounded-xl shadow-lg uppercase tracking-wider whitespace-nowrap">
+                <ShieldCheck className="w-3.5 h-3.5 md:w-4 md:h-4" /> Travel Hunter Approved
+              </span>
+            )}
+          </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-tight drop-shadow-lg max-w-3xl">
-            {destination.name}
-          </h1>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <h1 className="text-3xl sm:text-5xl md:text-7xl font-black text-white leading-[1.1] drop-shadow-2xl max-w-4xl break-words">
+              {destination.name}
+            </h1>
+            
+            <div className="flex items-center gap-3 shrink-0">
+              <ShareButton url={`${typeof window !== 'undefined' ? window.location.origin : ''}${getDestinationHref(destination)}`} title={destination.name} className="h-12 px-6 rounded-full" />
+              <WishlistButton 
+                item={{
+                  id: destination.id,
+                  type: 'destination',
+                  name: destination.name,
+                  slug: destination.slug,
+                  image: heroImage || undefined
+                }} 
+                className="w-12 h-12 shadow-lg"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
       {/* ── 2. Quick Info Row ── */}
-      <section className="border-b border-slate-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/50">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+      <section className="border-b border-slate-200/50 dark:border-slate-800/50 bg-white dark:bg-slate-950 sticky top-[72px] z-40 shadow-sm w-full overflow-hidden">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 md:py-4">
+          <div className="flex overflow-x-auto hide-scrollbar gap-3 md:gap-6 pb-2 -mb-2 snap-x snap-mandatory">
             {quickInfo.map(({ icon: Icon, label, value, highlight }) => (
               <div
                 key={label}
-                className="flex items-start gap-3 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm"
+                className="flex items-center gap-2 md:gap-3 p-2.5 md:p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm min-w-[140px] md:min-w-0 flex-1 shrink-0 snap-start"
               >
-                <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center shrink-0">
-                  <Icon className={`w-5 h-5 ${highlight ? 'text-amber-500 fill-amber-500' : 'text-emerald-600 dark:text-emerald-400'}`} />
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-white dark:bg-slate-800 flex items-center justify-center shrink-0 shadow-sm border border-slate-100 dark:border-slate-700/50">
+                  <Icon className={`w-6 h-6 ${highlight ? 'text-amber-500 fill-amber-500' : 'text-emerald-600 dark:text-emerald-400'}`} />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{label}</p>
-                  <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 mt-0.5 truncate">{value}</p>
+                  <p className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{label}</p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-slate-100 mt-0.5 truncate">{value}</p>
                 </div>
               </div>
             ))}
@@ -173,44 +199,46 @@ export function DestinationDetail({ destination, related }: DestinationDetailPro
         </div>
       </section>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16 space-y-14 md:space-y-20">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 space-y-16 md:space-y-24">
         {/* ── 3. Main Video ── */}
         {showVideo && videoSource && (
-          <section>
+          <section className="max-w-5xl mx-auto">
             <SectionHeading label="Watch" title="Experience It First" />
-            <div className="rounded-2xl overflow-hidden shadow-xl shadow-slate-200/50 dark:shadow-none ring-1 ring-slate-200/60 dark:ring-slate-800">
+            <div className="rounded-[2rem] overflow-hidden shadow-2xl shadow-slate-200/50 dark:shadow-none ring-1 ring-slate-200/60 dark:ring-slate-800 bg-black">
               <VideoEmbed
                 youtubeId={destination.video_id}
                 videoUrl={destination.video_url}
                 title={`${destination.name} video`}
-                className="rounded-2xl"
+                className="rounded-[2rem] scale-[1.01]"
               />
             </div>
-            <p className="mt-3 text-sm text-slate-500 dark:text-slate-400 flex items-center gap-2">
-              <Play className="w-4 h-4 text-emerald-500" />
+            <p className="mt-4 text-xs md:text-sm font-semibold text-slate-500 dark:text-slate-400 flex items-center justify-center gap-2 px-4 text-center">
+              <Play className="w-3.5 h-3.5 md:w-4 md:h-4 text-emerald-500 fill-emerald-500 shrink-0" />
               Travel Hunter&apos;s video guide to {destination.name}
             </p>
           </section>
         )}
 
         {/* ── 4. Travel Hunter's Story ── */}
-        <section>
+        <section className="max-w-4xl">
           <SectionHeading label="Our Take" title="Travel Hunter's Story" />
-          <div className="prose prose-slate dark:prose-invert max-w-none">
-            <div className="relative pl-6 border-l-4 border-emerald-500">
-              <p className="text-base md:text-lg text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line">
+          <div className="prose prose-base md:prose-lg prose-slate dark:prose-invert max-w-none">
+            <div className="relative pl-5 md:pl-8 border-l-4 border-emerald-500">
+              <p className="text-base md:text-xl text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line font-medium break-words">
                 {destination.description}
               </p>
             </div>
           </div>
 
           {destination.highlights && destination.highlights.length > 0 && (
-            <div className="mt-8 p-5 md:p-6 rounded-2xl bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/30">
-              <div className="flex items-center gap-2 mb-3">
-                <Lightbulb className="w-5 h-5 text-amber-600" />
-                <h3 className="font-bold text-slate-900 dark:text-white">Pro Tip from Travel Hunter</h3>
+            <div className="mt-10 p-6 md:p-8 rounded-3xl bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 border border-amber-200/60 dark:border-amber-900/40 shadow-sm">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center">
+                  <Lightbulb className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                </div>
+                <h3 className="font-black text-lg text-slate-900 dark:text-white">Pro Tip from Travel Hunter</h3>
               </div>
-              <p className="text-sm md:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+              <p className="text-base md:text-lg text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
                 {destination.highlights[0]}
               </p>
             </div>
@@ -250,17 +278,17 @@ export function DestinationDetail({ destination, related }: DestinationDetailPro
         {/* ── 7. Practical Info ── */}
         <section>
           <SectionHeading label="Plan Your Visit" title="Practical Info" />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {practicalItems.map(({ icon: Icon, title, content }) => (
               <div
                 key={title}
-                className="p-5 md:p-6 rounded-2xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm"
+                className="p-6 md:p-8 rounded-[2rem] border border-slate-200/60 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm hover:shadow-md transition-shadow"
               >
-                <div className="w-11 h-11 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
-                  <Icon className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                <div className="w-14 h-14 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center mb-6 border border-emerald-100 dark:border-emerald-900/50">
+                  <Icon className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
                 </div>
-                <h3 className="font-bold text-slate-900 dark:text-white mb-2">{title}</h3>
-                <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{content}</p>
+                <h3 className="text-xl font-black text-slate-900 dark:text-white mb-3">{title}</h3>
+                <p className="text-base text-slate-600 dark:text-slate-400 leading-relaxed">{content}</p>
               </div>
             ))}
           </div>
@@ -279,41 +307,64 @@ export function DestinationDetail({ destination, related }: DestinationDetailPro
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {related.map((place) => {
                 const thumb = getDestinationThumbnail(place)
+                const placeRating = getRating(place.slug || place.id)
                 return (
-                  <Link
-                    key={place.id}
-                    href={getDestinationHref(place)}
-                    className="group block rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
-                  >
-                    <div className="relative h-40 overflow-hidden bg-slate-100 dark:bg-slate-800">
-                      {thumb ? (
-                        <img
-                          src={thumb}
-                          alt={place.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-4xl">
-                          {CATEGORY_ICONS[place.category]}
+                  <div key={place.id} className="group relative">
+                    <Link
+                      href={getDestinationHref(place)}
+                      className="block rounded-[2rem] overflow-hidden border-0 bg-white dark:bg-slate-900 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:shadow-xl hover:-translate-y-2 transition-all duration-500 ring-1 ring-slate-100 dark:ring-slate-800 hover:ring-emerald-500/50"
+                    >
+                      <div className="relative h-48 overflow-hidden bg-slate-100 dark:bg-slate-800">
+                        {thumb ? (
+                          <img
+                            src={thumb}
+                            alt={place.name}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-4xl">
+                            {CATEGORY_ICONS[place.category]}
+                          </div>
+                        )}
+                        <span className="absolute top-4 left-4 px-3 py-1.5 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-slate-900 dark:text-white text-[10px] font-black rounded-xl shadow-lg uppercase tracking-wider">
+                          {place.category}
+                        </span>
+                      </div>
+                      <div className="p-6">
+                        <h3 className="font-black text-xl text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-1 mb-2">
+                          {place.name}
+                        </h3>
+                        <div className="flex items-center justify-between">
+                          {place.location && (
+                            <div className="flex items-center gap-1 text-sm text-slate-500 dark:text-slate-400">
+                              <MapPin className="w-3.5 h-3.5 text-emerald-500" />
+                              <span className="truncate">{place.location}</span>
+                            </div>
+                          )}
+                          <div className="flex items-center gap-1 text-sm text-amber-500 font-bold">
+                            <Star className="w-3.5 h-3.5 fill-amber-500" />
+                            {placeRating}
+                          </div>
                         </div>
-                      )}
-                      <span className="absolute top-2 right-2 px-2 py-0.5 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold rounded-full uppercase">
-                        {place.category}
-                      </span>
+                      </div>
+                    </Link>
+                    
+                    <div className="absolute -top-3 -right-3 z-20 scale-90 group-hover:scale-100 transition-transform duration-300">
+                      <WishlistButton 
+                        item={{
+                          id: place.id,
+                          type: 'destination',
+                          name: place.name,
+                          slug: place.slug,
+                          image: thumb || undefined
+                        }}
+                      />
                     </div>
-                    <div className="p-4">
-                      <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-1">
-                        {place.name}
-                      </h3>
-                      {place.location && (
-                        <p className="text-xs text-slate-400 mt-1 truncate">📍 {place.location}</p>
-                      )}
-                    </div>
-                  </Link>
+                  </div>
                 )
               })}
             </div>

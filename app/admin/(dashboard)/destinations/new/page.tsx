@@ -26,6 +26,8 @@ export default function NewDestinationPage() {
     video_id: '',
     video_url: '',
     best_time: '',
+    how_to_reach: '',
+    entry_fees: '',
     location: '',
     highlights: [] as string[],
     images: [] as string[],
@@ -74,6 +76,8 @@ export default function NewDestinationPage() {
       video_id: form.video_id || undefined,
       video_url: form.video_url || undefined,
       best_time: form.best_time || undefined,
+      how_to_reach: form.how_to_reach || undefined,
+      entry_fees: form.entry_fees || undefined,
       location: form.location || undefined,
       images: form.images.length > 0 ? form.images : undefined,
       highlights: form.highlights.length > 0 ? form.highlights : undefined,
@@ -217,17 +221,48 @@ export default function NewDestinationPage() {
             />
           </div>
 
-          {/* Best Time */}
+          {/* Practical Info Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Best Time */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                Best Time to Visit
+              </label>
+              <input
+                type="text"
+                value={form.best_time}
+                onChange={(e) => setForm((prev) => ({ ...prev, best_time: e.target.value }))}
+                placeholder="e.g., January to April"
+                className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
+              />
+            </div>
+
+            {/* Entry Fees */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                Entry Fees / Cost
+              </label>
+              <input
+                type="text"
+                value={form.entry_fees}
+                onChange={(e) => setForm((prev) => ({ ...prev, entry_fees: e.target.value }))}
+                placeholder="e.g., LKR 500 for locals, USD 30 for foreigners"
+                className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
+              />
+            </div>
+          </div>
+
+          {/* How to Reach */}
           <div className="space-y-2">
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-              Best Time to Visit
+              How to Reach
             </label>
-            <input
-              type="text"
-              value={form.best_time}
-              onChange={(e) => setForm((prev) => ({ ...prev, best_time: e.target.value }))}
-              placeholder="e.g., January to April"
-              className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
+            <textarea
+              value={form.how_to_reach}
+              onChange={(e) => setForm((prev) => ({ ...prev, how_to_reach: e.target.value }))}
+              placeholder="e.g., Accessible by train from Colombo to Kandy, then a short tuk-tuk ride..."
+              rows={3}
+              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all resize-y"
             />
           </div>
         </div>
