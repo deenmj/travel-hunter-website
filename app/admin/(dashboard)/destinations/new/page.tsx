@@ -21,7 +21,7 @@ export default function NewDestinationPage() {
     name: '',
     slug: '',
     description: '',
-    category: 'visit' as 'visit' | 'eat' | 'stay',
+    category: 'travel' as 'travel' | 'food' | 'lifestyle',
     featured_image: '',
     video_id: '',
     video_url: '',
@@ -172,7 +172,7 @@ export default function NewDestinationPage() {
               Category <span className="text-red-500">*</span>
             </label>
             <div className="grid grid-cols-3 gap-3">
-              {(['visit', 'eat', 'stay'] as const).map((cat) => (
+              {(['travel', 'food', 'lifestyle'] as const).map((cat) => (
                 <button
                   key={cat}
                   type="button"
@@ -184,7 +184,7 @@ export default function NewDestinationPage() {
                   }`}
                 >
                   <span className="text-xl block mb-1">
-                    {cat === 'visit' ? '🗺️' : cat === 'eat' ? '🍽️' : '🏨'}
+                    {cat === 'travel' ? '🗺️' : cat === 'food' ? '🍽️' : '🏨'}
                   </span>
                   <span className="text-xs font-medium">{CATEGORY_LABELS[cat]}</span>
                 </button>
