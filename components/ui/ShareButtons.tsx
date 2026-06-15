@@ -12,7 +12,12 @@ interface ShareButtonsProps {
 
 export function ShareButtons({ url, title, description, className = '' }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false)
-  const shareUrl = url || (typeof window !== 'undefined' ? window.location.href : '')
+  
+  // Ensure share URL is absolute
+  const shareUrl = typeof window !== 'undefined'
+    ? (url ? new URL(url, window.location.origin).href : window.location.href)
+    : (url || '')
+    
   const text = description || title
 
   const shareLinks = [

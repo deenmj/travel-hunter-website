@@ -18,15 +18,20 @@ interface ShareButtonProps {
 export function ShareButton({ url, title, className = '' }: ShareButtonProps) {
   const [copied, setCopied] = useState(false)
 
+  // Ensure the URL is absolute on the client side
+  const absoluteUrl = typeof window !== 'undefined' 
+    ? new URL(url, window.location.origin).href 
+    : url
+
   const shareLinks = {
-    whatsapp: `https://wa.me/?text=${encodeURIComponent(`${title} - ${url}`)}`,
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
-    twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
+    whatsapp: `https://wa.me/?text=${encodeURIComponent(`${title} - ${absoluteUrl}`)}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(absoluteUrl)}`,
+    twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(absoluteUrl)}&text=${encodeURIComponent(title)}`,
   }
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(url)
+      await navigator.clipboard.writeText(absoluteUrl)
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch (err) {
