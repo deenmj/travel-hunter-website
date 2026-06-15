@@ -16,19 +16,25 @@ import { getDestinations } from '@/lib/data-fetching'
 import type { Destination } from '@/lib/types'
 import { getDestinationThumbnail } from '@/lib/video-utils'
 import { getDestinationHref, getRating } from '@/lib/destination-utils'
-import { QuickFilters } from '@/components/sections/QuickFilters'
 import { WishlistButton } from '@/components/ui/WishlistButton'
-import { Star, ShieldCheck, MapPin } from 'lucide-react'
+import { Star, ShieldCheck, MapPin, Wallet, Filter, X } from 'lucide-react'
+import { CATEGORIES, CATEGORY_LABELS, CATEGORY_ICONS, BUDGET_LEVELS, ALL_DISTRICTS } from '@/lib/constants'
 
 export function DestinationsList() {
   const [destinations, setDestinations] = useState<Destination[]>([])
   const [filteredDestinations, setFilteredDestinations] = useState<Destination[]>([])
   
-  const [activeFilters, setActiveFilters] = useState<{ region?: string; budget?: string; category?: string }>({})
+  const [activeFilters, setActiveFilters] = useState<{ region?: string; budget?: string; category?: string }>({
+    category: 'all',
+    region: 'all',
+    budget: 'all'
+  })
   const [searchQuery, setSearchQuery] = useState('')
   const [sortBy, setSortBy] = useState<'featured' | 'name-asc' | 'name-desc'>('featured')
   
   const [loading, setLoading] = useState(true)
+
+  const popularRegions = ['Kandy', 'Ella', 'Galle', 'Sigiriya', 'Mirissa', 'Colombo']
 
   useEffect(() => {
     const fetchDestinations = async () => {
@@ -44,13 +50,13 @@ export function DestinationsList() {
     let result = [...destinations]
 
     // 1. Quick Filters (Region, Budget, Category)
-    if (activeFilters.category) {
+    if (activeFilters.category && activeFilters.category !== 'all') {
       result = result.filter((d) => d.category === activeFilters.category)
     }
-    if (activeFilters.region) {
+    if (activeFilters.region && activeFilters.region !== 'all') {
       result = result.filter((d) => d.region === activeFilters.region || d.location?.includes(activeFilters.region!))
     }
-    if (activeFilters.budget) {
+    if (activeFilters.budget && activeFilters.budget !== 'all') {
       result = result.filter((d) => d.budget === activeFilters.budget)
     }
 
@@ -79,90 +85,212 @@ export function DestinationsList() {
   }, [activeFilters, searchQuery, sortBy, destinations])
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-8">
-        <h1 className="text-4xl font-black text-slate-900 dark:text-white mb-2">
-          Explore Destinations
-        </h1>
-        <p className="text-slate-600 dark:text-slate-400">
-          Find your perfect getaway from {destinations.length} amazing locations.
-        </p>
+    <section className="w-full bg-slate-50 dark:bg-slate-950 min-h-screen">
+      {/* Hero Header & Search */}
+      <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 pb-10 pt-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white mb-6 tracking-tight">
+            Explore Destinations
+          </h1>
+          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-10">
+            Find your perfect getaway from our curated collection of amazing places in Sri Lanka.
+          </p>
+
+          {/* Strong Main Search Bar */}
+          <div className="max-w-3xl mx-auto relative group">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <Search className="h-6 w-6 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
+            </div>
+            <input
+              type="text"
+              placeholder="Search by Place, District, City, or Keyword (e.g. 'Beach', 'Kandy')"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="block w-full h-16 pl-14 pr-14 rounded-full border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-lg shadow-sm focus:ring-0 focus:border-emerald-500 dark:focus:border-emerald-500 transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute inset-y-0 right-0 pr-5 flex items-center"
+              >
+                <X className="h-5 w-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" />
+              </button>
+            )}
+          </div>
+        </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-8 items-start">
-        {/* Left Sidebar - Filters */}
-        <div className="w-full lg:w-1/4 shrink-0 space-y-6 lg:sticky lg:top-24">
-          <QuickFilters onFilterChange={setActiveFilters} />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Filter System */}
+        <div className="bg-white dark:bg-slate-900 rounded-[2rem] p-6 shadow-sm border border-slate-200 dark:border-slate-800 mb-8 space-y-6">
+          
+          {/* Top Row: Categories */}
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => setActiveFilters({ ...activeFilters, category: 'all' })}
+              className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all ${
+                activeFilters.category === 'all'
+                  ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-md'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700'
+              }`}
+            >
+              All Types
+            </button>
+            {Object.entries(CATEGORIES).map(([key, val]) => (
+              <button
+                key={val}
+                onClick={() => setActiveFilters({ ...activeFilters, category: val })}
+                className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all flex items-center gap-2 ${
+                  activeFilters.category === val
+                    ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/25'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700'
+                }`}
+              >
+                <span>{CATEGORY_ICONS[val as keyof typeof CATEGORY_ICONS]}</span>
+                {CATEGORY_LABELS[val as keyof typeof CATEGORY_LABELS]}
+              </button>
+            ))}
+          </div>
+
+          <hr className="border-slate-100 dark:border-slate-800" />
+
+          {/* Middle Row: Regions & Budget */}
+          <div className="flex flex-col lg:flex-row gap-6 justify-between lg:items-center">
+            
+            <div className="space-y-3 flex-1">
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                <MapPin className="w-4 h-4" /> Districts & Regions
+              </label>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  onClick={() => setActiveFilters({ ...activeFilters, region: 'all' })}
+                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all border ${
+                    activeFilters.region === 'all'
+                      ? 'border-emerald-500 bg-emerald-50 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400'
+                      : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                  }`}
+                >
+                  Anywhere
+                </button>
+                {popularRegions.map((region) => (
+                  <button
+                    key={region}
+                    onClick={() => setActiveFilters({ ...activeFilters, region })}
+                    className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all border ${
+                      activeFilters.region === region
+                        ? 'border-emerald-500 bg-emerald-50 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400'
+                        : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    {region}
+                  </button>
+                ))}
+                
+                {/* All Districts Dropdown */}
+                <div className="w-48 ml-auto lg:ml-2">
+                  <Select 
+                    value={activeFilters.region === 'all' || popularRegions.includes(activeFilters.region || '') ? '' : activeFilters.region} 
+                    onValueChange={(val) => setActiveFilters({ ...activeFilters, region: val })}
+                  >
+                    <SelectTrigger className="h-10 rounded-xl bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 font-semibold">
+                      <SelectValue placeholder="All Districts..." />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-[300px]">
+                      {ALL_DISTRICTS.map((district) => (
+                        <SelectItem key={district} value={district}>{district}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </div>
+
+            {/* Budget */}
+            <div className="space-y-3 shrink-0">
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                <Wallet className="w-4 h-4" /> Budget Level
+              </label>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  onClick={() => setActiveFilters({ ...activeFilters, budget: 'all' })}
+                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all border ${
+                    activeFilters.budget === 'all'
+                      ? 'border-amber-500 bg-amber-50 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400'
+                      : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                  }`}
+                >
+                  Any
+                </button>
+                {Object.entries(BUDGET_LEVELS).map(([key, data]) => (
+                  <button
+                    key={key}
+                    onClick={() => setActiveFilters({ ...activeFilters, budget: key })}
+                    className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all border ${
+                      activeFilters.budget === key
+                        ? 'border-amber-500 bg-amber-50 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400'
+                        : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    <span>{key === 'low' ? '₹' : key === 'mid' ? '₹₹' : '₹₹₹'}</span>
+                    <span>{data.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Right Content */}
-        <div className="flex-1 w-full space-y-6">
-          {/* Search and Sort */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="relative flex-grow">
-              <input
-                type="text"
-                placeholder="Search by name or location..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-12 px-4 pl-11 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 text-slate-800 dark:text-white transition-all shadow-sm"
-              />
-              <Search className="w-5 h-5 text-slate-400 absolute left-4 top-3.5" />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-4 top-3.5 text-slate-400 hover:text-slate-600 text-sm"
-                >
-                  ✕
-                </button>
-              )}
-            </div>
-            
-            <div className="w-full sm:w-48 shrink-0">
-              <Select value={sortBy} onValueChange={(val) => setSortBy(val as any)}>
-                <SelectTrigger className="w-full h-12 rounded-xl bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-sm shadow-sm">
-                  <div className="flex items-center gap-2 text-slate-800 dark:text-slate-200">
-                    <ArrowUpDown className="w-4 h-4 text-emerald-500" />
-                    <SelectValue placeholder="Sort By" />
-                  </div>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="featured">Featured / Newest</SelectItem>
-                  <SelectItem value="name-asc">Name (A-Z)</SelectItem>
-                  <SelectItem value="name-desc">Name (Z-A)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+        {/* Results Header */}
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+          <div className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300 py-1 px-3 rounded-full text-sm">
+              {filteredDestinations.length}
+            </span>
+            Places Found
           </div>
-
-          <div className="text-sm font-medium text-slate-500 mb-2">
-            Showing {filteredDestinations.length} destinations
+          <div className="w-full sm:w-48 shrink-0">
+            <Select value={sortBy} onValueChange={(val) => setSortBy(val as any)}>
+              <SelectTrigger className="w-full h-11 rounded-xl bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 font-semibold shadow-sm">
+                <SelectValue placeholder="Sort By" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="featured">Featured / Newest</SelectItem>
+                <SelectItem value="name-asc">Name (A-Z)</SelectItem>
+                <SelectItem value="name-desc">Name (Z-A)</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
+        </div>
 
+        {/* Results Grid */}
+        <div className="w-full">
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-[22rem] bg-slate-100 dark:bg-slate-800 rounded-2xl animate-pulse"></div>
+                <div key={i} className="h-[22rem] bg-slate-200 dark:bg-slate-800 rounded-3xl animate-pulse"></div>
               ))}
             </div>
           ) : filteredDestinations.length === 0 ? (
-            <div className="text-center py-20 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800">
-              <Search className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">No destinations found</h3>
-              <p className="text-slate-500 dark:text-slate-400">Try adjusting your filters or search query.</p>
+            <div className="text-center py-32 bg-white dark:bg-slate-900 rounded-[3rem] border border-slate-200 dark:border-slate-800 shadow-sm max-w-3xl mx-auto">
+              <div className="w-24 h-24 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Search className="w-10 h-10 text-slate-400 dark:text-slate-500" />
+              </div>
+              <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-3">No results found</h3>
+              <p className="text-lg text-slate-500 dark:text-slate-400 mb-8 max-w-md mx-auto">
+                We couldn't find any places matching your exact search. Try broadening your criteria or checking for typos.
+              </p>
               <Button 
                 onClick={() => {
                   setSearchQuery('')
-                  setActiveFilters({})
+                  setActiveFilters({ category: 'all', region: 'all', budget: 'all' })
                 }}
-                variant="outline" 
-                className="mt-4 rounded-full"
+                className="rounded-full px-8 h-12 text-base font-bold bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
               >
                 Clear all filters
               </Button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredDestinations.map((destination) => {
                 const thumbnail = getDestinationThumbnail(destination)
                 const rating = getRating(destination.slug || destination.id)
@@ -265,8 +393,6 @@ export function DestinationsList() {
                 </div>
                 )
               })}
-            </div>
-          )}
         </div>
       </div>
     </section>
