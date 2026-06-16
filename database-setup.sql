@@ -10,7 +10,7 @@
 CREATE TABLE IF NOT EXISTS profiles (
   id UUID REFERENCES auth.users NOT NULL PRIMARY KEY,
   email TEXT,
-  role TEXT DEFAULT 'editor',
+  role TEXT DEFAULT 'user',
   full_name TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL

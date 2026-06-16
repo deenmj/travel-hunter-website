@@ -17,7 +17,7 @@ export async function CategoriesSection() {
   const categoryMeta = {
     travel: { gradient: 'from-blue-500 to-cyan-500', emoji: '✈️', image: 'https://upload.wikimedia.org/wikipedia/commons/8/8e/Sigiriya_Rock_Fortress_View_from_Pidurangala_Rock.jpg' },
     food: { gradient: 'from-orange-500 to-yellow-500', emoji: '🍜', image: 'https://upload.wikimedia.org/wikipedia/commons/f/f0/Colombo_-_Galle_Face.jpg' },
-    lifestyle: { gradient: 'from-emerald-500 to-teal-500', emoji: '🌿', image: 'https://upload.wikimedia.org/wikipedia/commons/e/e9/Negombo_Beach%2C_Sri_Lanka.jpg' },
+    lifestyle: { gradient: 'from-emerald-500 to-teal-500', emoji: '🌿', image: 'https://images.unsplash.com/photo-1588416936097-41850ab3d86d?w=800' },
   }
 
   return (

@@ -19,7 +19,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="flex flex-col bg-white dark:bg-slate-950">
+      <main className="flex flex-col bg-white dark:bg-slate-950 pb-16 md:pb-0">
         <HeroSection />
         <TopPicks />
         <FeaturedDestinations />
