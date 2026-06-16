@@ -70,9 +70,23 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
     setLoading(true)
     searchTimeout.current = setTimeout(async () => {
       try {
-        // Client-side search across placeholder data + Supabase
+        // Client-side search across Supabase
+        // Only attempt if Supabase environment variables are available
+        if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+          console.log('[v0] Supabase not configured, search unavailable')
+          setResults([])
+          setLoading(false)
+          return
+        }
+
         const { createClient } = await import('@/lib/supabase/client')
         const supabase = createClient()
+
+        if (!supabase) {
+          setResults([])
+          setLoading(false)
+          return
+        }
 
         const [destResult, videoResult, blogResult] = await Promise.all([
           supabase.from('destinations').select('id, name, slug, description, featured_image, category').ilike('name', `%${value}%`).limit(5),
@@ -109,7 +123,8 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
         ]
 
         setResults(searchResults)
-      } catch {
+      } catch (error) {
+        console.error('[v0] Search error:', error)
         setResults([])
       } finally {
         setLoading(false)

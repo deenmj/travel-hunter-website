@@ -67,16 +67,24 @@ export async function updateSession(request: NextRequest) {
     }
 
     // Check user role from profiles table
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single()
+    try {
+      const { data: profile, error } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single()
 
-    if (!profile || (profile.role !== 'admin' && profile.role !== 'editor')) {
-      // User exists but is not admin/editor — redirect to home
+      if (error || !profile || (profile.role !== 'admin' && profile.role !== 'editor')) {
+        // User exists but is not admin/editor — redirect to home
+        const url = request.nextUrl.clone()
+        url.pathname = '/'
+        return NextResponse.redirect(url)
+      }
+    } catch (error) {
+      console.error('[v0] Error checking user role:', error)
+      // If profile check fails, redirect to login to be safe
       const url = request.nextUrl.clone()
-      url.pathname = '/'
+      url.pathname = '/admin/login'
       return NextResponse.redirect(url)
     }
   }
