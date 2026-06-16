@@ -6,11 +6,17 @@ export async function updateSession(request: NextRequest) {
     request,
   })
 
+  // Check for required environment variables
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    console.error('[v0] Missing Supabase environment variables')
+    return supabaseResponse
+  }
+
   // With Fluid compute, don't put this client in a global environment
   // variable. Always create a new one on each request.
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         getAll() {
@@ -37,9 +43,16 @@ export async function updateSession(request: NextRequest) {
 
   // IMPORTANT: If you remove getUser() and you use server-side rendering
   // with the Supabase client, your users may be randomly logged out.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  let user = null
+  try {
+    const {
+      data: { user: authUser },
+    } = await supabase.auth.getUser()
+    user = authUser
+  } catch (error) {
+    console.error('[v0] Failed to get user from Supabase:', error)
+    // Continue without user info, they'll be redirected to login if needed
+  }
 
   // Protect /admin routes (except /admin/login)
   if (
