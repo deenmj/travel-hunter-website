@@ -1,33 +1,5 @@
-import { createClient as createSupabaseClient } from '@/lib/supabase/client'
+import { createClient } from '@/lib/supabase/client'
 import type { Destination, BlogPost, Video, Profile, SiteSettings } from '@/lib/types'
-
-// Safe wrapper that returns a safe fallback object if Supabase isn't configured
-function createClient() {
-  try {
-    const client = createSupabaseClient()
-    if (client) return client
-  } catch (error) {
-    console.warn('[v0] Failed to create Supabase client:', error)
-  }
-  
-  // Return a safe mock that returns empty data
-  return {
-    from: () => ({
-      select: () => ({
-        eq: () => ({
-          limit: () => ({
-            order: async () => ({ data: [], error: null })
-          }),
-          order: async () => ({ data: [], error: null })
-        }),
-        limit: () => ({
-          order: async () => ({ data: [], error: null })
-        }),
-        order: async () => ({ data: [], error: null })
-      })
-    })
-  } as any
-}
 
 // Placeholder data for when Supabase is not configured
 const PLACEHOLDER_DESTINATIONS: Destination[] = [
@@ -293,11 +265,6 @@ export async function getFeaturedDestinations(limit: number = 4): Promise<Destin
   try {
     const supabase = createClient()
 
-    // If Supabase is not configured, return placeholder data
-    if (!supabase) {
-      return PLACEHOLDER_DESTINATIONS.slice(0, limit)
-    }
-
     const { data, error } = await supabase
       .from('destinations')
       .select('*')
@@ -306,24 +273,19 @@ export async function getFeaturedDestinations(limit: number = 4): Promise<Destin
 
     if (error) {
       console.error('Error fetching featured destinations:', error)
-      return PLACEHOLDER_DESTINATIONS.slice(0, limit)
+      return []
     }
 
     return data || []
   } catch (error) {
     console.error('Exception fetching featured destinations:', error)
-    return PLACEHOLDER_DESTINATIONS.slice(0, limit)
+    return []
   }
 }
 
 export async function getTopPicks(limit: number = 4): Promise<Destination[]> {
   try {
     const supabase = createClient()
-
-    // If Supabase is not configured, return placeholder data
-    if (!supabase) {
-      return PLACEHOLDER_DESTINATIONS.filter(d => d.is_top_pick).slice(0, limit)
-    }
 
     const { data, error } = await supabase
       .from('destinations')
@@ -334,13 +296,13 @@ export async function getTopPicks(limit: number = 4): Promise<Destination[]> {
 
     if (error) {
       console.error('Error fetching top picks:', error)
-      return PLACEHOLDER_DESTINATIONS.filter(d => d.is_top_pick).slice(0, limit)
+      return []
     }
 
     return data || []
   } catch (error) {
     console.error('Exception fetching top picks:', error)
-    return PLACEHOLDER_DESTINATIONS.filter(d => d.is_top_pick).slice(0, limit)
+    return []
   }
 }
 
@@ -348,11 +310,6 @@ export async function getTopPicks(limit: number = 4): Promise<Destination[]> {
 export async function getBlogPosts(): Promise<BlogPost[]> {
   try {
     const supabase = createClient()
-
-    // If Supabase is not configured, return empty array
-    if (!supabase) {
-      return []
-    }
 
     const { data, error } = await supabase
       .from('blog_posts')
@@ -549,11 +506,6 @@ const DEFAULT_SITE_SETTINGS: SiteSettings = {
 export async function getSiteSettings(): Promise<SiteSettings> {
   try {
     const supabase = createClient()
-
-    // If Supabase is not configured, return defaults
-    if (!supabase || !supabase.from) {
-      return DEFAULT_SITE_SETTINGS
-    }
 
     const { data, error } = await supabase
       .from('site_settings')
