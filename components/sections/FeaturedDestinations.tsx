@@ -6,7 +6,6 @@ import { getFeaturedDestinations } from '@/lib/data-fetching'
 import { ROUTES } from '@/lib/constants'
 import { getDestinationThumbnail } from '@/lib/video-utils'
 import { getDestinationHref } from '@/lib/destination-utils'
-import { WishlistButton } from '@/components/ui/WishlistButton'
 
 export async function FeaturedDestinations() {
   const destinations = await getFeaturedDestinations(6)
@@ -93,20 +92,6 @@ export async function FeaturedDestinations() {
                   </CardContent>
                 </Card>
               </Link>
-              
-              {/* Floating Wishlist Button */}
-              <div className="absolute top-4 left-4 z-20">
-                <WishlistButton 
-                  item={{
-                    id: destination.id,
-                    type: 'destination',
-                    name: destination.name,
-                    slug: destination.slug,
-                    image: thumbnail || undefined
-                  }}
-                  size="sm"
-                />
-              </div>
             </div>
           )
         })}

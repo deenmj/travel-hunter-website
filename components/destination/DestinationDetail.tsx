@@ -16,7 +16,6 @@ import {
 } from 'lucide-react'
 import { VideoEmbed } from '@/components/destination/VideoEmbed'
 import { ShareButton } from '@/components/ui/ShareButton'
-import { WishlistButton } from '@/components/ui/WishlistButton'
 import { DestinationGallery } from '@/components/destination/DestinationGallery'
 import type { Destination } from '@/lib/types'
 import { CATEGORY_LABELS, CATEGORY_ICONS, ROUTES } from '@/lib/constants'
@@ -162,16 +161,6 @@ export function DestinationDetail({ destination, related }: DestinationDetailPro
             
             <div className="flex items-center gap-3 shrink-0">
               <ShareButton url={`${typeof window !== 'undefined' ? window.location.origin : ''}${getDestinationHref(destination)}`} title={destination.name} className="h-12 px-6 rounded-full" />
-              <WishlistButton 
-                item={{
-                  id: destination.id,
-                  type: 'destination',
-                  name: destination.name,
-                  slug: destination.slug,
-                  image: heroImage || undefined
-                }} 
-                className="w-12 h-12 shadow-lg"
-              />
             </div>
           </div>
         </div>
@@ -352,18 +341,6 @@ export function DestinationDetail({ destination, related }: DestinationDetailPro
                         </div>
                       </div>
                     </Link>
-                    
-                    <div className="absolute -top-3 -right-3 z-20 scale-90 group-hover:scale-100 transition-transform duration-300">
-                      <WishlistButton 
-                        item={{
-                          id: place.id,
-                          type: 'destination',
-                          name: place.name,
-                          slug: place.slug,
-                          image: thumb || undefined
-                        }}
-                      />
-                    </div>
                   </div>
                 )
               })}

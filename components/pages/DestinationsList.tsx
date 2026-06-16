@@ -16,7 +16,6 @@ import { getDestinations } from '@/lib/data-fetching'
 import type { Destination } from '@/lib/types'
 import { getDestinationThumbnail } from '@/lib/video-utils'
 import { getDestinationHref, getRating } from '@/lib/destination-utils'
-import { WishlistButton } from '@/components/ui/WishlistButton'
 import { Star, ShieldCheck, MapPin, X, SlidersHorizontal, Trash2, Wallet } from 'lucide-react'
 import { CATEGORIES, CATEGORY_LABELS, CATEGORY_ICONS, BUDGET_LEVELS, ALL_DISTRICTS } from '@/lib/constants'
 
@@ -296,19 +295,6 @@ export function DestinationsList() {
                               </span>
                             )}
                           </div>
-                        </div>
-
-                        {/* Top Right Wishlist Button */}
-                        <div className="absolute top-3 right-3 md:top-4 md:right-4 z-20">
-                          <WishlistButton 
-                            item={{
-                              id: destination.id,
-                              type: 'destination',
-                              name: destination.name,
-                              slug: destination.slug,
-                              image: thumbnail || undefined
-                            }}
-                          />
                         </div>
 
                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

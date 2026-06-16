@@ -6,7 +6,6 @@ import { getTopPicks } from '@/lib/data-fetching'
 import { ROUTES } from '@/lib/constants'
 import { getDestinationThumbnail } from '@/lib/video-utils'
 import { getDestinationHref, getRating } from '@/lib/destination-utils'
-import { WishlistButton } from '@/components/ui/WishlistButton'
 import { Star, ShieldCheck, MapPin } from 'lucide-react'
 
 export async function TopPicks() {
@@ -114,19 +113,6 @@ export async function TopPicks() {
                   </CardContent>
                 </Card>
               </Link>
-              
-              {/* Floating Wishlist Button */}
-              <div className="absolute -top-3 -left-3 z-20 scale-90 group-hover:scale-100 transition-transform duration-300">
-                <WishlistButton 
-                  item={{
-                    id: destination.id,
-                    type: 'destination',
-                    name: destination.name,
-                    slug: destination.slug,
-                    image: thumbnail || undefined
-                  }} 
-                />
-              </div>
             </div>
           )
         })}

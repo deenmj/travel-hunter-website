@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Search, Sun, Moon, Heart } from 'lucide-react'
+import { Menu, X, Search, Sun, Moon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/lib/constants'
@@ -82,12 +82,6 @@ export function Header() {
             >
               <Search className="w-5 h-5" />
             </Button>
-
-            <Link href={ROUTES.WISHLIST}>
-              <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full text-slate-500 hover:text-red-500 transition-colors">
-                <Heart className="w-5 h-5" />
-              </Button>
-            </Link>
 
             <Button
               variant="ghost"
