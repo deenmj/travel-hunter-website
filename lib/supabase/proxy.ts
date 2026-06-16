@@ -6,17 +6,11 @@ export async function updateSession(request: NextRequest) {
     request,
   })
 
-  // Check for required environment variables
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-    console.error('[v0] Missing Supabase environment variables')
-    return supabaseResponse
-  }
-
   // With Fluid compute, don't put this client in a global environment
   // variable. Always create a new one on each request.
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
         getAll() {
@@ -43,16 +37,9 @@ export async function updateSession(request: NextRequest) {
 
   // IMPORTANT: If you remove getUser() and you use server-side rendering
   // with the Supabase client, your users may be randomly logged out.
-  let user = null
-  try {
-    const {
-      data: { user: authUser },
-    } = await supabase.auth.getUser()
-    user = authUser
-  } catch (error) {
-    console.error('[v0] Failed to get user from Supabase:', error)
-    // Continue without user info, they'll be redirected to login if needed
-  }
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
   // Protect /admin routes (except /admin/login)
   if (
@@ -67,24 +54,16 @@ export async function updateSession(request: NextRequest) {
     }
 
     // Check user role from profiles table
-    try {
-      const { data: profile, error } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single()
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
 
-      if (error || !profile || (profile.role !== 'admin' && profile.role !== 'editor')) {
-        // User exists but is not admin/editor — redirect to home
-        const url = request.nextUrl.clone()
-        url.pathname = '/'
-        return NextResponse.redirect(url)
-      }
-    } catch (error) {
-      console.error('[v0] Error checking user role:', error)
-      // If profile check fails, redirect to login to be safe
+    if (!profile || (profile.role !== 'admin' && profile.role !== 'editor')) {
+      // User exists but is not admin/editor — redirect to home
       const url = request.nextUrl.clone()
-      url.pathname = '/admin/login'
+      url.pathname = '/'
       return NextResponse.redirect(url)
     }
   }

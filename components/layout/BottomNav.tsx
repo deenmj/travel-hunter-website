@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Compass, Video, Search, Heart } from 'lucide-react'
+import { Home, Compass, Video, Search } from 'lucide-react'
 import { ROUTES } from '@/lib/constants'
 import { useState } from 'react'
 import { SearchModal } from '@/components/ui/SearchModal'
@@ -15,7 +15,6 @@ export function BottomNav() {
     { href: ROUTES.HOME, icon: Home, label: 'Home' },
     { href: ROUTES.DESTINATIONS, icon: Compass, label: 'Explore' },
     { href: '#search', icon: Search, label: 'Search', action: () => setSearchOpen(true) },
-    { href: ROUTES.WISHLIST, icon: Heart, label: 'Saved' },
     { href: ROUTES.VIDEOS, icon: Video, label: 'Videos' },
   ]
 
