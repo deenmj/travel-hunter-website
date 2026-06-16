@@ -77,7 +77,6 @@ export const ROUTES = {
   BLOG: '/blog',
   ABOUT: '/about',
   CONTACT: '/contact',
-  WISHLIST: '/wishlist',
   LOGIN: '/admin/login',
   ADMIN: '/admin',
   ADMIN_DASHBOARD: '/admin/dashboard',

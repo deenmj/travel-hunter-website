@@ -115,12 +115,4 @@ export interface SiteSettings {
   updated_at: string
 }
 
-// Wishlist item
-export interface WishlistItem {
-  id: string
-  type: 'destination' | 'blog' | 'video'
-  name: string
-  slug: string
-  image?: string
-  addedAt: string
-}
+
