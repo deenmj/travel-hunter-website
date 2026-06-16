@@ -9,9 +9,17 @@ export async function middleware(request: NextRequest) {
     !request.nextUrl.pathname.startsWith('/admin/login') &&
     !request.nextUrl.pathname.startsWith('/admin/reset-password')
   ) {
-    // Use updateSession to refresh cookies and check auth
-    const response = await updateSession(request)
-    return response
+    try {
+      // Use updateSession to refresh cookies and check auth
+      const response = await updateSession(request)
+      return response
+    } catch (error) {
+      console.error('[v0] Middleware error:', error)
+      // If Supabase fails to initialize, redirect to login
+      const url = request.nextUrl.clone()
+      url.pathname = '/admin/login'
+      return NextResponse.redirect(url)
+    }
   }
 
   // Allow all other requests to pass through
