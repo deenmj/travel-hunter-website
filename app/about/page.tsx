@@ -96,24 +96,18 @@ export default async function AboutPage() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                  <button
-                    onClick={() => {
-                      const element = document.getElementById('collaborate')
-                      element?.scrollIntoView({ behavior: 'smooth' })
-                    }}
-                    className="w-full sm:w-auto h-14 px-8 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg rounded-full transition-colors"
+                  <a
+                    href="#collaborate"
+                    className="w-full sm:w-auto h-14 px-8 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg rounded-full transition-colors flex items-center justify-center"
                   >
                     Collaborate With Me
-                  </button>
-                  <button
-                    onClick={() => {
-                      const element = document.getElementById('contact')
-                      element?.scrollIntoView({ behavior: 'smooth' })
-                    }}
-                    className="w-full sm:w-auto h-14 px-8 border-2 border-slate-900 dark:border-white text-slate-900 dark:text-white font-bold text-lg rounded-full hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors"
+                  </a>
+                  <a
+                    href="#contact"
+                    className="w-full sm:w-auto h-14 px-8 border-2 border-slate-900 dark:border-white text-slate-900 dark:text-white font-bold text-lg rounded-full hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors flex items-center justify-center"
                   >
                     Get In Touch
-                  </button>
+                  </a>
                 </div>
               </div>
 
@@ -371,15 +365,12 @@ export default async function AboutPage() {
               ))}
             </div>
 
-            <button
-              onClick={() => {
-                const element = document.getElementById('contact')
-                element?.scrollIntoView({ behavior: 'smooth' })
-              }}
-              className="bg-white text-emerald-600 hover:bg-slate-100 font-bold text-lg h-14 px-8 rounded-full transition-colors"
+            <a
+              href="#contact"
+              className="bg-white text-emerald-600 hover:bg-slate-100 font-bold text-lg h-14 px-8 rounded-full transition-colors inline-flex items-center justify-center"
             >
               Discuss a Partnership
-            </button>
+            </a>
           </div>
         </section>
 
