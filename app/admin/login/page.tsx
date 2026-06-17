@@ -25,7 +25,7 @@ export default function AdminLoginPage() {
 
     if (isForgotPassword) {
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/callback?next=/admin/reset-password`,
+        redirectTo: `${window.location.origin}/admin/reset-password`,
       })
 
       if (resetError) {
