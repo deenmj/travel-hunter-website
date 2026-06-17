@@ -11,6 +11,7 @@ import {
   Eye,
   Clock,
   ArrowRight,
+  Settings,
 } from 'lucide-react'
 import { getDestinations, getBlogPosts, getVideos } from '@/lib/data-fetching'
 import { ROUTES } from '@/lib/constants'
@@ -91,6 +92,12 @@ export default function AdminDashboard() {
 
   const quickActions = [
     {
+      label: 'Edit About Page',
+      href: '/admin/about',
+      icon: Settings,
+      gradient: 'from-orange-500 to-rose-600',
+    },
+    {
       label: 'New Destination',
       href: `${ROUTES.ADMIN_DESTINATIONS}/new`,
       icon: MapPin,
@@ -101,12 +108,6 @@ export default function AdminDashboard() {
       href: `${ROUTES.ADMIN_BLOG}/new`,
       icon: FileText,
       gradient: 'from-blue-500 to-indigo-600',
-    },
-    {
-      label: 'New Video',
-      href: `${ROUTES.ADMIN_VIDEOS}/new`,
-      icon: Video,
-      gradient: 'from-purple-500 to-pink-600',
     },
   ]
 
