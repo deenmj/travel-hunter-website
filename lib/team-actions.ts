@@ -121,3 +121,47 @@ export async function deleteTeamMember(userId: string) {
   revalidatePath('/admin/team')
   return { success: true }
 }
+
+export async function updateTeamMember(userId: string, formData: FormData) {
+  const isAdmin = await isUserAdmin()
+  if (!isAdmin) {
+    return { error: 'Unauthorized' }
+  }
+
+  const fullName = formData.get('fullName') as string
+  const role = formData.get('role') as string
+
+  if (!fullName || !role) {
+    return { error: 'Name and role are required.' }
+  }
+
+  const supabase = createAdminClient()
+
+  // 1. Update the user metadata in Supabase Auth
+  const { error: authError } = await supabase.auth.admin.updateUserById(userId, {
+    user_metadata: {
+      full_name: fullName,
+      role: role
+    }
+  })
+
+  if (authError) {
+    return { error: authError.message }
+  }
+
+  // 2. Update profiles table
+  const { error: profileError } = await supabase
+    .from('profiles')
+    .update({
+      full_name: fullName,
+      role: role
+    })
+    .eq('id', userId)
+
+  if (profileError) {
+    return { error: 'Failed to update user profile.' }
+  }
+
+  revalidatePath('/admin/team')
+  return { success: true }
+}

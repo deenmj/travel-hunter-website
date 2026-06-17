@@ -3,6 +3,16 @@
 import { useEffect, useState, useRef } from 'react'
 import { Upload, Trash2, Copy, Check, FileImage, RefreshCw, Link as LinkIcon } from 'lucide-react'
 import { listMedia, uploadMedia, deleteMedia } from '@/lib/admin-actions'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 
 interface MediaFile {
   name: string
@@ -19,6 +29,7 @@ export default function MediaLibraryPage() {
   const [copiedPath, setCopiedPath] = useState<string | null>(null)
   const [showUrlInput, setShowUrlInput] = useState(false)
   const [externalUrl, setExternalUrl] = useState('')
+  const [fileToDelete, setFileToDelete] = useState<MediaFile | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -85,13 +96,11 @@ export default function MediaLibraryPage() {
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
-  const handleDelete = async (file: MediaFile) => {
-    const confirmDelete = window.confirm(`Are you sure you want to delete ${file.name}?`)
-    if (!confirmDelete) return
-
+  const confirmDelete = async (file: MediaFile) => {
     // If it's a mock Object URL or placeholder, just filter it out locally
     if (file.url.startsWith('blob:') || file.url.includes('wikimedia.org') || file.path.startsWith('external/')) {
       setFiles((prev) => prev.filter((f) => f.path !== file.path))
+      setFileToDelete(null)
       return
     }
 
@@ -101,6 +110,7 @@ export default function MediaLibraryPage() {
     } else {
       setFiles((prev) => prev.filter((f) => f.path !== file.path))
     }
+    setFileToDelete(null)
   }
 
   const copyToClipboard = (url: string) => {
@@ -233,7 +243,7 @@ export default function MediaLibraryPage() {
                     )}
                   </button>
                   <button
-                    onClick={() => handleDelete(file)}
+                    onClick={() => setFileToDelete(file)}
                     className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow"
                     title="Delete permanently"
                   >
@@ -275,6 +285,27 @@ export default function MediaLibraryPage() {
           </button>
         </div>
       )}
+
+      {/* Delete Confirmation Modal */}
+      <AlertDialog open={!!fileToDelete} onOpenChange={(open) => !open && setFileToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure you want to delete this image?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete <strong>{fileToDelete?.name}</strong> from your media library.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => fileToDelete && confirmDelete(fileToDelete)}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

@@ -20,6 +20,7 @@ import { ROUTES } from '@/lib/constants'
 interface AdminSidebarProps {
   open: boolean
   onClose: () => void
+  userRole?: string | null
 }
 
 const navItems = [
@@ -28,11 +29,11 @@ const navItems = [
   { href: ROUTES.ADMIN_BLOG, icon: FileText, label: 'Blogs' },
   { href: ROUTES.ADMIN_VIDEOS, icon: Video, label: 'Videos' },
   { href: ROUTES.ADMIN_MEDIA, icon: ImageIcon, label: 'Media Library' },
-  { href: ROUTES.ADMIN_TEAM, icon: Users, label: 'Team' },
+  { href: ROUTES.ADMIN_TEAM, icon: Users, label: 'Team', adminOnly: true },
   { href: ROUTES.ADMIN_SETTINGS, icon: Settings, label: 'Settings' },
 ]
 
-export function AdminSidebar({ open, onClose }: AdminSidebarProps) {
+export function AdminSidebar({ open, onClose, userRole }: AdminSidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
 
@@ -54,6 +55,7 @@ export function AdminSidebar({ open, onClose }: AdminSidebarProps) {
           isActive={isActive}
           handleSignOut={handleSignOut}
           onLinkClick={() => {}}
+          userRole={userRole}
         />
       </aside>
 
@@ -76,6 +78,7 @@ export function AdminSidebar({ open, onClose }: AdminSidebarProps) {
           isActive={isActive}
           handleSignOut={handleSignOut}
           onLinkClick={onClose}
+          userRole={userRole}
         />
       </aside>
     </>
@@ -86,11 +89,13 @@ function SidebarContent({
   isActive,
   handleSignOut,
   onLinkClick,
+  userRole,
 }: {
   pathname: string
   isActive: (href: string) => boolean
   handleSignOut: () => void
   onLinkClick: () => void
+  userRole?: string | null
 }) {
   return (
     <>
@@ -117,6 +122,8 @@ function SidebarContent({
           Content
         </p>
         {navItems.map((item) => {
+          if (item.adminOnly && userRole !== 'admin') return null;
+
           const Icon = item.icon
           const active = isActive(item.href)
 
