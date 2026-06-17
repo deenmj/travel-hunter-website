@@ -1,14 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createAdminClient } from '@/lib/supabase/admin'
 import crypto from 'crypto'
-
-// Create a Supabase admin client (service role)
-function getAdminClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
-}
 
 // Verify the reset token and extract the email
 function verifyResetToken(token: string): { email: string } | null {
@@ -70,7 +62,7 @@ export async function POST(request: NextRequest) {
     const { email } = result
 
     // Find user by email
-    const supabase = getAdminClient()
+    const supabase = createAdminClient()
     const { data: users, error: listError } = await supabase.auth.admin.listUsers()
 
     if (listError) {

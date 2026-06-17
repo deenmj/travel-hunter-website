@@ -1,17 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { Resend } from 'resend'
 import crypto from 'crypto'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-
-// Create a Supabase admin client (service role) for looking up users
-function getAdminClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
-}
 
 // Generate a signed reset token using HMAC
 function generateResetToken(email: string): string {
@@ -44,7 +36,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Check if user exists in Supabase auth
-    const supabase = getAdminClient()
+    const supabase = createAdminClient()
     const { data: users, error: listError } = await supabase.auth.admin.listUsers()
 
     if (listError) {
