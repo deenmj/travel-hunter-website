@@ -86,6 +86,26 @@ export async function Footer() {
             </ul>
           </div>
 
+          {/* Newsletter */}
+          <div className="col-span-2 sm:col-span-1 space-y-3">
+            <h3 className="font-semibold text-base">Newsletter</h3>
+            <p className="text-gray-400 text-sm">Subscribe for travel tips and updates.</p>
+            <form className="flex flex-col gap-2">
+              <input
+                type="email"
+                placeholder="Your email"
+                className="px-3 py-2 bg-slate-800 rounded text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 h-9"
+              />
+              <button
+                type="submit"
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 rounded text-sm font-medium transition-colors h-9"
+              >
+                Subscribe
+              </button>
+            </form>
+          </div>
+        </div>
+
         {/* Divider */}
         <div className="border-t border-slate-800 pt-6 sm:pt-8"></div>
 
