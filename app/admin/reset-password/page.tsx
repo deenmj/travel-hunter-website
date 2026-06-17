@@ -5,11 +5,11 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Eye, EyeOff, Compass, KeyRound, AlertTriangle } from 'lucide-react'
 import { Suspense } from 'react'
 
+import { createClient } from '@/lib/supabase/client'
+
 function ResetPasswordForm() {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const token = searchParams.get('token')
-
+  
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -35,16 +35,13 @@ function ResetPasswordForm() {
     }
 
     try {
-      const res = await fetch('/api/auth/verify-reset', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, password }),
+      const supabase = createClient()
+      const { error: updateError } = await supabase.auth.updateUser({
+        password: password
       })
 
-      const data = await res.json()
-
-      if (!res.ok) {
-        setError(data.error || 'Failed to reset password. Please try again.')
+      if (updateError) {
+        setError(updateError.message || 'Failed to reset password. Please try again.')
         setLoading(false)
         return
       }
@@ -53,36 +50,14 @@ function ResetPasswordForm() {
       setLoading(false)
 
       // Redirect to login after a delay
-      setTimeout(() => {
+      setTimeout(async () => {
+        await supabase.auth.signOut()
         router.push('/admin/login')
       }, 3000)
     } catch {
       setError('Network error. Please try again.')
       setLoading(false)
     }
-  }
-
-  // No token in URL — show an error
-  if (!token) {
-    return (
-      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl">
-        <div className="text-center space-y-4">
-          <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-            <AlertTriangle className="w-8 h-8 text-red-400" />
-          </div>
-          <h3 className="text-lg font-medium text-white">Invalid Reset Link</h3>
-          <p className="text-slate-400 text-sm">
-            This password reset link is invalid or has expired. Please request a new one.
-          </p>
-          <button
-            onClick={() => router.push('/admin/login')}
-            className="mt-4 inline-flex items-center px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-semibold rounded-xl shadow-lg shadow-emerald-500/25 transition-all duration-200 text-sm"
-          >
-            Back to Login
-          </button>
-        </div>
-      </div>
-    )
   }
 
   return (
