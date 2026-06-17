@@ -1,42 +1,41 @@
 import { Metadata } from 'next'
-import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { BottomNav } from '@/components/layout/BottomNav'
 import { ContactFormComponent } from '@/components/about/ContactForm'
 import { Youtube, Instagram, Facebook, MapPin, Video, Users, Award, Mail, Phone } from 'lucide-react'
+import { getAboutPageData, DEFAULT_ABOUT_DATA } from '@/lib/about-utils'
 
 export const metadata: Metadata = {
   title: 'About - Travel Hunter',
   description: 'Meet Sri Lanka&apos;s Travel Hunter. Discover my story, passion for travel, and how we can collaborate to promote your business or destination.',
 }
 
-const stats = [
-  { label: 'YouTube Subscribers', value: '250K+', icon: Youtube },
-  { label: 'Videos Created', value: '500+', icon: Video },
-  { label: 'Places Explored', value: '150+', icon: MapPin },
-  { label: 'Community Members', value: '500K+', icon: Users },
+const galleryImages = [
+  { id: 1, src: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=500&h=500&fit=crop', alt: 'Travel Adventure 1' },
+  { id: 2, src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop', alt: 'Travel Adventure 2' },
+  { id: 3, src: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500&h=500&fit=crop', alt: 'Travel Adventure 3' },
+  { id: 4, src: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=500&h=500&fit=crop', alt: 'Travel Adventure 4' },
+  { id: 5, src: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=500&h=500&fit=crop', alt: 'Travel Adventure 5' },
+  { id: 6, src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop', alt: 'Travel Adventure 6' },
 ]
 
-const socialLinks = [
+const socialIcons = [
   {
     name: 'YouTube',
     icon: Youtube,
-    url: 'https://youtube.com',
     color: 'hover:text-red-600 dark:hover:text-red-500',
     bgColor: 'hover:bg-red-50 dark:hover:bg-red-950/30',
   },
   {
     name: 'Instagram',
     icon: Instagram,
-    url: 'https://instagram.com',
     color: 'hover:text-pink-600 dark:hover:text-pink-500',
     bgColor: 'hover:bg-pink-50 dark:hover:bg-pink-950/30',
   },
   {
     name: 'Facebook',
     icon: Facebook,
-    url: 'https://facebook.com',
     color: 'hover:text-blue-600 dark:hover:text-blue-500',
     bgColor: 'hover:bg-blue-50 dark:hover:bg-blue-950/30',
   },
@@ -52,16 +51,22 @@ const socialLinks = [
   },
 ]
 
-const galleryImages = [
-  { id: 1, src: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=500&h=500&fit=crop', alt: 'Travel Adventure 1' },
-  { id: 2, src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop', alt: 'Travel Adventure 2' },
-  { id: 3, src: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500&h=500&fit=crop', alt: 'Travel Adventure 3' },
-  { id: 4, src: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=500&h=500&fit=crop', alt: 'Travel Adventure 4' },
-  { id: 5, src: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=500&h=500&fit=crop', alt: 'Travel Adventure 5' },
-  { id: 6, src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop', alt: 'Travel Adventure 6' },
-]
+export default async function AboutPage() {
+  const aboutData = await getAboutPageData() || DEFAULT_ABOUT_DATA
 
-export default function AboutPage() {
+  const stats = [
+    { label: 'YouTube Subscribers', value: aboutData.youtube_subscribers, icon: Youtube },
+    { label: 'Videos Created', value: aboutData.videos_created, icon: Video },
+    { label: 'Places Explored', value: aboutData.places_explored, icon: MapPin },
+    { label: 'Community Members', value: aboutData.community_members, icon: Users },
+  ]
+
+  const socialLinks = [
+    { ...socialIcons[0], url: aboutData.youtube_url },
+    { ...socialIcons[1], url: aboutData.instagram_url },
+    { ...socialIcons[2], url: aboutData.facebook_url },
+    { ...socialIcons[3], url: aboutData.tiktok_url },
+  ]
 
   return (
     <>
@@ -80,13 +85,13 @@ export default function AboutPage() {
               <div className="space-y-8">
                 <div className="space-y-4">
                   <p className="text-emerald-600 dark:text-emerald-400 font-bold text-sm uppercase tracking-widest">
-                    Sri Lanka&apos;s Travel Hunter
+                    {aboutData.hero_tagline}
                   </p>
                   <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-slate-900 dark:text-white leading-tight">
-                    Discover Sri Lanka With Me
+                    {aboutData.hero_title}
                   </h1>
                   <p className="text-xl sm:text-2xl text-slate-600 dark:text-slate-300 font-medium leading-relaxed max-w-lg">
-                    Exploring hidden gems, authentic experiences, and unforgettable adventures across the island.
+                    {aboutData.hero_description}
                   </p>
                 </div>
 
@@ -116,7 +121,7 @@ export default function AboutPage() {
               <div className="relative">
                 <div className="relative h-[500px] rounded-3xl overflow-hidden shadow-2xl">
                   <img
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=700&h=800&fit=crop"
+                    src={aboutData.hero_image_url}
                     alt="Travel Hunter"
                     className="w-full h-full object-cover"
                   />
@@ -132,18 +137,12 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-6">
-                The Journey Begins
+                {aboutData.story_title}
               </h2>
               <div className="space-y-6 text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
-                <p>
-                  My passion for travel started with a simple question: &quot;What if I could help others discover Sri Lanka the way I see it?&quot; What began as personal travel videos has blossomed into a thriving community of over 250K subscribers.
-                </p>
-                <p>
-                  Every destination I visit, every meal I taste, and every person I meet becomes a story worth sharing. Through my camera lens, I capture not just beautiful landscapes, but the authentic spirit of Sri Lanka&apos;s incredible culture, hospitality, and hidden treasures.
-                </p>
-                <p>
-                  I believe travel is more than just visiting places—it&apos;s about meaningful connections, cultural appreciation, and creating memories that last a lifetime. That&apos;s what drives every video, every recommendation, and every collaboration.
-                </p>
+                {aboutData.story_content.split('\n\n').map((paragraph, idx) => (
+                  <p key={idx}>{paragraph}</p>
+                ))}
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -405,11 +404,8 @@ export default function AboutPage() {
                   </div>
                   Email
                 </h3>
-                <a
-                  href="mailto:hello@travelhunter.com"
-                  className="text-lg text-emerald-600 dark:text-emerald-400 hover:underline font-semibold"
-                >
-                  hello@travelhunter.com
+                <a href={`mailto:${aboutData.contact_email}`} className="text-lg text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                  {aboutData.contact_email}
                 </a>
               </div>
 
@@ -420,21 +416,17 @@ export default function AboutPage() {
                   </div>
                   Phone
                 </h3>
-                <a
-                  href="tel:+94123456789"
-                  className="text-lg text-emerald-600 dark:text-emerald-400 hover:underline font-semibold"
-                >
-                  +94 (123) 456-789
-                </a>
+                <p className="text-lg text-slate-600 dark:text-slate-400">{aboutData.contact_phone}</p>
               </div>
 
-              <div className="pt-6 border-t border-slate-200 dark:border-slate-800">
-                <p className="text-slate-600 dark:text-slate-400 mb-4">
-                  <strong>Response time:</strong> I try to respond to all inquiries within 48 hours.
-                </p>
-                <p className="text-slate-600 dark:text-slate-400">
-                  <strong>Best for partnerships:</strong> Send details about your business/destination in the contact form.
-                </p>
+              <div className="space-y-4">
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
+                    <MapPin className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+                  </div>
+                  Location
+                </h3>
+                <p className="text-lg text-slate-600 dark:text-slate-400">{aboutData.contact_address}</p>
               </div>
             </div>
 
@@ -444,19 +436,15 @@ export default function AboutPage() {
         </section>
 
         {/* ── CTA SECTION ── */}
-        <section className="bg-slate-900 dark:bg-slate-950 text-white py-16 md:py-24">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl sm:text-4xl font-black mb-6">
-              Ready to Explore Sri Lanka With Me?
-            </h2>
-            <p className="text-lg opacity-90 mb-8">
-              Subscribe to my channel and stay updated with the latest adventures, travel tips, and destination guides.
-            </p>
+        <section className="bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-700 dark:to-teal-700 py-16 md:py-20">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+            <h3 className="text-3xl sm:text-4xl font-black mb-4">Subscribe & Join The Adventure</h3>
+            <p className="text-lg opacity-90 mb-8">Get exclusive travel tips, behind-the-scenes content, and early access to partnerships</p>
             <a
-              href="https://youtube.com"
+              href={aboutData.youtube_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-red-600 hover:bg-red-700 text-white font-bold text-lg h-14 px-8 rounded-full inline-flex items-center gap-2 transition-colors"
+              className="inline-flex items-center gap-2 bg-white text-red-600 hover:bg-slate-100 font-bold text-lg h-14 px-8 rounded-full transition-colors"
             >
               <Youtube className="w-6 h-6" />
               Subscribe on YouTube
