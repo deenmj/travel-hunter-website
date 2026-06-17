@@ -470,3 +470,77 @@ export async function updateSiteSettings(formData: {
   revalidatePath('/admin/settings')
   return { data: result.data, error: null }
 }
+
+// ─── About Page ───────────────────────────────────────────────────────────────
+
+export async function getAboutPageDataAdmin() {
+  const { supabase } = await requireAdmin()
+
+  const { data, error } = await supabase
+    .from('about_page')
+    .select('*')
+    .limit(1)
+    .single()
+
+  if (error) {
+    return { data: null, error: error.message }
+  }
+
+  return { data, error: null }
+}
+
+export async function updateAboutPageData(formData: {
+  hero_tagline?: string
+  hero_title?: string
+  hero_description?: string
+  hero_image_url?: string
+  story_title?: string
+  story_content?: string
+  youtube_subscribers?: string
+  videos_created?: string
+  places_explored?: string
+  community_members?: string
+  youtube_url?: string
+  instagram_url?: string
+  facebook_url?: string
+  tiktok_url?: string
+  contact_email?: string
+  contact_phone?: string
+  contact_address?: string
+}) {
+  const { supabase } = await requireAdmin()
+
+  // First try to get the existing row
+  const { data: existing } = await supabase
+    .from('about_page')
+    .select('id')
+    .limit(1)
+    .single()
+
+  let result
+
+  if (existing) {
+    // Update existing row
+    result = await supabase
+      .from('about_page')
+      .update({ ...formData, updated_at: new Date().toISOString() })
+      .eq('id', existing.id)
+      .select()
+      .single()
+  } else {
+    // Insert new row
+    result = await supabase
+      .from('about_page')
+      .insert({ ...formData })
+      .select()
+      .single()
+  }
+
+  if (result.error) {
+    return { data: null, error: result.error.message }
+  }
+
+  revalidatePath('/about')
+  revalidatePath('/admin/about')
+  return { data: result.data, error: null }
+}

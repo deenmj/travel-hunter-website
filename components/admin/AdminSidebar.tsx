@@ -12,6 +12,7 @@ import {
   LogOut,
   Compass,
   Users,
+  Info,
   X,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
@@ -30,6 +31,7 @@ const navItems = [
   { href: ROUTES.ADMIN_VIDEOS, icon: Video, label: 'Videos' },
   { href: ROUTES.ADMIN_MEDIA, icon: ImageIcon, label: 'Media Library' },
   { href: ROUTES.ADMIN_TEAM, icon: Users, label: 'Team', adminOnly: true },
+  { href: ROUTES.ADMIN_ABOUT, icon: Info, label: 'About Page' },
   { href: ROUTES.ADMIN_SETTINGS, icon: Settings, label: 'Settings' },
 ]
 

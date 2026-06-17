@@ -85,6 +85,7 @@ export const ROUTES = {
   ADMIN_VIDEOS: '/admin/videos',
   ADMIN_MEDIA: '/admin/media',
   ADMIN_TEAM: '/admin/team',
+  ADMIN_ABOUT: '/admin/about',
   ADMIN_SETTINGS: '/admin/settings',
 } as const
 
