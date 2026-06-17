@@ -1,32 +1,21 @@
 'use client'
 
-import { useState, FormEvent, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
-import { Eye, EyeOff, Compass, KeyRound } from 'lucide-react'
+import { useState, FormEvent } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Eye, EyeOff, Compass, KeyRound, AlertTriangle } from 'lucide-react'
+import { Suspense } from 'react'
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const token = searchParams.get('token')
+
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
-
-  // Wait for session to be established from the email hash
-  useEffect(() => {
-    const checkSession = async () => {
-      const supabase = createClient()
-      const { data: { session } } = await supabase.auth.getSession()
-      
-      // We don't immediately redirect if no session is found, because Supabase
-      // handles the hash parsing asynchronously in the background. But we can 
-      // check if auth error occurs.
-    }
-    
-    checkSession()
-  }, [])
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -45,32 +34,159 @@ export default function ResetPasswordPage() {
       return
     }
 
-    const supabase = createClient()
-
-    // Update the user's password. This requires the user to be logged in,
-    // which they should be if they just clicked the reset link from their email.
-    const { error: updateError } = await supabase.auth.updateUser({
-      password: password,
-    })
-
-    if (updateError) {
-      setError(updateError.message || 'Failed to reset password. Please try the link again.')
-      setLoading(false)
-      return
-    }
-
-    setSuccess(true)
-    setLoading(false)
-
-    // Redirect to login after a delay
-    setTimeout(() => {
-      // Sign out to force them to log in with new credentials
-      supabase.auth.signOut().then(() => {
-        router.push('/admin/login')
+    try {
+      const res = await fetch('/api/auth/verify-reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token, password }),
       })
-    }, 3000)
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        setError(data.error || 'Failed to reset password. Please try again.')
+        setLoading(false)
+        return
+      }
+
+      setSuccess(true)
+      setLoading(false)
+
+      // Redirect to login after a delay
+      setTimeout(() => {
+        router.push('/admin/login')
+      }, 3000)
+    } catch {
+      setError('Network error. Please try again.')
+      setLoading(false)
+    }
   }
 
+  // No token in URL — show an error
+  if (!token) {
+    return (
+      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl">
+        <div className="text-center space-y-4">
+          <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <AlertTriangle className="w-8 h-8 text-red-400" />
+          </div>
+          <h3 className="text-lg font-medium text-white">Invalid Reset Link</h3>
+          <p className="text-slate-400 text-sm">
+            This password reset link is invalid or has expired. Please request a new one.
+          </p>
+          <button
+            onClick={() => router.push('/admin/login')}
+            className="mt-4 inline-flex items-center px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-semibold rounded-xl shadow-lg shadow-emerald-500/25 transition-all duration-200 text-sm"
+          >
+            Back to Login
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl">
+      <div className="mb-6 flex items-center gap-3">
+        <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0">
+          <KeyRound className="w-5 h-5 text-emerald-400" />
+        </div>
+        <div>
+          <h2 className="text-xl font-semibold text-white">Create New Password</h2>
+          <p className="text-slate-400 text-sm mt-1">Please enter your new password</p>
+        </div>
+      </div>
+
+      {error && (
+        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-sm text-red-300 flex items-start gap-3">
+          <svg className="w-5 h-5 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{error}</span>
+        </div>
+      )}
+
+      {success ? (
+        <div className="text-center space-y-4">
+          <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h3 className="text-lg font-medium text-white">Password Reset Successfully</h3>
+          <p className="text-slate-400 text-sm">
+            Redirecting you to the login page...
+          </p>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="space-y-2">
+            <label htmlFor="new-password" className="block text-sm font-medium text-slate-300">
+              New Password
+            </label>
+            <div className="relative">
+              <input
+                id="new-password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                disabled={loading}
+                minLength={6}
+                className="w-full h-12 px-4 pr-12 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all disabled:opacity-50 text-base"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 transition-colors"
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="confirm-password" className="block text-sm font-medium text-slate-300">
+              Confirm Password
+            </label>
+            <div className="relative">
+              <input
+                id="confirm-password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="••••••••"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                disabled={loading}
+                minLength={6}
+                className="w-full h-12 px-4 pr-12 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all disabled:opacity-50 text-base"
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full h-12 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-semibold rounded-xl shadow-lg shadow-emerald-500/25 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-base"
+          >
+            {loading ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Updating...
+              </>
+            ) : (
+              'Reset Password'
+            )}
+          </button>
+        </form>
+      )}
+    </div>
+  )
+}
+
+export default function ResetPasswordPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 px-4">
       {/* Animated background elements */}
@@ -89,104 +205,14 @@ export default function ResetPasswordPage() {
           <p className="text-slate-400 mt-1 text-sm">Admin Panel</p>
         </div>
 
-        {/* Reset Card */}
-        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl">
-          <div className="mb-6 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0">
-              <KeyRound className="w-5 h-5 text-emerald-400" />
-            </div>
-            <div>
-              <h2 className="text-xl font-semibold text-white">Create New Password</h2>
-              <p className="text-slate-400 text-sm mt-1">Please enter your new password</p>
-            </div>
+        <Suspense fallback={
+          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl text-center">
+            <div className="w-8 h-8 border-2 border-white/30 border-t-emerald-400 rounded-full animate-spin mx-auto" />
+            <p className="text-slate-400 text-sm mt-4">Loading...</p>
           </div>
-
-          {error && (
-            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-sm text-red-300 flex items-start gap-3">
-              <svg className="w-5 h-5 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>{error}</span>
-            </div>
-          )}
-
-          {success ? (
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-medium text-white">Password Reset Successfully</h3>
-              <p className="text-slate-400 text-sm">
-                Redirecting you to the login page...
-              </p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="space-y-2">
-                <label htmlFor="new-password" className="block text-sm font-medium text-slate-300">
-                  New Password
-                </label>
-                <div className="relative">
-                  <input
-                    id="new-password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    disabled={loading}
-                    minLength={6}
-                    className="w-full h-12 px-4 pr-12 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all disabled:opacity-50 text-base"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 transition-colors"
-                    tabIndex={-1}
-                  >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                  </button>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="confirm-password" className="block text-sm font-medium text-slate-300">
-                  Confirm Password
-                </label>
-                <div className="relative">
-                  <input
-                    id="confirm-password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="••••••••"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    disabled={loading}
-                    minLength={6}
-                    className="w-full h-12 px-4 pr-12 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all disabled:opacity-50 text-base"
-                  />
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full h-12 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-semibold rounded-xl shadow-lg shadow-emerald-500/25 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-base"
-              >
-                {loading ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Updating...
-                  </>
-                ) : (
-                  'Reset Password'
-                )}
-              </button>
-            </form>
-          )}
-        </div>
+        }>
+          <ResetPasswordForm />
+        </Suspense>
       </div>
     </div>
   )

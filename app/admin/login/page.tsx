@@ -24,15 +24,23 @@ export default function AdminLoginPage() {
     const supabase = createClient()
 
     if (isForgotPassword) {
-      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/callback?next=/admin/reset-password`,
-      })
+      try {
+        const res = await fetch('/api/auth/reset-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        })
 
-      if (resetError) {
-        setError(resetError.message)
-      } else {
-        setSuccess('Reset link sent! Please check your email.')
-        setIsForgotPassword(false)
+        const data = await res.json()
+
+        if (!res.ok) {
+          setError(data.error || 'Failed to send reset email.')
+        } else {
+          setSuccess('Reset link sent! Please check your email (including spam folder).')
+          setIsForgotPassword(false)
+        }
+      } catch {
+        setError('Network error. Please try again.')
       }
       setLoading(false)
       return
