@@ -42,6 +42,8 @@ export async function createDestination(formData: {
   location?: string
   region?: string
   budget?: 'low' | 'mid' | 'luxury'
+  how_to_reach?: string
+  entry_fees?: string
   highlights?: string[]
   is_top_pick?: boolean
 }) {
@@ -83,6 +85,8 @@ export async function updateDestination(
     location?: string
     region?: string
     budget?: 'low' | 'mid' | 'luxury'
+    how_to_reach?: string
+    entry_fees?: string
     highlights?: string[]
     is_top_pick?: boolean
   },
