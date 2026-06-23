@@ -150,10 +150,10 @@ export default async function AboutPage() {
         {/* ── STORY SECTION ── */}
         <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
           <div className="text-center">
-            <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 md:mb-10">
+            <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white mb-4 md:mb-8">
               {aboutData.story_title}
             </h2>
-            <div className="space-y-4 md:space-y-6 text-base md:text-lg text-slate-700 dark:text-slate-300 leading-relaxed text-left md:text-center mx-auto">
+            <div className="space-y-4 md:space-y-6 text-sm md:text-lg text-slate-700 dark:text-slate-300 leading-relaxed text-left md:text-center mx-auto">
               {storyParagraphs.length > 0
                 ? storyParagraphs.map((paragraph, idx) => (
                     <p key={idx}>{paragraph}</p>
@@ -167,11 +167,11 @@ export default async function AboutPage() {
         {/* ── TRAVEL PHILOSOPHY SECTION ── */}
         <section className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/20 dark:to-slate-900 py-12 md:py-24">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-10 md:mb-16">
-              <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 md:mb-6">
+            <div className="text-center mb-8 md:mb-16">
+              <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white mb-3 md:mb-6">
                 My Travel Philosophy
               </h2>
-              <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+              <p className="text-sm md:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
                 How I explore, what I believe in, and why I love Sri Lanka
               </p>
             </div>
@@ -224,11 +224,11 @@ export default async function AboutPage() {
 
         {/* ── STATS SECTION ── */}
         <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
-          <div className="text-center mb-10 md:mb-16">
-            <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 md:mb-6">
+          <div className="text-center mb-8 md:mb-16">
+            <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white mb-3 md:mb-6">
               Journey Stats
             </h2>
-            <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300">
+            <p className="text-sm md:text-xl text-slate-600 dark:text-slate-300">
               Numbers that represent my passion for exploration
             </p>
           </div>
@@ -259,11 +259,11 @@ export default async function AboutPage() {
         {/* ── GALLERY SECTION ── */}
         <section className="bg-slate-50 dark:bg-slate-900 py-12 md:py-24">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-10 md:mb-16">
-              <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 md:mb-6">
+            <div className="text-center mb-8 md:mb-16">
+              <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white mb-3 md:mb-6">
                 Travel Gallery
               </h2>
-              <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300">
+              <p className="text-sm md:text-xl text-slate-600 dark:text-slate-300">
                 A glimpse into my adventures across Sri Lanka
               </p>
             </div>
@@ -302,16 +302,16 @@ export default async function AboutPage() {
         {/* ── SOCIAL SECTION ── */}
         {socialLinks.length > 0 && (
           <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
-            <div className="text-center mb-10 md:mb-12">
-              <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 md:mb-6">
+            <div className="text-center mb-8 md:mb-12">
+              <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white mb-3 md:mb-6">
                 Follow My Journey
               </h2>
-              <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300">
+              <p className="text-sm md:text-xl text-slate-600 dark:text-slate-300">
                 Join my community across all platforms
               </p>
             </div>
 
-            <div className="flex flex-wrap justify-center gap-6 md:gap-8">
+            <div className="flex flex-wrap justify-center gap-4 md:gap-8">
               {socialLinks.map((social, idx) => {
                 const IconComponent = social.icon
                 return (
@@ -320,9 +320,9 @@ export default async function AboutPage() {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`p-6 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 transition-all duration-300 ${social.bgColor}`}
+                    className={`p-4 md:p-6 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 transition-all duration-300 ${social.bgColor}`}
                   >
-                    <IconComponent className={`w-10 h-10 text-slate-600 dark:text-slate-300 transition-colors ${social.color}`} />
+                    <IconComponent className={`w-6 h-6 md:w-10 md:h-10 text-slate-600 dark:text-slate-300 transition-colors ${social.color}`} />
                   </a>
                 )
               })}
@@ -336,16 +336,16 @@ export default async function AboutPage() {
           className="bg-gradient-to-br from-emerald-600 to-teal-600 dark:from-emerald-700 dark:to-teal-700 py-12 md:py-24 text-white"
         >
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/30">
-              <Award className="w-4 h-4" />
-              <span className="font-semibold text-sm">Partnership Opportunities</span>
+            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 md:px-4 md:py-2 rounded-full mb-4 md:mb-6 border border-white/30">
+              <Award className="w-3 h-3 md:w-4 md:h-4" />
+              <span className="font-semibold text-xs md:text-sm">Partnership Opportunities</span>
             </div>
 
-            <h2 className="text-3xl md:text-5xl font-black mb-4 md:mb-6 leading-tight">
+            <h2 className="text-2xl md:text-4xl font-black mb-3 md:mb-6 leading-tight">
               Let&apos;s Create Something Amazing Together
             </h2>
 
-            <p className="text-base md:text-xl opacity-90 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-sm md:text-xl opacity-90 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed">
               Are you a hotel, restaurant, destination, or brand looking to reach travel enthusiasts? I&apos;m always excited about authentic partnerships that align with my values and create genuine value for my community.
             </p>
 
@@ -386,53 +386,53 @@ export default async function AboutPage() {
 
         {/* ── CONTACT SECTION ── */}
         <section id="contact" className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
-          <div className="text-center mb-10 md:mb-16">
-            <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 md:mb-6">
+          <div className="text-center mb-8 md:mb-16">
+            <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white mb-3 md:mb-6">
               Get In Touch
             </h2>
-            <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300">
+            <p className="text-sm md:text-xl text-slate-600 dark:text-slate-300">
               Have a question, partnership idea, or just want to say hi? I&apos;d love to hear from you!
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mb-8 md:mb-12">
             {/* Contact Info */}
-            <div className="space-y-8">
+            <div className="space-y-6 md:space-y-8">
               {contactEmail && (
-                <div className="space-y-4">
-                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
-                      <Mail className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+                <div className="space-y-2 md:space-y-4">
+                  <h3 className="text-lg md:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2 md:gap-3">
+                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
+                      <Mail className="w-5 h-5 md:w-6 md:h-6 text-emerald-600 dark:text-emerald-400" />
                     </div>
                     Email
                   </h3>
-                  <a href={`mailto:${contactEmail}`} className="text-lg text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                  <a href={`mailto:${contactEmail}`} className="text-sm md:text-lg text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                     {contactEmail}
                   </a>
                 </div>
               )}
 
               {contactPhone && (
-                <div className="space-y-4">
-                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
-                      <Phone className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+                <div className="space-y-2 md:space-y-4">
+                  <h3 className="text-lg md:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2 md:gap-3">
+                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
+                      <Phone className="w-5 h-5 md:w-6 md:h-6 text-emerald-600 dark:text-emerald-400" />
                     </div>
                     Phone
                   </h3>
-                  <p className="text-lg text-slate-600 dark:text-slate-400">{contactPhone}</p>
+                  <p className="text-sm md:text-lg text-slate-600 dark:text-slate-400">{contactPhone}</p>
                 </div>
               )}
 
               {contactAddress && (
-                <div className="space-y-4">
-                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
-                      <MapPin className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+                <div className="space-y-2 md:space-y-4">
+                  <h3 className="text-lg md:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2 md:gap-3">
+                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
+                      <MapPin className="w-5 h-5 md:w-6 md:h-6 text-emerald-600 dark:text-emerald-400" />
                     </div>
                     Location
                   </h3>
-                  <p className="text-lg text-slate-600 dark:text-slate-400">{contactAddress}</p>
+                  <p className="text-sm md:text-lg text-slate-600 dark:text-slate-400">{contactAddress}</p>
                 </div>
               )}
             </div>
@@ -444,17 +444,17 @@ export default async function AboutPage() {
 
         {/* ── CTA SECTION ── */}
         {siteSettings.youtube_url && (
-          <section className="bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-700 dark:to-teal-700 py-16 md:py-20">
+          <section className="bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-700 dark:to-teal-700 py-12 md:py-20">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-              <h3 className="text-3xl sm:text-4xl font-black mb-4">Subscribe & Join The Adventure</h3>
-              <p className="text-lg opacity-90 mb-8">Get exclusive travel tips, behind-the-scenes content, and early access to partnerships</p>
+              <h3 className="text-2xl sm:text-4xl font-black mb-3 md:mb-4">Subscribe & Join The Adventure</h3>
+              <p className="text-sm md:text-lg opacity-90 mb-6 md:mb-8">Get exclusive travel tips, behind-the-scenes content, and early access to partnerships</p>
               <a
                 href={siteSettings.youtube_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-white text-red-600 hover:bg-slate-100 font-bold text-lg h-14 px-8 rounded-full transition-colors"
+                className="inline-flex items-center gap-2 bg-white text-red-600 hover:bg-slate-100 font-bold text-sm md:text-lg h-12 md:h-14 px-6 md:px-8 rounded-full transition-colors"
               >
-                <Youtube className="w-6 h-6" />
+                <Youtube className="w-5 h-5 md:w-6 md:h-6" />
                 Subscribe on YouTube
               </a>
             </div>
