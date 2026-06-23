@@ -7,11 +7,13 @@ import {
   ImageIcon,
   FileText,
   BarChart,
-  ExternalLink,
-  Phone,
   Mail,
+  Phone,
   MapPin,
+  ExternalLink,
+  Info,
 } from 'lucide-react'
+import Link from 'next/link'
 import ImageUpload from '@/components/admin/ImageUpload'
 import { getAboutPageDataAdmin, updateAboutPageData } from '@/lib/admin-actions'
 
@@ -38,13 +40,6 @@ export default function AboutSettingsPage() {
     videos: '',
     places: '',
     community: '',
-  })
-
-  const [socialSettings, setSocialSettings] = useState({
-    youtube: '',
-    instagram: '',
-    facebook: '',
-    tiktok: '',
   })
 
   const [contactSettings, setContactSettings] = useState({
@@ -74,12 +69,6 @@ export default function AboutSettingsPage() {
             videos: result.data.videos_created || '',
             places: result.data.places_explored || '',
             community: result.data.community_members || '',
-          })
-          setSocialSettings({
-            youtube: result.data.youtube_url || '',
-            instagram: result.data.instagram_url || '',
-            facebook: result.data.facebook_url || '',
-            tiktok: result.data.tiktok_url || '',
           })
           setContactSettings({
             phone: result.data.contact_phone || '',
@@ -113,10 +102,6 @@ export default function AboutSettingsPage() {
         videos_created: statsSettings.videos,
         places_explored: statsSettings.places,
         community_members: statsSettings.community,
-        youtube_url: socialSettings.youtube,
-        instagram_url: socialSettings.instagram,
-        facebook_url: socialSettings.facebook,
-        tiktok_url: socialSettings.tiktok,
         contact_email: contactSettings.email,
         contact_phone: contactSettings.phone,
         contact_address: contactSettings.address,
@@ -170,6 +155,24 @@ export default function AboutSettingsPage() {
         </div>
       )}
 
+      {/* Social Links Info Banner */}
+      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700/50 px-4 py-4 rounded-xl flex items-start gap-3">
+        <Info className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
+        <div className="flex-1">
+          <p className="text-sm font-semibold text-blue-800 dark:text-blue-300">Social Links are shared with the Home Page</p>
+          <p className="text-sm text-blue-700 dark:text-blue-400 mt-1">
+            The About page automatically uses the same social media links you set in Site Settings. No need to enter them twice.
+          </p>
+          <Link
+            href="/admin/settings"
+            className="inline-flex items-center gap-1.5 mt-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            Edit Social Links in Settings
+          </Link>
+        </div>
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Hero Section */}
         <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700/50 p-6 space-y-5">
@@ -187,6 +190,7 @@ export default function AboutSettingsPage() {
                 type="text"
                 value={heroSettings.tagline}
                 onChange={(e) => setHeroSettings({ ...heroSettings, tagline: e.target.value })}
+                placeholder="e.g. Sri Lanka's Travel Hunter"
                 className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
               />
             </div>
@@ -198,6 +202,7 @@ export default function AboutSettingsPage() {
                 type="text"
                 value={heroSettings.title}
                 onChange={(e) => setHeroSettings({ ...heroSettings, title: e.target.value })}
+                placeholder="e.g. Discover Sri Lanka With Me"
                 className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
               />
             </div>
@@ -211,6 +216,7 @@ export default function AboutSettingsPage() {
               value={heroSettings.description}
               onChange={(e) => setHeroSettings({ ...heroSettings, description: e.target.value })}
               rows={3}
+              placeholder="A short description shown in the hero area..."
               className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 resize-y"
             />
           </div>
@@ -242,6 +248,7 @@ export default function AboutSettingsPage() {
               type="text"
               value={storySettings.title}
               onChange={(e) => setStorySettings({ ...storySettings, title: e.target.value })}
+              placeholder="e.g. The Journey Begins"
               className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
             />
           </div>
@@ -255,6 +262,7 @@ export default function AboutSettingsPage() {
               value={storySettings.content}
               onChange={(e) => setStorySettings({ ...storySettings, content: e.target.value })}
               rows={8}
+              placeholder="Write your story here...&#10;&#10;Each double newline becomes a new paragraph."
               className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 resize-y"
             />
           </div>
@@ -276,6 +284,7 @@ export default function AboutSettingsPage() {
                 type="text"
                 value={statsSettings.youtube}
                 onChange={(e) => setStatsSettings({ ...statsSettings, youtube: e.target.value })}
+                placeholder="250K+"
                 className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
               />
             </div>
@@ -287,6 +296,7 @@ export default function AboutSettingsPage() {
                 type="text"
                 value={statsSettings.videos}
                 onChange={(e) => setStatsSettings({ ...statsSettings, videos: e.target.value })}
+                placeholder="500+"
                 className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
               />
             </div>
@@ -298,6 +308,7 @@ export default function AboutSettingsPage() {
                 type="text"
                 value={statsSettings.places}
                 onChange={(e) => setStatsSettings({ ...statsSettings, places: e.target.value })}
+                placeholder="150+"
                 className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
               />
             </div>
@@ -309,53 +320,7 @@ export default function AboutSettingsPage() {
                 type="text"
                 value={statsSettings.community}
                 onChange={(e) => setStatsSettings({ ...statsSettings, community: e.target.value })}
-                className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Social Links */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700/50 p-6 space-y-5">
-          <div className="flex items-center gap-2 text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-3">
-            <ExternalLink className="w-5 h-5 text-emerald-500" />
-            <h2 className="text-base font-semibold">Social Links</h2>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">YouTube</label>
-              <input
-                type="url"
-                value={socialSettings.youtube}
-                onChange={(e) => setSocialSettings({ ...socialSettings, youtube: e.target.value })}
-                className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Instagram</label>
-              <input
-                type="url"
-                value={socialSettings.instagram}
-                onChange={(e) => setSocialSettings({ ...socialSettings, instagram: e.target.value })}
-                className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Facebook</label>
-              <input
-                type="url"
-                value={socialSettings.facebook}
-                onChange={(e) => setSocialSettings({ ...socialSettings, facebook: e.target.value })}
-                className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">TikTok</label>
-              <input
-                type="url"
-                value={socialSettings.tiktok}
-                onChange={(e) => setSocialSettings({ ...socialSettings, tiktok: e.target.value })}
+                placeholder="500K+"
                 className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
               />
             </div>
@@ -368,6 +333,9 @@ export default function AboutSettingsPage() {
             <Mail className="w-5 h-5 text-emerald-500" />
             <h2 className="text-base font-semibold">Contact Information</h2>
           </div>
+          <p className="text-xs text-slate-500 -mt-3">
+            If left blank, contact details will fall back to the values set in Site Settings.
+          </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -378,6 +346,7 @@ export default function AboutSettingsPage() {
                 type="tel"
                 value={contactSettings.phone}
                 onChange={(e) => setContactSettings({ ...contactSettings, phone: e.target.value })}
+                placeholder="+94 (123) 456-789"
                 className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
               />
             </div>
@@ -389,6 +358,7 @@ export default function AboutSettingsPage() {
                 type="email"
                 value={contactSettings.email}
                 onChange={(e) => setContactSettings({ ...contactSettings, email: e.target.value })}
+                placeholder="you@example.com"
                 className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
               />
             </div>
@@ -402,6 +372,7 @@ export default function AboutSettingsPage() {
               type="text"
               value={contactSettings.address}
               onChange={(e) => setContactSettings({ ...contactSettings, address: e.target.value })}
+              placeholder="Your location, Sri Lanka"
               className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
             />
           </div>

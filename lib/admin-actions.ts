@@ -504,10 +504,6 @@ export async function updateAboutPageData(formData: {
   videos_created?: string
   places_explored?: string
   community_members?: string
-  youtube_url?: string
-  instagram_url?: string
-  facebook_url?: string
-  tiktok_url?: string
   contact_email?: string
   contact_phone?: string
   contact_address?: string

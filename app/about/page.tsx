@@ -4,11 +4,11 @@ import { Footer } from '@/components/layout/Footer'
 import { BottomNav } from '@/components/layout/BottomNav'
 import { ContactFormComponent } from '@/components/about/ContactForm'
 import { Youtube, Instagram, Facebook, MapPin, Video, Users, Award, Mail, Phone } from 'lucide-react'
-import { getAboutPageData, DEFAULT_ABOUT_DATA } from '@/lib/about-utils'
+import { getAboutPageData, getSiteSettingsServer, DEFAULT_ABOUT_DATA } from '@/lib/about-utils'
 
 export const metadata: Metadata = {
   title: 'About - Travel Hunter',
-  description: 'Meet Sri Lanka&apos;s Travel Hunter. Discover my story, passion for travel, and how we can collaborate to promote your business or destination.',
+  description: "Meet Sri Lanka's Travel Hunter. Discover my story, passion for travel, and how we can collaborate to promote your business or destination.",
 }
 
 const galleryImages = [
@@ -20,53 +20,73 @@ const galleryImages = [
   { id: 6, src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop', alt: 'Travel Adventure 6' },
 ]
 
-const socialIcons = [
-  {
-    name: 'YouTube',
-    icon: Youtube,
-    color: 'hover:text-red-600 dark:hover:text-red-500',
-    bgColor: 'hover:bg-red-50 dark:hover:bg-red-950/30',
-  },
-  {
-    name: 'Instagram',
-    icon: Instagram,
-    color: 'hover:text-pink-600 dark:hover:text-pink-500',
-    bgColor: 'hover:bg-pink-50 dark:hover:bg-pink-950/30',
-  },
-  {
-    name: 'Facebook',
-    icon: Facebook,
-    color: 'hover:text-blue-600 dark:hover:text-blue-500',
-    bgColor: 'hover:bg-blue-50 dark:hover:bg-blue-950/30',
-  },
-  {
-    name: 'TikTok',
-    icon: () => (
-      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.68v13.67a2.4 2.4 0 0 1-2.4 2.4 2.4 2.4 0 0 1-2.4-2.4 2.4 2.4 0 0 1 2.4-2.4c.34 0 .67.05.98.15V9.41a5.64 5.64 0 0 0-.98-.08 5.976 5.976 0 0 0-5.965 6.01A5.976 5.976 0 0 0 12.75 22a5.976 5.976 0 0 0 5.825-5.83v-6.48a7.905 7.905 0 0 0 3.965-3.99v-3.99z" />
-      </svg>
-    ),
-    color: 'hover:text-black dark:hover:text-white',
-    bgColor: 'hover:bg-gray-100 dark:hover:bg-gray-800',
-  },
-]
+const TikTokIcon = () => (
+  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.68v13.67a2.4 2.4 0 0 1-2.4 2.4 2.4 2.4 0 0 1-2.4-2.4 2.4 2.4 0 0 1 2.4-2.4c.34 0 .67.05.98.15V9.41a5.64 5.64 0 0 0-.98-.08 5.976 5.976 0 0 0-5.965 6.01A5.976 5.976 0 0 0 12.75 22a5.976 5.976 0 0 0 5.825-5.83v-6.48a7.905 7.905 0 0 0 3.965-3.99v-3.99z" />
+  </svg>
+)
 
 export default async function AboutPage() {
-  const aboutData = await getAboutPageData() || DEFAULT_ABOUT_DATA
+  // Fetch both data sources in parallel — both are safe with fallbacks
+  const [rawAboutData, siteSettings] = await Promise.all([
+    getAboutPageData(),
+    getSiteSettingsServer(),
+  ])
+
+  // Merge DB data with defaults — ensures no field is ever null/undefined
+  const aboutData = {
+    ...DEFAULT_ABOUT_DATA,
+    ...(rawAboutData ?? {}),
+  }
+
+  // Social links always come from site_settings (same as home page)
+  // Contact info: prefer about_page, fallback to site_settings
+  const contactEmail = aboutData.contact_email || siteSettings.contact_email
+  const contactPhone = aboutData.contact_phone || siteSettings.contact_phone
+  const contactAddress = aboutData.contact_address || siteSettings.contact_address
 
   const stats = [
-    { label: 'YouTube Subscribers', value: aboutData.youtube_subscribers, icon: Youtube },
-    { label: 'Videos Created', value: aboutData.videos_created, icon: Video },
-    { label: 'Places Explored', value: aboutData.places_explored, icon: MapPin },
-    { label: 'Community Members', value: aboutData.community_members, icon: Users },
+    { label: 'YouTube Subscribers', value: aboutData.youtube_subscribers || '250K+', icon: Youtube },
+    { label: 'Videos Created', value: aboutData.videos_created || '500+', icon: Video },
+    { label: 'Places Explored', value: aboutData.places_explored || '150+', icon: MapPin },
+    { label: 'Community Members', value: aboutData.community_members || '500K+', icon: Users },
   ]
 
   const socialLinks = [
-    { ...socialIcons[0], url: aboutData.youtube_url },
-    { ...socialIcons[1], url: aboutData.instagram_url },
-    { ...socialIcons[2], url: aboutData.facebook_url },
-    { ...socialIcons[3], url: aboutData.tiktok_url },
-  ]
+    {
+      name: 'YouTube',
+      icon: Youtube,
+      url: siteSettings.youtube_url,
+      color: 'hover:text-red-600 dark:hover:text-red-500',
+      bgColor: 'hover:bg-red-50 dark:hover:bg-red-950/30',
+    },
+    {
+      name: 'Instagram',
+      icon: Instagram,
+      url: siteSettings.instagram_url,
+      color: 'hover:text-pink-600 dark:hover:text-pink-500',
+      bgColor: 'hover:bg-pink-50 dark:hover:bg-pink-950/30',
+    },
+    {
+      name: 'Facebook',
+      icon: Facebook,
+      url: siteSettings.facebook_url,
+      color: 'hover:text-blue-600 dark:hover:text-blue-500',
+      bgColor: 'hover:bg-blue-50 dark:hover:bg-blue-950/30',
+    },
+    {
+      name: 'TikTok',
+      icon: TikTokIcon,
+      url: siteSettings.tiktok_url,
+      color: 'hover:text-black dark:hover:text-white',
+      bgColor: 'hover:bg-gray-100 dark:hover:bg-gray-800',
+    },
+  ].filter((s) => s.url) // only show platforms with a configured URL
+
+  // Safely split story content into paragraphs
+  const storyParagraphs = (aboutData.story_content || '')
+    .split('\n\n')
+    .filter(Boolean)
 
   return (
     <>
@@ -134,9 +154,12 @@ export default async function AboutPage() {
                 {aboutData.story_title}
               </h2>
               <div className="space-y-6 text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
-                {aboutData.story_content.split('\n\n').map((paragraph, idx) => (
-                  <p key={idx}>{paragraph}</p>
-                ))}
+                {storyParagraphs.length > 0
+                  ? storyParagraphs.map((paragraph, idx) => (
+                      <p key={idx}>{paragraph}</p>
+                    ))
+                  : <p>{aboutData.story_content}</p>
+                }
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -204,12 +227,12 @@ export default async function AboutPage() {
                 {
                   icon: '🎥',
                   title: 'Quality Content',
-                  description: 'High-production videos that do justice to Sri Lanka&apos;s beauty while remaining authentic and relatable.',
+                  description: "High-production videos that do justice to Sri Lanka's beauty while remaining authentic and relatable.",
                 },
                 {
                   icon: '💚',
                   title: 'Love For Sri Lanka',
-                  description: 'This island isn&apos;t just my destination—it&apos;s my passion. Every video is made with genuine care and appreciation.',
+                  description: "This island isn't just my destination—it's my passion. Every video is made with genuine care and appreciation.",
                 },
               ].map((item, idx) => (
                 <div
@@ -292,33 +315,35 @@ export default async function AboutPage() {
         </section>
 
         {/* ── SOCIAL SECTION ── */}
-        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-6">
-              Follow My Journey
-            </h2>
-            <p className="text-xl text-slate-600 dark:text-slate-300">
-              Join my community across all platforms
-            </p>
-          </div>
+        {socialLinks.length > 0 && (
+          <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-6">
+                Follow My Journey
+              </h2>
+              <p className="text-xl text-slate-600 dark:text-slate-300">
+                Join my community across all platforms
+              </p>
+            </div>
 
-          <div className="flex flex-wrap justify-center gap-6 md:gap-8">
-            {socialLinks.map((social, idx) => {
-              const IconComponent = social.icon
-              return (
-                <a
-                  key={idx}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`p-6 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 transition-all duration-300 ${social.bgColor}`}
-                >
-                  <IconComponent className={`w-10 h-10 text-slate-600 dark:text-slate-300 transition-colors ${social.color}`} />
-                </a>
-              )
-            })}
-          </div>
-        </section>
+            <div className="flex flex-wrap justify-center gap-6 md:gap-8">
+              {socialLinks.map((social, idx) => {
+                const IconComponent = social.icon
+                return (
+                  <a
+                    key={idx}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`p-6 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 transition-all duration-300 ${social.bgColor}`}
+                  >
+                    <IconComponent className={`w-10 h-10 text-slate-600 dark:text-slate-300 transition-colors ${social.color}`} />
+                  </a>
+                )
+              })}
+            </div>
+          </section>
+        )}
 
         {/* ── COLLABORATION SECTION ── */}
         <section
@@ -388,37 +413,43 @@ export default async function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
             {/* Contact Info */}
             <div className="space-y-8">
-              <div className="space-y-4">
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
-                    <Mail className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
-                  </div>
-                  Email
-                </h3>
-                <a href={`mailto:${aboutData.contact_email}`} className="text-lg text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
-                  {aboutData.contact_email}
-                </a>
-              </div>
+              {contactEmail && (
+                <div className="space-y-4">
+                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
+                      <Mail className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+                    </div>
+                    Email
+                  </h3>
+                  <a href={`mailto:${contactEmail}`} className="text-lg text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                    {contactEmail}
+                  </a>
+                </div>
+              )}
 
-              <div className="space-y-4">
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
-                    <Phone className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
-                  </div>
-                  Phone
-                </h3>
-                <p className="text-lg text-slate-600 dark:text-slate-400">{aboutData.contact_phone}</p>
-              </div>
+              {contactPhone && (
+                <div className="space-y-4">
+                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
+                      <Phone className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+                    </div>
+                    Phone
+                  </h3>
+                  <p className="text-lg text-slate-600 dark:text-slate-400">{contactPhone}</p>
+                </div>
+              )}
 
-              <div className="space-y-4">
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
-                    <MapPin className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
-                  </div>
-                  Location
-                </h3>
-                <p className="text-lg text-slate-600 dark:text-slate-400">{aboutData.contact_address}</p>
-              </div>
+              {contactAddress && (
+                <div className="space-y-4">
+                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
+                      <MapPin className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+                    </div>
+                    Location
+                  </h3>
+                  <p className="text-lg text-slate-600 dark:text-slate-400">{contactAddress}</p>
+                </div>
+              )}
             </div>
 
             {/* Contact Form */}
@@ -427,21 +458,23 @@ export default async function AboutPage() {
         </section>
 
         {/* ── CTA SECTION ── */}
-        <section className="bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-700 dark:to-teal-700 py-16 md:py-20">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-            <h3 className="text-3xl sm:text-4xl font-black mb-4">Subscribe & Join The Adventure</h3>
-            <p className="text-lg opacity-90 mb-8">Get exclusive travel tips, behind-the-scenes content, and early access to partnerships</p>
-            <a
-              href={aboutData.youtube_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-white text-red-600 hover:bg-slate-100 font-bold text-lg h-14 px-8 rounded-full transition-colors"
-            >
-              <Youtube className="w-6 h-6" />
-              Subscribe on YouTube
-            </a>
-          </div>
-        </section>
+        {siteSettings.youtube_url && (
+          <section className="bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-700 dark:to-teal-700 py-16 md:py-20">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+              <h3 className="text-3xl sm:text-4xl font-black mb-4">Subscribe & Join The Adventure</h3>
+              <p className="text-lg opacity-90 mb-8">Get exclusive travel tips, behind-the-scenes content, and early access to partnerships</p>
+              <a
+                href={siteSettings.youtube_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-white text-red-600 hover:bg-slate-100 font-bold text-lg h-14 px-8 rounded-full transition-colors"
+              >
+                <Youtube className="w-6 h-6" />
+                Subscribe on YouTube
+              </a>
+            </div>
+          </section>
+        )}
       </main>
       <Footer />
       <BottomNav />

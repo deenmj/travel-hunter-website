@@ -18,10 +18,8 @@ CREATE TABLE IF NOT EXISTS about_page (
   videos_created TEXT DEFAULT '500+',
   places_explored TEXT DEFAULT '150+',
   community_members TEXT DEFAULT '500K+',
-  youtube_url TEXT DEFAULT 'https://youtube.com',
-  instagram_url TEXT DEFAULT 'https://instagram.com',
-  facebook_url TEXT DEFAULT 'https://facebook.com',
-  tiktok_url TEXT DEFAULT 'https://tiktok.com',
+  -- NOTE: Social media links (YouTube, Instagram, Facebook, TikTok) are managed
+  -- via site_settings table and shared with the home page. No duplicates needed.
   contact_email TEXT DEFAULT 'travelhunterlk@gmail.com',
   contact_phone TEXT DEFAULT '+94 (123) 456-789',
   contact_address TEXT DEFAULT 'Sri Lanka',
@@ -72,10 +70,6 @@ INSERT INTO about_page (
   videos_created,
   places_explored,
   community_members,
-  youtube_url,
-  instagram_url,
-  facebook_url,
-  tiktok_url,
   contact_email,
   contact_phone,
   contact_address
@@ -90,10 +84,6 @@ INSERT INTO about_page (
   '500+',
   '150+',
   '500K+',
-  'https://youtube.com',
-  'https://instagram.com',
-  'https://facebook.com',
-  'https://tiktok.com',
   'travelhunterlk@gmail.com',
   '+94 (123) 456-789',
   'Sri Lanka'
@@ -104,5 +94,6 @@ INSERT INTO about_page (
 -- DONE! Your about_page table is set up with:
 --   ✅ Single settings row with default content
 --   ✅ Row Level Security (public read, admin/editor write)
---   ✅ Hero section, story, stats, social links, and contact fields
+--   ✅ Hero section, story, stats, and contact fields
+--   ✅ Social links come from site_settings (shared with home page)
 -- ============================================================================

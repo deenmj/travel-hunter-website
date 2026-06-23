@@ -511,7 +511,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       .from('site_settings')
       .select('*')
       .limit(1)
-      .single()
+      .maybeSingle()
 
     if (error || !data) {
       console.error('Error fetching site settings, using defaults:', error)
