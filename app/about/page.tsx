@@ -20,8 +20,8 @@ const galleryImages = [
   { id: 6, src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop', alt: 'Travel Adventure 6' },
 ]
 
-const TikTokIcon = () => (
-  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+const TikTokIcon = ({ className }: { className?: string }) => (
+  <svg className={className || "w-6 h-6"} fill="currentColor" viewBox="0 0 24 24">
     <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.68v13.67a2.4 2.4 0 0 1-2.4 2.4 2.4 2.4 0 0 1-2.4-2.4 2.4 2.4 0 0 1 2.4-2.4c.34 0 .67.05.98.15V9.41a5.64 5.64 0 0 0-.98-.08 5.976 5.976 0 0 0-5.965 6.01A5.976 5.976 0 0 0 12.75 22a5.976 5.976 0 0 0 5.825-5.83v-6.48a7.905 7.905 0 0 0 3.965-3.99v-3.99z" />
   </svg>
 )
@@ -93,7 +93,7 @@ export default async function AboutPage() {
       <Header />
       <main className="min-h-screen bg-white dark:bg-slate-950">
         {/* ── HERO SECTION ── */}
-        <section className="relative w-full min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-slate-900 dark:to-emerald-950/20 pt-32 pb-16">
+        <section className="relative w-full min-h-[75vh] md:min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-slate-900 dark:to-emerald-950/20 pt-24 pb-12 md:pt-32 md:pb-16">
           <div className="absolute inset-0 opacity-40 dark:opacity-20">
             <div className="absolute top-20 right-10 w-72 h-72 bg-emerald-200 dark:bg-emerald-900/30 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" />
             <div className="absolute bottom-20 left-10 w-72 h-72 bg-teal-200 dark:bg-teal-900/30 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" />
@@ -102,29 +102,29 @@ export default async function AboutPage() {
           <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
               {/* Hero Content */}
-              <div className="space-y-8">
-                <div className="space-y-4">
-                  <p className="text-emerald-600 dark:text-emerald-400 font-bold text-sm uppercase tracking-widest">
+              <div className="space-y-6 md:space-y-8">
+                <div className="space-y-3 md:space-y-4">
+                  <p className="text-emerald-600 dark:text-emerald-400 font-bold text-xs sm:text-sm md:text-base uppercase tracking-widest">
                     {aboutData.hero_tagline}
                   </p>
-                  <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-slate-900 dark:text-white leading-tight">
+                  <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black text-slate-900 dark:text-white leading-tight">
                     {aboutData.hero_title}
                   </h1>
-                  <p className="text-xl sm:text-2xl text-slate-600 dark:text-slate-300 font-medium leading-relaxed max-w-lg">
+                  <p className="text-lg sm:text-xl md:text-2xl text-slate-600 dark:text-slate-300 font-medium leading-relaxed max-w-lg">
                     {aboutData.hero_description}
                   </p>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-2 md:pt-4">
                   <a
                     href="#collaborate"
-                    className="w-full sm:w-auto h-14 px-8 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg rounded-full transition-colors flex items-center justify-center"
+                    className="w-full sm:w-auto h-12 md:h-14 px-6 md:px-8 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base md:text-lg rounded-full transition-colors flex items-center justify-center"
                   >
                     Collaborate With Me
                   </a>
                   <a
                     href="#contact"
-                    className="w-full sm:w-auto h-14 px-8 border-2 border-slate-900 dark:border-white text-slate-900 dark:text-white font-bold text-lg rounded-full hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors flex items-center justify-center"
+                    className="w-full sm:w-auto h-12 md:h-14 px-6 md:px-8 border-2 border-slate-900 dark:border-white text-slate-900 dark:text-white font-bold text-base md:text-lg rounded-full hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors flex items-center justify-center"
                   >
                     Get In Touch
                   </a>
@@ -147,13 +147,13 @@ export default async function AboutPage() {
         </section>
 
         {/* ── STORY SECTION ── */}
-        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
             <div>
-              <h2 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-6">
+              <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 md:mb-6">
                 {aboutData.story_title}
               </h2>
-              <div className="space-y-6 text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
+              <div className="space-y-4 md:space-y-6 text-base md:text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
                 {storyParagraphs.length > 0
                   ? storyParagraphs.map((paragraph, idx) => (
                       <p key={idx}>{paragraph}</p>
@@ -191,13 +191,13 @@ export default async function AboutPage() {
         </section>
 
         {/* ── TRAVEL PHILOSOPHY SECTION ── */}
-        <section className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/20 dark:to-slate-900 py-20 md:py-32">
+        <section className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/20 dark:to-slate-900 py-12 md:py-24">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-6">
+            <div className="text-center mb-10 md:mb-16">
+              <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 md:mb-6">
                 My Travel Philosophy
               </h2>
-              <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+              <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
                 How I explore, what I believe in, and why I love Sri Lanka
               </p>
             </div>
@@ -249,33 +249,33 @@ export default async function AboutPage() {
         </section>
 
         {/* ── STATS SECTION ── */}
-        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-6">
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
+          <div className="text-center mb-10 md:mb-16">
+            <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 md:mb-6">
               Journey Stats
             </h2>
-            <p className="text-xl text-slate-600 dark:text-slate-300">
+            <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300">
               Numbers that represent my passion for exploration
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
             {stats.map((stat, idx) => {
               const Icon = stat.icon
               return (
                 <div
                   key={idx}
-                  className="p-8 text-center bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 rounded-3xl border border-emerald-200/60 dark:border-emerald-900/40 hover:shadow-lg transition-all"
+                  className="p-4 sm:p-6 md:p-8 text-center bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 rounded-2xl md:rounded-3xl border border-emerald-200/60 dark:border-emerald-900/40 hover:shadow-lg transition-all"
                 >
-                  <div className="flex justify-center mb-4">
-                    <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
-                      <Icon className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
+                  <div className="flex justify-center mb-3 md:mb-4">
+                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
+                      <Icon className="w-6 h-6 md:w-8 md:h-8 text-emerald-600 dark:text-emerald-400" />
                     </div>
                   </div>
-                  <div className="text-4xl sm:text-5xl font-black text-emerald-600 dark:text-emerald-400 mb-3">
+                  <div className="text-2xl sm:text-4xl md:text-5xl font-black text-emerald-600 dark:text-emerald-400 mb-2 md:mb-3">
                     {stat.value}
                   </div>
-                  <p className="text-slate-600 dark:text-slate-400 font-semibold">{stat.label}</p>
+                  <p className="text-xs sm:text-sm md:text-base text-slate-600 dark:text-slate-400 font-semibold">{stat.label}</p>
                 </div>
               )
             })}
@@ -283,13 +283,13 @@ export default async function AboutPage() {
         </section>
 
         {/* ── GALLERY SECTION ── */}
-        <section className="bg-slate-50 dark:bg-slate-900 py-20 md:py-32">
+        <section className="bg-slate-50 dark:bg-slate-900 py-12 md:py-24">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-6">
+            <div className="text-center mb-10 md:mb-16">
+              <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 md:mb-6">
                 Travel Gallery
               </h2>
-              <p className="text-xl text-slate-600 dark:text-slate-300">
+              <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300">
                 A glimpse into my adventures across Sri Lanka
               </p>
             </div>
@@ -316,12 +316,12 @@ export default async function AboutPage() {
 
         {/* ── SOCIAL SECTION ── */}
         {socialLinks.length > 0 && (
-          <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-6">
+          <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
+            <div className="text-center mb-10 md:mb-12">
+              <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 md:mb-6">
                 Follow My Journey
               </h2>
-              <p className="text-xl text-slate-600 dark:text-slate-300">
+              <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300">
                 Join my community across all platforms
               </p>
             </div>
@@ -348,7 +348,7 @@ export default async function AboutPage() {
         {/* ── COLLABORATION SECTION ── */}
         <section
           id="collaborate"
-          className="bg-gradient-to-br from-emerald-600 to-teal-600 dark:from-emerald-700 dark:to-teal-700 py-20 md:py-32 text-white"
+          className="bg-gradient-to-br from-emerald-600 to-teal-600 dark:from-emerald-700 dark:to-teal-700 py-12 md:py-24 text-white"
         >
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/30">
@@ -356,11 +356,11 @@ export default async function AboutPage() {
               <span className="font-semibold text-sm">Partnership Opportunities</span>
             </div>
 
-            <h2 className="text-4xl sm:text-5xl font-black mb-6 leading-tight">
+            <h2 className="text-3xl md:text-5xl font-black mb-4 md:mb-6 leading-tight">
               Let&apos;s Create Something Amazing Together
             </h2>
 
-            <p className="text-xl opacity-90 mb-10 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-base md:text-xl opacity-90 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed">
               Are you a hotel, restaurant, destination, or brand looking to reach travel enthusiasts? I&apos;m always excited about authentic partnerships that align with my values and create genuine value for my community.
             </p>
 
@@ -400,12 +400,12 @@ export default async function AboutPage() {
         </section>
 
         {/* ── CONTACT SECTION ── */}
-        <section id="contact" className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-6">
+        <section id="contact" className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
+          <div className="text-center mb-10 md:mb-16">
+            <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 md:mb-6">
               Get In Touch
             </h2>
-            <p className="text-xl text-slate-600 dark:text-slate-300">
+            <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300">
               Have a question, partnership idea, or just want to say hi? I&apos;d love to hear from you!
             </p>
           </div>
