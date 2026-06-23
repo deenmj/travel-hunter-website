@@ -30,9 +30,9 @@ export function ContactFormComponent() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-3 md:space-y-5">
       <div>
-        <label className="block text-sm font-bold text-slate-900 dark:text-white mb-2">
+        <label className="block text-xs md:text-sm font-bold text-slate-900 dark:text-white mb-1 md:mb-2">
           Your Name
         </label>
         <input
@@ -41,13 +41,13 @@ export function ContactFormComponent() {
           value={formData.name}
           onChange={handleInputChange}
           required
-          className="w-full px-4 py-3 rounded-lg border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none transition-colors"
+          className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base rounded-lg border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none transition-colors"
           placeholder="John Doe"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-bold text-slate-900 dark:text-white mb-2">
+        <label className="block text-xs md:text-sm font-bold text-slate-900 dark:text-white mb-1 md:mb-2">
           Email
         </label>
         <input
@@ -56,13 +56,13 @@ export function ContactFormComponent() {
           value={formData.email}
           onChange={handleInputChange}
           required
-          className="w-full px-4 py-3 rounded-lg border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none transition-colors"
+          className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base rounded-lg border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none transition-colors"
           placeholder="john@example.com"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-bold text-slate-900 dark:text-white mb-2">
+        <label className="block text-xs md:text-sm font-bold text-slate-900 dark:text-white mb-1 md:mb-2">
           Phone
         </label>
         <input
@@ -70,13 +70,13 @@ export function ContactFormComponent() {
           name="phone"
           value={formData.phone}
           onChange={handleInputChange}
-          className="w-full px-4 py-3 rounded-lg border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none transition-colors"
+          className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base rounded-lg border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none transition-colors"
           placeholder="+94 (123) 456-789"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-bold text-slate-900 dark:text-white mb-2">
+        <label className="block text-xs md:text-sm font-bold text-slate-900 dark:text-white mb-1 md:mb-2">
           Business/Destination
         </label>
         <input
@@ -84,13 +84,13 @@ export function ContactFormComponent() {
           name="business"
           value={formData.business}
           onChange={handleInputChange}
-          className="w-full px-4 py-3 rounded-lg border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none transition-colors"
+          className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base rounded-lg border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none transition-colors"
           placeholder="Your business or destination name"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-bold text-slate-900 dark:text-white mb-2">
+        <label className="block text-xs md:text-sm font-bold text-slate-900 dark:text-white mb-1 md:mb-2">
           Message
         </label>
         <textarea
@@ -99,16 +99,16 @@ export function ContactFormComponent() {
           onChange={handleInputChange}
           required
           rows={4}
-          className="w-full px-4 py-3 rounded-lg border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none transition-colors resize-none"
-          placeholder="Tell me about your partnership idea or what brings you here..."
+          className="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base rounded-lg border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none transition-colors resize-none"
+          placeholder="Tell me about your partnership idea..."
         />
       </div>
 
       <button
         type="submit"
-        className="w-full h-12 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg rounded-lg flex items-center justify-center gap-2 transition-colors"
+        className="w-full h-10 md:h-12 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm md:text-lg rounded-lg flex items-center justify-center gap-2 transition-colors"
       >
-        <Send className="w-5 h-5" />
+        <Send className="w-4 h-4 md:w-5 md:h-5" />
         Send Message
       </button>
 
