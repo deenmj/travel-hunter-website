@@ -101,31 +101,31 @@ export default async function AboutPage() {
           </div>
 
           <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div className="grid grid-cols-2 gap-4 lg:gap-12 items-center">
+            <div className="grid grid-cols-12 gap-6 lg:gap-12 items-center">
               {/* Hero Content */}
-              <div className="space-y-4 md:space-y-8">
-                <div className="space-y-2 md:space-y-4">
-                  <p className="text-emerald-600 dark:text-emerald-400 font-bold text-[10px] sm:text-xs md:text-base uppercase tracking-widest">
+              <div className="col-span-7 lg:col-span-6 space-y-6 md:space-y-8">
+                <div className="space-y-3 md:space-y-4">
+                  <p className="text-emerald-600 dark:text-emerald-400 font-bold text-xs sm:text-sm md:text-base uppercase tracking-widest">
                     {aboutData.hero_tagline}
                   </p>
-                  <h1 className="text-2xl sm:text-4xl lg:text-7xl font-black text-slate-900 dark:text-white leading-tight">
+                  <h1 className="text-3xl sm:text-5xl lg:text-7xl font-black text-slate-900 dark:text-white leading-tight">
                     {aboutData.hero_title}
                   </h1>
-                  <p className="text-xs sm:text-base md:text-2xl text-slate-600 dark:text-slate-300 font-medium leading-relaxed max-w-lg">
+                  <p className="text-sm sm:text-lg md:text-2xl text-slate-600 dark:text-slate-300 font-medium leading-relaxed max-w-lg">
                     {aboutData.hero_description}
                   </p>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 pt-1 md:pt-4">
+                <div className="flex flex-col xl:flex-row gap-3 md:gap-4 pt-2 md:pt-4">
                   <a
                     href="#collaborate"
-                    className="flex-1 sm:flex-none h-10 md:h-14 px-3 sm:px-6 md:px-8 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] sm:text-sm md:text-lg rounded-full transition-colors flex items-center justify-center text-center leading-tight"
+                    className="w-full xl:w-auto h-12 md:h-14 px-4 sm:px-6 md:px-8 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm md:text-lg rounded-full transition-colors flex items-center justify-center text-center leading-tight shadow-md"
                   >
                     Collaborate With Me
                   </a>
                   <a
                     href="#contact"
-                    className="flex-1 sm:flex-none h-10 md:h-14 px-3 sm:px-6 md:px-8 border-2 border-slate-900 dark:border-white text-slate-900 dark:text-white font-bold text-[10px] sm:text-sm md:text-lg rounded-full hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors flex items-center justify-center text-center leading-tight"
+                    className="w-full xl:w-auto h-12 md:h-14 px-4 sm:px-6 md:px-8 border-2 border-slate-900 dark:border-white text-slate-900 dark:text-white font-bold text-xs sm:text-sm md:text-lg rounded-full hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors flex items-center justify-center text-center leading-tight shadow-sm"
                   >
                     Get In Touch
                   </a>
@@ -133,8 +133,8 @@ export default async function AboutPage() {
               </div>
 
               {/* Hero Image */}
-              <div className="relative">
-                <div className="relative h-[250px] sm:h-[350px] md:h-[500px] rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl">
+              <div className="col-span-5 lg:col-span-6 relative">
+                <div className="relative h-[200px] sm:h-[300px] md:h-[500px] rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl">
                   <img
                     src={aboutData.hero_image_url}
                     alt="Travel Hunter"
@@ -148,12 +148,12 @@ export default async function AboutPage() {
         </section>
 
         {/* ── STORY SECTION ── */}
-        <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
           <div className="text-center">
-            <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white mb-4 md:mb-8">
+            <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-8 md:mb-12">
               {aboutData.story_title}
             </h2>
-            <div className="space-y-4 md:space-y-6 text-sm md:text-lg text-slate-700 dark:text-slate-300 leading-relaxed text-left md:text-center mx-auto">
+            <div className="space-y-6 md:space-y-8 text-sm md:text-lg text-slate-700 dark:text-slate-300 leading-relaxed text-left md:text-center mx-auto">
               {storyParagraphs.length > 0
                 ? storyParagraphs.map((paragraph, idx) => (
                     <p key={idx}>{paragraph}</p>
@@ -165,18 +165,18 @@ export default async function AboutPage() {
         </section>
 
         {/* ── TRAVEL PHILOSOPHY SECTION ── */}
-        <section className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/20 dark:to-slate-900 py-12 md:py-24">
+        <section className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/20 dark:to-slate-900 py-16 md:py-24">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-8 md:mb-16">
-              <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white mb-3 md:mb-6">
+            <div className="text-center mb-12 md:mb-16">
+              <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 md:mb-8">
                 My Travel Philosophy
               </h2>
-              <p className="text-sm md:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+              <p className="text-base md:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
                 How I explore, what I believe in, and why I love Sri Lanka
               </p>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {[
                 {
                   icon: '🧭',
@@ -223,12 +223,12 @@ export default async function AboutPage() {
         </section>
 
         {/* ── STATS SECTION ── */}
-        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
-          <div className="text-center mb-8 md:mb-16">
-            <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white mb-3 md:mb-6">
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+          <div className="text-center mb-12 md:mb-16">
+            <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 md:mb-8">
               Journey Stats
             </h2>
-            <p className="text-sm md:text-xl text-slate-600 dark:text-slate-300">
+            <p className="text-base md:text-xl text-slate-600 dark:text-slate-300">
               Numbers that represent my passion for exploration
             </p>
           </div>
@@ -257,13 +257,13 @@ export default async function AboutPage() {
         </section>
 
         {/* ── GALLERY SECTION ── */}
-        <section className="bg-slate-50 dark:bg-slate-900 py-12 md:py-24">
+        <section className="bg-slate-50 dark:bg-slate-900 py-16 md:py-24">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-8 md:mb-16">
-              <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white mb-3 md:mb-6">
+            <div className="text-center mb-12 md:mb-16">
+              <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 md:mb-8">
                 Travel Gallery
               </h2>
-              <p className="text-sm md:text-xl text-slate-600 dark:text-slate-300">
+              <p className="text-base md:text-xl text-slate-600 dark:text-slate-300">
                 A glimpse into my adventures across Sri Lanka
               </p>
             </div>
@@ -301,17 +301,17 @@ export default async function AboutPage() {
 
         {/* ── SOCIAL SECTION ── */}
         {socialLinks.length > 0 && (
-          <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
-            <div className="text-center mb-8 md:mb-12">
-              <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white mb-3 md:mb-6">
+          <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+            <div className="text-center mb-10 md:mb-12">
+              <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 md:mb-8">
                 Follow My Journey
               </h2>
-              <p className="text-sm md:text-xl text-slate-600 dark:text-slate-300">
+              <p className="text-base md:text-xl text-slate-600 dark:text-slate-300">
                 Join my community across all platforms
               </p>
             </div>
 
-            <div className="flex flex-wrap justify-center gap-4 md:gap-8">
+            <div className="flex flex-wrap justify-center gap-6 md:gap-8">
               {socialLinks.map((social, idx) => {
                 const IconComponent = social.icon
                 return (
@@ -320,9 +320,9 @@ export default async function AboutPage() {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`p-4 md:p-6 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 transition-all duration-300 ${social.bgColor}`}
+                    className={`p-5 md:p-6 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 transition-all duration-300 ${social.bgColor}`}
                   >
-                    <IconComponent className={`w-6 h-6 md:w-10 md:h-10 text-slate-600 dark:text-slate-300 transition-colors ${social.color}`} />
+                    <IconComponent className={`w-8 h-8 md:w-10 md:h-10 text-slate-600 dark:text-slate-300 transition-colors ${social.color}`} />
                   </a>
                 )
               })}
@@ -333,19 +333,19 @@ export default async function AboutPage() {
         {/* ── COLLABORATION SECTION ── */}
         <section
           id="collaborate"
-          className="bg-gradient-to-br from-emerald-600 to-teal-600 dark:from-emerald-700 dark:to-teal-700 py-12 md:py-24 text-white"
+          className="bg-gradient-to-br from-emerald-600 to-teal-600 dark:from-emerald-700 dark:to-teal-700 py-16 md:py-24 text-white"
         >
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 md:px-4 md:py-2 rounded-full mb-4 md:mb-6 border border-white/30">
-              <Award className="w-3 h-3 md:w-4 md:h-4" />
-              <span className="font-semibold text-xs md:text-sm">Partnership Opportunities</span>
+            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6 md:mb-8 border border-white/30">
+              <Award className="w-4 h-4" />
+              <span className="font-semibold text-sm">Partnership Opportunities</span>
             </div>
 
-            <h2 className="text-2xl md:text-4xl font-black mb-3 md:mb-6 leading-tight">
+            <h2 className="text-3xl md:text-5xl font-black mb-6 leading-tight">
               Let&apos;s Create Something Amazing Together
             </h2>
 
-            <p className="text-sm md:text-xl opacity-90 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-base md:text-xl opacity-90 mb-10 max-w-2xl mx-auto leading-relaxed">
               Are you a hotel, restaurant, destination, or brand looking to reach travel enthusiasts? I&apos;m always excited about authentic partnerships that align with my values and create genuine value for my community.
             </p>
 
@@ -385,17 +385,17 @@ export default async function AboutPage() {
         </section>
 
         {/* ── CONTACT SECTION ── */}
-        <section id="contact" className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
-          <div className="text-center mb-8 md:mb-16">
-            <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white mb-3 md:mb-6">
+        <section id="contact" className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+          <div className="text-center mb-12 md:mb-16">
+            <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 md:mb-8">
               Get In Touch
             </h2>
-            <p className="text-sm md:text-xl text-slate-600 dark:text-slate-300">
+            <p className="text-base md:text-xl text-slate-600 dark:text-slate-300">
               Have a question, partnership idea, or just want to say hi? I&apos;d love to hear from you!
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 md:gap-12 mb-8 md:mb-12 items-start">
+          <div className="grid grid-cols-2 gap-4 md:gap-12 mb-12 items-start">
             {/* Contact Info */}
             <div className="space-y-4 md:space-y-8">
               {contactEmail && (
