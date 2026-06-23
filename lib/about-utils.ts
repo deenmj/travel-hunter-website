@@ -30,10 +30,14 @@ export async function getAboutPageData(): Promise<AboutPageData | null> {
       .from('about_page')
       .select('*')
       .limit(1)
-      .single()
+      .maybeSingle()
 
     if (error) {
       console.error('Error fetching about page data:', error)
+      return null
+    }
+
+    if (!data) {
       return null
     }
 

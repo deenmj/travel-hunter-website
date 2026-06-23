@@ -419,7 +419,7 @@ export async function getSiteSettingsAdmin() {
     .from('site_settings')
     .select('*')
     .limit(1)
-    .single()
+    .maybeSingle()
 
   if (error) {
     return { data: null, error: error.message }
@@ -445,7 +445,7 @@ export async function updateSiteSettings(formData: {
     .from('site_settings')
     .select('id')
     .limit(1)
-    .single()
+    .maybeSingle()
 
   let result
 
@@ -484,7 +484,7 @@ export async function getAboutPageDataAdmin() {
     .from('about_page')
     .select('*')
     .limit(1)
-    .single()
+    .maybeSingle()
 
   if (error) {
     return { data: null, error: error.message }
@@ -519,7 +519,7 @@ export async function updateAboutPageData(formData: {
     .from('about_page')
     .select('id')
     .limit(1)
-    .single()
+    .maybeSingle()
 
   let result
 
