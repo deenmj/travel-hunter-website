@@ -5,6 +5,7 @@ import { BottomNav } from '@/components/layout/BottomNav'
 import { ContactFormComponent } from '@/components/about/ContactForm'
 import { Youtube, Instagram, Facebook, MapPin, Video, Users, Award, Mail, Phone } from 'lucide-react'
 import { getAboutPageData, getSiteSettingsServer, DEFAULT_ABOUT_DATA } from '@/lib/about-utils'
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 
 export const metadata: Metadata = {
   title: 'About - Travel Hunter',
@@ -115,16 +116,16 @@ export default async function AboutPage() {
                   </p>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-2 md:pt-4">
+                <div className="flex flex-row gap-2 sm:gap-3 md:gap-4 pt-2 md:pt-4">
                   <a
                     href="#collaborate"
-                    className="w-full sm:w-auto h-12 md:h-14 px-6 md:px-8 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base md:text-lg rounded-full transition-colors flex items-center justify-center"
+                    className="flex-1 sm:flex-none h-12 md:h-14 px-2 sm:px-6 md:px-8 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-base md:text-lg rounded-full transition-colors flex items-center justify-center text-center leading-tight"
                   >
                     Collaborate With Me
                   </a>
                   <a
                     href="#contact"
-                    className="w-full sm:w-auto h-12 md:h-14 px-6 md:px-8 border-2 border-slate-900 dark:border-white text-slate-900 dark:text-white font-bold text-base md:text-lg rounded-full hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors flex items-center justify-center"
+                    className="flex-1 sm:flex-none h-12 md:h-14 px-2 sm:px-6 md:px-8 border-2 border-slate-900 dark:border-white text-slate-900 dark:text-white font-bold text-xs sm:text-base md:text-lg rounded-full hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors flex items-center justify-center text-center leading-tight"
                   >
                     Get In Touch
                   </a>
@@ -147,45 +148,18 @@ export default async function AboutPage() {
         </section>
 
         {/* ── STORY SECTION ── */}
-        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
-            <div>
-              <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 md:mb-6">
-                {aboutData.story_title}
-              </h2>
-              <div className="space-y-4 md:space-y-6 text-base md:text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
-                {storyParagraphs.length > 0
-                  ? storyParagraphs.map((paragraph, idx) => (
-                      <p key={idx}>{paragraph}</p>
-                    ))
-                  : <p>{aboutData.story_content}</p>
-                }
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="h-80 rounded-2xl overflow-hidden shadow-lg">
-                <img
-                  src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=500&h=600&fit=crop"
-                  alt="Adventure 1"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="space-y-4">
-                <div className="h-40 rounded-2xl overflow-hidden shadow-lg">
-                  <img
-                    src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500&h=300&fit=crop"
-                    alt="Adventure 2"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="h-40 rounded-2xl overflow-hidden shadow-lg">
-                  <img
-                    src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=500&h=300&fit=crop"
-                    alt="Adventure 3"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
+          <div className="text-center">
+            <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 md:mb-10">
+              {aboutData.story_title}
+            </h2>
+            <div className="space-y-4 md:space-y-6 text-base md:text-lg text-slate-700 dark:text-slate-300 leading-relaxed text-left md:text-center mx-auto">
+              {storyParagraphs.length > 0
+                ? storyParagraphs.map((paragraph, idx) => (
+                    <p key={idx}>{paragraph}</p>
+                  ))
+                : <p>{aboutData.story_content}</p>
+              }
             </div>
           </div>
         </section>
@@ -202,7 +176,7 @@ export default async function AboutPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
               {[
                 {
                   icon: '🧭',
@@ -237,11 +211,11 @@ export default async function AboutPage() {
               ].map((item, idx) => (
                 <div
                   key={idx}
-                  className="p-8 bg-white dark:bg-slate-900/60 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-lg hover:-translate-y-2 transition-all duration-300"
+                  className="p-4 sm:p-6 md:p-8 bg-white dark:bg-slate-900/60 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-lg hover:-translate-y-1 md:hover:-translate-y-2 transition-all duration-300 flex flex-col"
                 >
-                  <div className="text-5xl mb-4">{item.icon}</div>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{item.title}</h3>
-                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{item.description}</p>
+                  <div className="text-3xl md:text-5xl mb-3 md:mb-4">{item.icon}</div>
+                  <h3 className="text-sm sm:text-base md:text-xl font-bold text-slate-900 dark:text-white mb-2 md:mb-3">{item.title}</h3>
+                  <p className="text-xs sm:text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed md:leading-relaxed">{item.description}</p>
                 </div>
               ))}
             </div>
@@ -294,22 +268,33 @@ export default async function AboutPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {galleryImages.map((image) => (
-                <div
-                  key={image.id}
-                  className="group relative h-64 rounded-2xl overflow-hidden cursor-pointer"
-                >
-                  <img
-                    src={image.src}
-                    alt={image.alt}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                    <p className="text-white font-semibold text-lg">{image.alt}</p>
-                  </div>
-                </div>
-              ))}
+            <div className="px-6 md:px-12 relative">
+              <Carousel
+                opts={{
+                  align: 'start',
+                  loop: true,
+                }}
+                className="w-full"
+              >
+                <CarouselContent className="-ml-4">
+                  {galleryImages.map((image) => (
+                    <CarouselItem key={image.id} className="pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
+                      <div className="group relative h-64 md:h-80 rounded-2xl overflow-hidden shadow-md border border-slate-100 dark:border-slate-800 cursor-pointer">
+                        <img
+                          src={image.src}
+                          alt={image.alt}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                          <p className="text-white font-bold text-lg">{image.alt}</p>
+                        </div>
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="hidden sm:flex -left-4 md:-left-12" />
+                <CarouselNext className="hidden sm:flex -right-4 md:-right-12" />
+              </Carousel>
             </div>
           </div>
         </section>
