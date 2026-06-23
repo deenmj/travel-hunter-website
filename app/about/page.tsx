@@ -101,31 +101,31 @@ export default async function AboutPage() {
           </div>
 
           <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div className="grid grid-cols-2 gap-4 lg:gap-12 items-center">
               {/* Hero Content */}
-              <div className="space-y-6 md:space-y-8">
-                <div className="space-y-3 md:space-y-4">
-                  <p className="text-emerald-600 dark:text-emerald-400 font-bold text-xs sm:text-sm md:text-base uppercase tracking-widest">
+              <div className="space-y-4 md:space-y-8">
+                <div className="space-y-2 md:space-y-4">
+                  <p className="text-emerald-600 dark:text-emerald-400 font-bold text-[10px] sm:text-xs md:text-base uppercase tracking-widest">
                     {aboutData.hero_tagline}
                   </p>
-                  <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black text-slate-900 dark:text-white leading-tight">
+                  <h1 className="text-2xl sm:text-4xl lg:text-7xl font-black text-slate-900 dark:text-white leading-tight">
                     {aboutData.hero_title}
                   </h1>
-                  <p className="text-lg sm:text-xl md:text-2xl text-slate-600 dark:text-slate-300 font-medium leading-relaxed max-w-lg">
+                  <p className="text-xs sm:text-base md:text-2xl text-slate-600 dark:text-slate-300 font-medium leading-relaxed max-w-lg">
                     {aboutData.hero_description}
                   </p>
                 </div>
 
-                <div className="flex flex-row gap-2 sm:gap-3 md:gap-4 pt-2 md:pt-4">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 pt-1 md:pt-4">
                   <a
                     href="#collaborate"
-                    className="flex-1 sm:flex-none h-12 md:h-14 px-2 sm:px-6 md:px-8 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-base md:text-lg rounded-full transition-colors flex items-center justify-center text-center leading-tight"
+                    className="flex-1 sm:flex-none h-10 md:h-14 px-3 sm:px-6 md:px-8 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] sm:text-sm md:text-lg rounded-full transition-colors flex items-center justify-center text-center leading-tight"
                   >
                     Collaborate With Me
                   </a>
                   <a
                     href="#contact"
-                    className="flex-1 sm:flex-none h-12 md:h-14 px-2 sm:px-6 md:px-8 border-2 border-slate-900 dark:border-white text-slate-900 dark:text-white font-bold text-xs sm:text-base md:text-lg rounded-full hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors flex items-center justify-center text-center leading-tight"
+                    className="flex-1 sm:flex-none h-10 md:h-14 px-3 sm:px-6 md:px-8 border-2 border-slate-900 dark:border-white text-slate-900 dark:text-white font-bold text-[10px] sm:text-sm md:text-lg rounded-full hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors flex items-center justify-center text-center leading-tight"
                   >
                     Get In Touch
                   </a>
@@ -134,7 +134,7 @@ export default async function AboutPage() {
 
               {/* Hero Image */}
               <div className="relative">
-                <div className="relative h-[500px] rounded-3xl overflow-hidden shadow-2xl">
+                <div className="relative h-[250px] sm:h-[350px] md:h-[500px] rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl">
                   <img
                     src={aboutData.hero_image_url}
                     alt="Travel Hunter"
@@ -395,44 +395,44 @@ export default async function AboutPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mb-8 md:mb-12">
+          <div className="grid grid-cols-2 gap-4 md:gap-12 mb-8 md:mb-12 items-start">
             {/* Contact Info */}
-            <div className="space-y-6 md:space-y-8">
+            <div className="space-y-4 md:space-y-8">
               {contactEmail && (
-                <div className="space-y-2 md:space-y-4">
-                  <h3 className="text-lg md:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2 md:gap-3">
-                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
-                      <Mail className="w-5 h-5 md:w-6 md:h-6 text-emerald-600 dark:text-emerald-400" />
+                <div className="space-y-1 md:space-y-4">
+                  <h3 className="text-sm md:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2 md:gap-3">
+                    <div className="w-8 h-8 md:w-12 md:h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
+                      <Mail className="w-4 h-4 md:w-6 md:h-6 text-emerald-600 dark:text-emerald-400" />
                     </div>
                     Email
                   </h3>
-                  <a href={`mailto:${contactEmail}`} className="text-sm md:text-lg text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                  <a href={`mailto:${contactEmail}`} className="text-xs sm:text-sm md:text-lg text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors break-all">
                     {contactEmail}
                   </a>
                 </div>
               )}
 
               {contactPhone && (
-                <div className="space-y-2 md:space-y-4">
-                  <h3 className="text-lg md:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2 md:gap-3">
-                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
-                      <Phone className="w-5 h-5 md:w-6 md:h-6 text-emerald-600 dark:text-emerald-400" />
+                <div className="space-y-1 md:space-y-4">
+                  <h3 className="text-sm md:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2 md:gap-3">
+                    <div className="w-8 h-8 md:w-12 md:h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
+                      <Phone className="w-4 h-4 md:w-6 md:h-6 text-emerald-600 dark:text-emerald-400" />
                     </div>
                     Phone
                   </h3>
-                  <p className="text-sm md:text-lg text-slate-600 dark:text-slate-400">{contactPhone}</p>
+                  <p className="text-xs sm:text-sm md:text-lg text-slate-600 dark:text-slate-400 break-all">{contactPhone}</p>
                 </div>
               )}
 
               {contactAddress && (
-                <div className="space-y-2 md:space-y-4">
-                  <h3 className="text-lg md:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2 md:gap-3">
-                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
-                      <MapPin className="w-5 h-5 md:w-6 md:h-6 text-emerald-600 dark:text-emerald-400" />
+                <div className="space-y-1 md:space-y-4">
+                  <h3 className="text-sm md:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2 md:gap-3">
+                    <div className="w-8 h-8 md:w-12 md:h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
+                      <MapPin className="w-4 h-4 md:w-6 md:h-6 text-emerald-600 dark:text-emerald-400" />
                     </div>
                     Location
                   </h3>
-                  <p className="text-sm md:text-lg text-slate-600 dark:text-slate-400">{contactAddress}</p>
+                  <p className="text-xs sm:text-sm md:text-lg text-slate-600 dark:text-slate-400 break-all">{contactAddress}</p>
                 </div>
               )}
             </div>
