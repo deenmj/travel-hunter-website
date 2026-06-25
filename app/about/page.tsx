@@ -3,23 +3,15 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { BottomNav } from '@/components/layout/BottomNav'
 import { ContactFormComponent } from '@/components/about/ContactForm'
-import { Youtube, Instagram, Facebook, MapPin, Video, Users, Award, Mail, Phone } from 'lucide-react'
+import { Youtube, Instagram, Facebook, MapPin, Video, Users, Award, Mail, Phone, ChevronDown } from 'lucide-react'
 import { getAboutPageData, getSiteSettingsServer, DEFAULT_ABOUT_DATA } from '@/lib/about-utils'
+import { getDestinations } from '@/lib/data-fetching'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 
 export const metadata: Metadata = {
   title: 'About - Travel Hunter',
   description: "Meet Sri Lanka's Travel Hunter. Discover my story, passion for travel, and how we can collaborate to promote your business or destination.",
 }
-
-const galleryImages = [
-  { id: 1, src: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=500&h=500&fit=crop', alt: 'Travel Adventure 1' },
-  { id: 2, src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop', alt: 'Travel Adventure 2' },
-  { id: 3, src: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500&h=500&fit=crop', alt: 'Travel Adventure 3' },
-  { id: 4, src: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=500&h=500&fit=crop', alt: 'Travel Adventure 4' },
-  { id: 5, src: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=500&h=500&fit=crop', alt: 'Travel Adventure 5' },
-  { id: 6, src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop', alt: 'Travel Adventure 6' },
-]
 
 const TikTokIcon = ({ className }: { className?: string }) => (
   <svg className={className || "w-6 h-6"} fill="currentColor" viewBox="0 0 24 24">
@@ -28,20 +20,17 @@ const TikTokIcon = ({ className }: { className?: string }) => (
 )
 
 export default async function AboutPage() {
-  // Fetch both data sources in parallel — both are safe with fallbacks
-  const [rawAboutData, siteSettings] = await Promise.all([
+  const [rawAboutData, siteSettings, destinations] = await Promise.all([
     getAboutPageData(),
     getSiteSettingsServer(),
+    getDestinations(),
   ])
 
-  // Merge DB data with defaults — ensures no field is ever null/undefined
   const aboutData = {
     ...DEFAULT_ABOUT_DATA,
     ...(rawAboutData ?? {}),
   }
 
-  // Social links always come from site_settings (same as home page)
-  // Contact info: prefer about_page, fallback to site_settings
   const contactEmail = aboutData.contact_email || siteSettings.contact_email
   const contactPhone = aboutData.contact_phone || siteSettings.contact_phone
   const contactAddress = aboutData.contact_address || siteSettings.contact_address
@@ -56,35 +45,61 @@ export default async function AboutPage() {
   const socialLinks = [
     {
       name: 'YouTube',
+      followers: '250K+ Subscribers',
       icon: Youtube,
       url: siteSettings.youtube_url,
-      color: 'hover:text-red-600 dark:hover:text-red-500',
-      bgColor: 'hover:bg-red-50 dark:hover:bg-red-950/30',
+      color: 'text-slate-600 group-hover:text-red-600 dark:text-slate-300 dark:group-hover:text-red-500',
+      bgColor: 'group-hover:bg-red-50 dark:group-hover:bg-red-950/30',
+      borderColor: 'group-hover:border-red-200 dark:group-hover:border-red-900',
     },
     {
       name: 'Instagram',
+      followers: '150K+ Followers',
       icon: Instagram,
       url: siteSettings.instagram_url,
-      color: 'hover:text-pink-600 dark:hover:text-pink-500',
-      bgColor: 'hover:bg-pink-50 dark:hover:bg-pink-950/30',
+      color: 'text-slate-600 group-hover:text-pink-600 dark:text-slate-300 dark:group-hover:text-pink-500',
+      bgColor: 'group-hover:bg-pink-50 dark:group-hover:bg-pink-950/30',
+      borderColor: 'group-hover:border-pink-200 dark:group-hover:border-pink-900',
     },
     {
       name: 'Facebook',
+      followers: '100K+ Followers',
       icon: Facebook,
       url: siteSettings.facebook_url,
-      color: 'hover:text-blue-600 dark:hover:text-blue-500',
-      bgColor: 'hover:bg-blue-50 dark:hover:bg-blue-950/30',
+      color: 'text-slate-600 group-hover:text-blue-600 dark:text-slate-300 dark:group-hover:text-blue-500',
+      bgColor: 'group-hover:bg-blue-50 dark:group-hover:bg-blue-950/30',
+      borderColor: 'group-hover:border-blue-200 dark:group-hover:border-blue-900',
     },
     {
       name: 'TikTok',
+      followers: '300K+ Followers',
       icon: TikTokIcon,
       url: siteSettings.tiktok_url,
-      color: 'hover:text-black dark:hover:text-white',
-      bgColor: 'hover:bg-gray-100 dark:hover:bg-gray-800',
+      color: 'text-slate-600 group-hover:text-black dark:text-slate-300 dark:group-hover:text-white',
+      bgColor: 'group-hover:bg-gray-100 dark:group-hover:bg-gray-800',
+      borderColor: 'group-hover:border-gray-300 dark:group-hover:border-gray-700',
     },
-  ].filter((s) => s.url) // only show platforms with a configured URL
+  ].filter((s) => s.url)
 
-  // Safely split story content into paragraphs
+  // Use destination featured images for the gallery
+  const galleryImages = destinations
+    .filter(d => d.featured_image)
+    .slice(0, 8)
+    .map((d, index) => ({
+      id: d.id || index,
+      src: d.featured_image,
+      alt: d.name,
+    }))
+  
+  // Fallback if less than 3 images
+  if (galleryImages.length < 3) {
+    galleryImages.push(
+      { id: 'fb1', src: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=500&h=500&fit=crop', alt: 'Travel Adventure 1' },
+      { id: 'fb2', src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop', alt: 'Travel Adventure 2' },
+      { id: 'fb3', src: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500&h=500&fit=crop', alt: 'Travel Adventure 3' }
+    )
+  }
+
   const storyParagraphs = (aboutData.story_content || '')
     .split('\n\n')
     .filter(Boolean)
@@ -94,38 +109,38 @@ export default async function AboutPage() {
       <Header />
       <main className="min-h-screen bg-white dark:bg-slate-950">
         {/* ── HERO SECTION ── */}
-        <section className="relative w-full min-h-[75vh] md:min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-slate-900 dark:to-emerald-950/20 pt-24 pb-12 md:pt-32 md:pb-16">
-          <div className="absolute inset-0 opacity-40 dark:opacity-20">
+        <section className="relative w-full min-h-[85vh] md:min-h-[90vh] flex flex-col justify-center overflow-hidden bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-slate-900 dark:to-emerald-950/20 pt-24 pb-12 md:pt-32 md:pb-16">
+          <div className="absolute inset-0 opacity-40 dark:opacity-20 pointer-events-none">
             <div className="absolute top-20 right-10 w-72 h-72 bg-emerald-200 dark:bg-emerald-900/30 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" />
             <div className="absolute bottom-20 left-10 w-72 h-72 bg-teal-200 dark:bg-teal-900/30 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" />
           </div>
 
-          <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div className="grid grid-cols-12 gap-6 lg:gap-12 items-center">
+          <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 flex items-center">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center w-full">
               {/* Hero Content */}
-              <div className="col-span-7 lg:col-span-6 space-y-6 md:space-y-8">
+              <div className="md:col-span-6 lg:col-span-7 space-y-6 md:space-y-8 order-2 md:order-1">
                 <div className="space-y-3 md:space-y-4">
                   <p className="text-emerald-600 dark:text-emerald-400 font-bold text-xs sm:text-sm md:text-base uppercase tracking-widest">
                     {aboutData.hero_tagline}
                   </p>
-                  <h1 className="text-3xl sm:text-5xl lg:text-7xl font-black text-slate-900 dark:text-white leading-tight">
+                  <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black text-slate-900 dark:text-white leading-[1.1]">
                     {aboutData.hero_title}
                   </h1>
-                  <p className="text-sm sm:text-lg md:text-2xl text-slate-600 dark:text-slate-300 font-medium leading-relaxed max-w-lg">
+                  <p className="text-base sm:text-lg md:text-xl text-slate-600 dark:text-slate-300 font-medium leading-relaxed max-w-lg">
                     {aboutData.hero_description}
                   </p>
                 </div>
 
-                <div className="flex flex-col xl:flex-row gap-3 md:gap-4 pt-2 md:pt-4">
+                <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-2 md:pt-4">
                   <a
                     href="#collaborate"
-                    className="w-full xl:w-auto h-12 md:h-14 px-4 sm:px-6 md:px-8 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm md:text-lg rounded-full transition-colors flex items-center justify-center text-center leading-tight shadow-md"
+                    className="w-full sm:w-auto h-12 md:h-14 px-6 md:px-8 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm md:text-lg rounded-full transition-colors flex items-center justify-center text-center shadow-md"
                   >
                     Collaborate With Me
                   </a>
                   <a
                     href="#contact"
-                    className="w-full xl:w-auto h-12 md:h-14 px-4 sm:px-6 md:px-8 border-2 border-slate-900 dark:border-white text-slate-900 dark:text-white font-bold text-xs sm:text-sm md:text-lg rounded-full hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors flex items-center justify-center text-center leading-tight shadow-sm"
+                    className="w-full sm:w-auto h-12 md:h-14 px-6 md:px-8 border-2 border-slate-900 dark:border-white text-slate-900 dark:text-white font-bold text-sm md:text-lg rounded-full hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors flex items-center justify-center text-center shadow-sm"
                   >
                     Get In Touch
                   </a>
@@ -133,8 +148,8 @@ export default async function AboutPage() {
               </div>
 
               {/* Hero Image */}
-              <div className="col-span-5 lg:col-span-6 relative">
-                <div className="relative h-[200px] sm:h-[300px] md:h-[500px] rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl">
+              <div className="md:col-span-6 lg:col-span-5 relative order-1 md:order-2">
+                <div className="relative w-full aspect-[4/5] sm:aspect-[3/2] md:aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
                   <img
                     src={aboutData.hero_image_url}
                     alt="Travel Hunter"
@@ -145,94 +160,17 @@ export default async function AboutPage() {
               </div>
             </div>
           </div>
-        </section>
-
-        {/* ── STORY SECTION ── */}
-        <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-          <div className="text-center">
-            <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-8 md:mb-12">
-              {aboutData.story_title}
-            </h2>
-            <div className="space-y-6 md:space-y-8 text-sm md:text-lg text-slate-700 dark:text-slate-300 leading-relaxed text-left md:text-center mx-auto">
-              {storyParagraphs.length > 0
-                ? storyParagraphs.map((paragraph, idx) => (
-                    <p key={idx}>{paragraph}</p>
-                  ))
-                : <p>{aboutData.story_content}</p>
-              }
-            </div>
-          </div>
-        </section>
-
-        {/* ── TRAVEL PHILOSOPHY SECTION ── */}
-        <section className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/20 dark:to-slate-900 py-16 md:py-24">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12 md:mb-16">
-              <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 md:mb-8">
-                My Travel Philosophy
-              </h2>
-              <p className="text-base md:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-                How I explore, what I believe in, and why I love Sri Lanka
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              {[
-                {
-                  icon: '🧭',
-                  title: 'Authentic Experiences',
-                  description: 'I seek genuine connections with locals, not just tourist attractions. Real travel happens beyond the guidebook.',
-                },
-                {
-                  icon: '🌱',
-                  title: 'Sustainable Tourism',
-                  description: 'Supporting local businesses, respecting nature, and contributing positively to the communities I visit.',
-                },
-                {
-                  icon: '📸',
-                  title: 'Storytelling First',
-                  description: 'Every moment is a story. I capture not just images, but emotions, history, and the soul of each place.',
-                },
-                {
-                  icon: '🤝',
-                  title: 'Community Building',
-                  description: 'Creating a space where travelers can connect, learn, and inspire each other to explore responsibly.',
-                },
-                {
-                  icon: '🎥',
-                  title: 'Quality Content',
-                  description: "High-production videos that do justice to Sri Lanka's beauty while remaining authentic and relatable.",
-                },
-                {
-                  icon: '💚',
-                  title: 'Love For Sri Lanka',
-                  description: "This island isn't just my destination—it's my passion. Every video is made with genuine care and appreciation.",
-                },
-              ].map((item, idx) => (
-                <div
-                  key={idx}
-                  className="p-4 sm:p-6 md:p-8 bg-white dark:bg-slate-900/60 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-lg hover:-translate-y-1 md:hover:-translate-y-2 transition-all duration-300 flex flex-col"
-                >
-                  <div className="text-3xl md:text-5xl mb-3 md:mb-4">{item.icon}</div>
-                  <h3 className="text-sm sm:text-base md:text-xl font-bold text-slate-900 dark:text-white mb-2 md:mb-3">{item.title}</h3>
-                  <p className="text-xs sm:text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed md:leading-relaxed">{item.description}</p>
-                </div>
-              ))}
+          
+          {/* Scroll Cue */}
+          <div className="absolute bottom-6 left-0 right-0 flex justify-center pb-4 md:pb-0 pointer-events-none">
+            <div className="animate-bounce p-2 rounded-full bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm shadow-sm border border-slate-200/50 dark:border-slate-700/50">
+              <ChevronDown className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
             </div>
           </div>
         </section>
 
         {/* ── STATS SECTION ── */}
         <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-          <div className="text-center mb-12 md:mb-16">
-            <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 md:mb-8">
-              Journey Stats
-            </h2>
-            <p className="text-base md:text-xl text-slate-600 dark:text-slate-300">
-              Numbers that represent my passion for exploration
-            </p>
-          </div>
-
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
             {stats.map((stat, idx) => {
               const Icon = stat.icon
@@ -256,44 +194,89 @@ export default async function AboutPage() {
           </div>
         </section>
 
+        {/* ── STORY SECTION ── */}
+        <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-24">
+          <div className="text-left">
+            <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-8 md:mb-12">
+              {aboutData.story_title}
+            </h2>
+            <div className="space-y-6 md:space-y-8 text-base md:text-lg text-slate-700 dark:text-slate-300 leading-relaxed mx-auto">
+              {storyParagraphs.length > 0
+                ? storyParagraphs.map((paragraph, idx) => (
+                    <p key={idx}>{paragraph}</p>
+                  ))
+                : <p>{aboutData.story_content}</p>
+              }
+            </div>
+          </div>
+        </section>
+
+        {/* ── TRAVEL PHILOSOPHY SECTION ── */}
+        <section className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/20 dark:to-slate-900 py-16 md:py-24 border-y border-emerald-100 dark:border-emerald-900/30">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12 md:mb-16">
+              <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 md:mb-6">
+                My Travel Philosophy
+              </h2>
+              <p className="text-base md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                How I explore, what I believe in, and why I love Sri Lanka
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+              {[
+                { icon: '🧭', title: 'Authentic Experiences', description: 'I seek genuine connections with locals, not just tourist attractions. Real travel happens beyond the guidebook.' },
+                { icon: '🌱', title: 'Sustainable Tourism', description: 'Supporting local businesses, respecting nature, and contributing positively to the communities I visit.' },
+                { icon: '📸', title: 'Storytelling First', description: 'Every moment is a story. I capture not just images, but emotions, history, and the soul of each place.' },
+                { icon: '🤝', title: 'Community Building', description: 'Creating a space where travelers can connect, learn, and inspire each other to explore responsibly.' },
+                { icon: '🎥', title: 'Quality Content', description: "High-production videos that do justice to Sri Lanka's beauty while remaining authentic and relatable." },
+                { icon: '💚', title: 'Love For Sri Lanka', description: "This island isn't just my destination—it's my passion. Every video is made with genuine care and appreciation." },
+              ].map((item, idx) => (
+                <div
+                  key={idx}
+                  className="p-6 md:p-8 bg-white dark:bg-slate-900/80 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 md:hover:-translate-y-2 transition-all duration-300 flex flex-col"
+                >
+                  <div className="text-3xl md:text-4xl mb-4 md:mb-5 bg-slate-50 dark:bg-slate-800 w-16 h-16 flex items-center justify-center rounded-2xl">{item.icon}</div>
+                  <h3 className="text-lg md:text-xl font-bold text-slate-900 dark:text-white mb-2 md:mb-3">{item.title}</h3>
+                  <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ── GALLERY SECTION ── */}
         <section className="bg-slate-50 dark:bg-slate-900 py-16 md:py-24">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 md:mb-16">
-              <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 md:mb-8">
+              <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 md:mb-6">
                 Travel Gallery
               </h2>
-              <p className="text-base md:text-xl text-slate-600 dark:text-slate-300">
+              <p className="text-base md:text-xl text-slate-600 dark:text-slate-400">
                 A glimpse into my adventures across Sri Lanka
               </p>
             </div>
 
             <div className="px-6 md:px-12 relative">
-              <Carousel
-                opts={{
-                  align: 'start',
-                  loop: true,
-                }}
-                className="w-full"
-              >
+              <Carousel opts={{ align: 'start', loop: true }} className="w-full">
                 <CarouselContent className="-ml-4">
                   {galleryImages.map((image) => (
                     <CarouselItem key={image.id} className="pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
-                      <div className="group relative h-64 md:h-80 rounded-2xl overflow-hidden shadow-md border border-slate-100 dark:border-slate-800 cursor-pointer">
+                      <div className="group relative h-72 md:h-80 rounded-[2rem] overflow-hidden shadow-sm border border-slate-200 dark:border-slate-800 cursor-pointer">
                         <img
                           src={image.src}
                           alt={image.alt}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                          <p className="text-white font-bold text-lg">{image.alt}</p>
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                          <p className="text-white font-bold text-lg leading-tight">{image.alt}</p>
                         </div>
                       </div>
                     </CarouselItem>
                   ))}
                 </CarouselContent>
-                <CarouselPrevious className="hidden sm:flex -left-4 md:-left-12" />
-                <CarouselNext className="hidden sm:flex -right-4 md:-right-12" />
+                <CarouselPrevious className="hidden sm:flex -left-4 md:-left-12 bg-white dark:bg-slate-800" />
+                <CarouselNext className="hidden sm:flex -right-4 md:-right-12 bg-white dark:bg-slate-800" />
               </Carousel>
             </div>
           </div>
@@ -301,17 +284,17 @@ export default async function AboutPage() {
 
         {/* ── SOCIAL SECTION ── */}
         {socialLinks.length > 0 && (
-          <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+          <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
             <div className="text-center mb-10 md:mb-12">
-              <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 md:mb-8">
+              <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 md:mb-6">
                 Follow My Journey
               </h2>
-              <p className="text-base md:text-xl text-slate-600 dark:text-slate-300">
-                Join my community across all platforms
+              <p className="text-base md:text-xl text-slate-600 dark:text-slate-400">
+                Join our community across platforms
               </p>
             </div>
 
-            <div className="flex flex-wrap justify-center gap-6 md:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
               {socialLinks.map((social, idx) => {
                 const IconComponent = social.icon
                 return (
@@ -320,9 +303,13 @@ export default async function AboutPage() {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`p-5 md:p-6 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 transition-all duration-300 ${social.bgColor}`}
+                    className={`group p-6 rounded-[2rem] bg-white dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${social.borderColor} ${social.bgColor}`}
                   >
-                    <IconComponent className={`w-8 h-8 md:w-10 md:h-10 text-slate-600 dark:text-slate-300 transition-colors ${social.color}`} />
+                    <div className="flex flex-col items-center text-center">
+                      <IconComponent className={`w-12 h-12 mb-4 transition-colors ${social.color}`} />
+                      <h3 className="font-bold text-lg text-slate-900 dark:text-white mb-1">{social.name}</h3>
+                      <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">{social.followers}</p>
+                    </div>
                   </a>
                 )
               })}
@@ -333,12 +320,12 @@ export default async function AboutPage() {
         {/* ── COLLABORATION SECTION ── */}
         <section
           id="collaborate"
-          className="bg-gradient-to-br from-emerald-600 to-teal-600 dark:from-emerald-700 dark:to-teal-700 py-16 md:py-24 text-white"
+          className="bg-gradient-to-br from-emerald-600 to-teal-600 dark:from-emerald-700 dark:to-teal-800 py-16 md:py-24 text-white"
         >
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6 md:mb-8 border border-white/30">
+            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-5 py-2 rounded-full mb-6 md:mb-8 border border-white/30 shadow-sm">
               <Award className="w-4 h-4" />
-              <span className="font-semibold text-sm">Partnership Opportunities</span>
+              <span className="font-bold text-sm tracking-wide">PARTNERSHIP OPPORTUNITIES</span>
             </div>
 
             <h2 className="text-3xl md:text-5xl font-black mb-6 leading-tight">
@@ -349,35 +336,23 @@ export default async function AboutPage() {
               Are you a hotel, restaurant, destination, or brand looking to reach travel enthusiasts? I&apos;m always excited about authentic partnerships that align with my values and create genuine value for my community.
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12 text-left">
               {[
-                {
-                  title: 'Hotels & Resorts',
-                  description: 'Feature your property to our audience of dedicated travelers',
-                },
-                {
-                  title: 'Restaurants & Cafes',
-                  description: 'Showcase your culinary experience through engaging content',
-                },
-                {
-                  title: 'Tourism Boards',
-                  description: 'Promote your destination authentically to a global audience',
-                },
-                {
-                  title: 'Brands & Products',
-                  description: 'Reach travel-conscious consumers through genuine storytelling',
-                },
+                { title: 'Hotels & Resorts', description: 'Feature your property to our audience of dedicated travelers seeking their next stay.' },
+                { title: 'Restaurants & Cafes', description: 'Showcase your culinary experience through engaging, mouth-watering content.' },
+                { title: 'Tourism Boards', description: 'Promote your destination authentically to a global audience of adventure seekers.' },
+                { title: 'Brands & Products', description: 'Reach travel-conscious consumers through genuine product integration and storytelling.' },
               ].map((item, idx) => (
-                <div key={idx} className="p-6 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl">
-                  <h3 className="font-bold text-lg mb-2">{item.title}</h3>
-                  <p className="opacity-90 text-sm">{item.description}</p>
+                <div key={idx} className="p-6 md:p-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl hover:bg-white/15 transition-colors">
+                  <h3 className="font-bold text-xl mb-3 flex items-center gap-2">{item.title}</h3>
+                  <p className="opacity-90 text-sm md:text-base leading-relaxed">{item.description}</p>
                 </div>
               ))}
             </div>
 
             <a
               href="#contact"
-              className="bg-white text-emerald-600 hover:bg-slate-100 font-bold text-lg h-14 px-8 rounded-full transition-colors inline-flex items-center justify-center"
+              className="bg-white text-emerald-700 hover:bg-emerald-50 font-black text-sm md:text-lg h-14 px-8 rounded-full transition-colors inline-flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 duration-200"
             >
               Discuss a Partnership
             </a>
@@ -387,72 +362,90 @@ export default async function AboutPage() {
         {/* ── CONTACT SECTION ── */}
         <section id="contact" className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
           <div className="text-center mb-12 md:mb-16">
-            <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 md:mb-8">
+            <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 md:mb-6">
               Get In Touch
             </h2>
-            <p className="text-base md:text-xl text-slate-600 dark:text-slate-300">
-              Have a question, partnership idea, or just want to say hi? I&apos;d love to hear from you!
+            <p className="text-base md:text-xl text-slate-600 dark:text-slate-400">
+              Have a question, partnership idea, or just want to say hi?
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 md:gap-12 mb-12 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-start bg-white dark:bg-slate-900 p-6 md:p-10 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm">
             {/* Contact Info */}
-            <div className="space-y-4 md:space-y-8">
-              {contactEmail && (
-                <div className="space-y-1 md:space-y-4">
-                  <h3 className="text-sm md:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2 md:gap-3">
-                    <div className="w-8 h-8 md:w-12 md:h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
-                      <Mail className="w-4 h-4 md:w-6 md:h-6 text-emerald-600 dark:text-emerald-400" />
-                    </div>
-                    Email
-                  </h3>
-                  <a href={`mailto:${contactEmail}`} className="text-xs sm:text-sm md:text-lg text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors break-all">
-                    {contactEmail}
-                  </a>
-                </div>
-              )}
+            <div className="space-y-6 md:space-y-10 order-2 md:order-1">
+              <div>
+                <h3 className="text-xl md:text-3xl font-black text-slate-900 dark:text-white mb-4 md:mb-6">
+                  Contact Information
+                </h3>
+                <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 mb-8 md:mb-10 leading-relaxed">
+                  Fill out the form to send a direct message, or reach out via email or phone. I usually respond within 24-48 hours.
+                </p>
+              </div>
 
-              {contactPhone && (
-                <div className="space-y-1 md:space-y-4">
-                  <h3 className="text-sm md:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2 md:gap-3">
-                    <div className="w-8 h-8 md:w-12 md:h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
-                      <Phone className="w-4 h-4 md:w-6 md:h-6 text-emerald-600 dark:text-emerald-400" />
+              <div className="space-y-6 md:space-y-8">
+                {contactEmail && (
+                  <div className="flex items-start gap-4 md:gap-5">
+                    <div className="w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-2xl bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center mt-1">
+                      <Mail className="w-5 h-5 md:w-6 md:h-6 text-emerald-600 dark:text-emerald-400" />
                     </div>
-                    Phone
-                  </h3>
-                  <p className="text-xs sm:text-sm md:text-lg text-slate-600 dark:text-slate-400 break-all">{contactPhone}</p>
-                </div>
-              )}
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Email</h4>
+                      <a href={`mailto:${contactEmail}`} className="text-base md:text-lg font-bold text-slate-900 dark:text-white hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors break-all">
+                        {contactEmail}
+                      </a>
+                    </div>
+                  </div>
+                )}
 
-              {contactAddress && (
-                <div className="space-y-1 md:space-y-4">
-                  <h3 className="text-sm md:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2 md:gap-3">
-                    <div className="w-8 h-8 md:w-12 md:h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
-                      <MapPin className="w-4 h-4 md:w-6 md:h-6 text-emerald-600 dark:text-emerald-400" />
+                {contactPhone && (
+                  <div className="flex items-start gap-4 md:gap-5">
+                    <div className="w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-2xl bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center mt-1">
+                      <Phone className="w-5 h-5 md:w-6 md:h-6 text-emerald-600 dark:text-emerald-400" />
                     </div>
-                    Location
-                  </h3>
-                  <p className="text-xs sm:text-sm md:text-lg text-slate-600 dark:text-slate-400 break-all">{contactAddress}</p>
-                </div>
-              )}
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Phone</h4>
+                      <p className="text-base md:text-lg font-bold text-slate-900 dark:text-white break-all">{contactPhone}</p>
+                    </div>
+                  </div>
+                )}
+
+                {contactAddress && (
+                  <div className="flex items-start gap-4 md:gap-5">
+                    <div className="w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-2xl bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center mt-1">
+                      <MapPin className="w-5 h-5 md:w-6 md:h-6 text-emerald-600 dark:text-emerald-400" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Location</h4>
+                      <p className="text-base md:text-lg font-bold text-slate-900 dark:text-white break-words pr-4">{contactAddress}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Contact Form */}
-            <ContactFormComponent />
+            <div className="order-1 md:order-2 bg-slate-50 dark:bg-slate-950 p-6 md:p-8 rounded-3xl border border-slate-200/60 dark:border-slate-800">
+              <ContactFormComponent />
+            </div>
           </div>
         </section>
 
-        {/* ── CTA SECTION ── */}
+        {/* ── YOUTUBE CTA SECTION ── */}
         {siteSettings.youtube_url && (
-          <section className="bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-700 dark:to-teal-700 py-12 md:py-20">
+          <section className="bg-slate-900 dark:bg-black py-16 md:py-24 border-t border-slate-800">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-              <h3 className="text-2xl sm:text-4xl font-black mb-3 md:mb-4">Subscribe & Join The Adventure</h3>
-              <p className="text-sm md:text-lg opacity-90 mb-6 md:mb-8">Get exclusive travel tips, behind-the-scenes content, and early access to partnerships</p>
+              <div className="w-16 h-16 md:w-20 md:h-20 bg-red-600 rounded-3xl flex items-center justify-center mx-auto mb-6 md:mb-8 shadow-lg shadow-red-600/30">
+                <Youtube className="w-8 h-8 md:w-10 md:h-10 text-white" />
+              </div>
+              <h3 className="text-3xl md:text-5xl font-black mb-4 md:mb-6">Subscribe & Join The Adventure</h3>
+              <p className="text-base md:text-xl text-slate-400 mb-8 md:mb-10 max-w-2xl mx-auto">
+                Get exclusive travel tips, behind-the-scenes content, and watch the highest quality Sri Lanka travel videos.
+              </p>
               <a
                 href={siteSettings.youtube_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-white text-red-600 hover:bg-slate-100 font-bold text-sm md:text-lg h-12 md:h-14 px-6 md:px-8 rounded-full transition-colors"
+                className="inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold text-sm md:text-lg h-12 md:h-14 px-8 md:px-10 rounded-full transition-all hover:scale-105 active:scale-95 shadow-lg shadow-red-600/20"
               >
                 <Youtube className="w-5 h-5 md:w-6 md:h-6" />
                 Subscribe on YouTube
