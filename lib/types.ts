@@ -41,6 +41,7 @@ export interface BlogPost {
   content: string
   category?: 'travel' | 'food' | 'lifestyle'
   featured_image?: string
+  images?: string[]
   video_id?: string
   video_url?: string
   author_id: string
@@ -89,6 +90,7 @@ export interface BlogPostFormData {
   excerpt?: string
   content: string
   featured_image?: File
+  images?: File[]
   category?: 'travel' | 'food' | 'lifestyle'
 }
 

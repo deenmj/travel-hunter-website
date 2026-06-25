@@ -9,7 +9,7 @@ import { ROUTES, CATEGORY_LABELS, ALL_DISTRICTS } from '@/lib/constants'
 import type { Destination } from '@/lib/types'
 import ImageUpload from '@/components/admin/ImageUpload'
 import VideoInput from '@/components/admin/VideoInput'
-import GalleryInput from '@/components/admin/GalleryInput'
+import MultiImageUpload from '@/components/admin/MultiImageUpload'
 
 export default function EditDestinationPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -316,7 +316,7 @@ export default function EditDestinationPage({ params }: { params: Promise<{ id: 
             label="Destination Video (Optional)"
           />
 
-          <GalleryInput
+          <MultiImageUpload
             value={form.images}
             onChange={(images) => setForm((prev) => ({ ...prev, images }))}
             label="Gallery Photos (Optional)"

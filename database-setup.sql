@@ -395,3 +395,5 @@ CREATE POLICY "Admin delete from media" ON storage.objects
 --   ✅ 3 videos with YouTube thumbnails
 --   ✅ Media storage bucket for image uploads
 -- ============================================================================
+A L T E R   T A B L E   b l o g _ p o s t s   A D D   C O L U M N   i m a g e s   T E X T [ ] ;  
+ 

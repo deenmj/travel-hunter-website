@@ -8,6 +8,7 @@ import { createBlogPost } from '@/lib/admin-actions'
 import { ROUTES } from '@/lib/constants'
 import ImageUpload from '@/components/admin/ImageUpload'
 import VideoInput from '@/components/admin/VideoInput'
+import MultiImageUpload from '@/components/admin/MultiImageUpload'
 
 export default function NewBlogPage() {
   const router = useRouter()
@@ -21,6 +22,7 @@ export default function NewBlogPage() {
     excerpt: '',
     content: '',
     featured_image: '',
+    images: [] as string[],
     video_id: '',
     video_url: '',
   })
@@ -49,6 +51,7 @@ export default function NewBlogPage() {
       ...form,
       excerpt: form.excerpt || undefined,
       featured_image: form.featured_image || undefined,
+      images: form.images.length > 0 ? form.images : undefined,
       video_id: form.video_id || undefined,
       video_url: form.video_url || undefined,
     }
@@ -165,6 +168,12 @@ export default function NewBlogPage() {
             value={form.featured_image}
             onChange={(url) => setForm((prev) => ({ ...prev, featured_image: url }))}
             label="Featured Image"
+          />
+
+          <MultiImageUpload
+            value={form.images}
+            onChange={(images) => setForm((prev) => ({ ...prev, images }))}
+            label="Additional Gallery Photos (Optional)"
           />
 
           <VideoInput

@@ -155,6 +155,7 @@ export async function createBlogPost(formData: {
   excerpt?: string
   content: string
   featured_image?: string
+  images?: string[]
   video_id?: string
   video_url?: string
 }) {
@@ -186,6 +187,7 @@ export async function updateBlogPost(
     excerpt?: string
     content?: string
     featured_image?: string
+    images?: string[]
     video_id?: string
     video_url?: string
   },

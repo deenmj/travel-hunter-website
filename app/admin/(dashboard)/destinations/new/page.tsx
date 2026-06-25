@@ -8,7 +8,7 @@ import { createDestination } from '@/lib/admin-actions'
 import { ROUTES, CATEGORY_LABELS, ALL_DISTRICTS } from '@/lib/constants'
 import ImageUpload from '@/components/admin/ImageUpload'
 import VideoInput from '@/components/admin/VideoInput'
-import GalleryInput from '@/components/admin/GalleryInput'
+import MultiImageUpload from '@/components/admin/MultiImageUpload'
 
 export default function NewDestinationPage() {
   const router = useRouter()
@@ -317,7 +317,7 @@ export default function NewDestinationPage() {
             label="Destination Video (Optional)"
           />
 
-          <GalleryInput
+          <MultiImageUpload
             value={form.images}
             onChange={(images) => setForm((prev) => ({ ...prev, images }))}
             label="Gallery Photos (Optional)"

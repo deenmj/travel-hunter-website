@@ -3,6 +3,7 @@
 import { useState, useRef, ChangeEvent, DragEvent } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Upload, Link as LinkIcon, X, Loader2, CheckCircle2 } from 'lucide-react'
+import { optimizeImage, formatBytes } from '@/lib/image-utils'
 
 interface ImageUploadProps {
   value: string
@@ -12,7 +13,8 @@ interface ImageUploadProps {
 
 export default function ImageUpload({ value, onChange, label = 'Featured Image' }: ImageUploadProps) {
   const [activeTab, setActiveTab] = useState<'upload' | 'url'>(value && !value.includes('/storage/v1/object/public/media/') ? 'url' : 'upload')
-  const [uploading, setUploading] = useState(false)
+  const [status, setStatus] = useState<'idle' | 'optimizing' | 'uploading'>('idle')
+  const [stats, setStats] = useState<{ originalSize?: number, newSize?: number, skipped?: boolean }>({})
   const [error, setError] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [uploadSuccess, setUploadSuccess] = useState(false)
@@ -34,16 +36,25 @@ export default function ImageUpload({ value, onChange, label = 'Featured Image' 
     }
 
     try {
-      setUploading(true)
+      setStatus('optimizing')
       setError(null)
+      setStats({})
 
-      const fileExt = file.name.split('.').pop()
+      // 1. Optimize Image
+      const { file: optimizedFile, originalSize, newSize, skipped } = await optimizeImage(file)
+      setStats({ originalSize, newSize, skipped })
+      setStatus('uploading')
+
+      const fileExt = optimizedFile.name.split('.').pop()
       const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`
       const filePath = `uploads/${fileName}`
 
       const { data, error: uploadError } = await supabase.storage
         .from('media')
-        .upload(filePath, file)
+        .upload(filePath, optimizedFile, {
+          cacheControl: '3600',
+          upsert: false
+        })
 
       if (uploadError) {
         if (uploadError.message.toLowerCase().includes('bucket not found')) {
@@ -65,7 +76,7 @@ export default function ImageUpload({ value, onChange, label = 'Featured Image' 
       console.error('Upload error:', err)
       setError(err.message || 'Failed to upload image')
     } finally {
-      setUploading(false)
+      setStatus('idle')
     }
   }
 
@@ -184,14 +195,14 @@ export default function ImageUpload({ value, onChange, label = 'Featured Image' 
           <div className="p-4">
             {activeTab === 'upload' ? (
               <div
-                onClick={() => !uploading && fileInputRef.current?.click()}
+                onClick={() => status === 'idle' && fileInputRef.current?.click()}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
                 className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all ${
                   isDragging
                     ? 'border-emerald-500 bg-emerald-50/50 dark:bg-emerald-900/20 scale-[1.02]'
-                    : uploading
+                    : status !== 'idle'
                       ? 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50'
                       : 'border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 hover:bg-slate-50 dark:hover:bg-slate-900/50'
                 }`}
@@ -202,14 +213,14 @@ export default function ImageUpload({ value, onChange, label = 'Featured Image' 
                   onChange={handleFileUpload}
                   accept="image/*"
                   className="hidden"
-                  disabled={uploading}
+                  disabled={status !== 'idle'}
                 />
                 
-                {uploading ? (
+                {status !== 'idle' ? (
                   <div className="flex flex-col items-center justify-center gap-2 py-2">
                     <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
                     <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                      Uploading image...
+                      {status === 'optimizing' ? 'Optimizing image...' : 'Uploading image...'}
                     </p>
                   </div>
                 ) : isDragging ? (
