@@ -6,6 +6,7 @@ import { getFeaturedDestinations } from '@/lib/data-fetching'
 import { ROUTES } from '@/lib/constants'
 import { getDestinationThumbnail } from '@/lib/video-utils'
 import { getDestinationHref } from '@/lib/destination-utils'
+import { MapPin } from 'lucide-react'
 
 export async function FeaturedDestinations() {
   const destinations = await getFeaturedDestinations(6)
@@ -42,13 +43,13 @@ export async function FeaturedDestinations() {
           return (
             <div key={destination.id} className="relative group">
               <Link href={getDestinationHref(destination)}>
-                <Card className="overflow-hidden border border-slate-200/60 dark:border-slate-800/60 bg-white dark:bg-slate-900 hover:border-emerald-500/50 dark:hover:border-emerald-500/50 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 cursor-pointer h-full flex flex-col rounded-2xl group">
-                  <div className="relative aspect-[4/3] bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                <Card className="overflow-hidden border border-slate-200/60 dark:border-slate-800/60 bg-white dark:bg-slate-900 hover:border-emerald-500/50 dark:hover:border-emerald-500/50 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 cursor-pointer h-full flex flex-col rounded-[2rem] group">
+                  <div className="relative aspect-[4/3] bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0">
                     {thumbnail ? (
                       <img
                         src={thumbnail}
                         alt={destination.name}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-4xl bg-gradient-to-br from-emerald-100 to-teal-100 dark:from-emerald-900/40 dark:to-teal-900/40">
@@ -58,35 +59,36 @@ export async function FeaturedDestinations() {
                     
                     {destination.category && (
                       <div className="absolute top-4 right-4 z-10">
-                        <span className="inline-flex items-center px-2.5 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-slate-900 dark:text-white text-[10px] font-bold rounded-md shadow-sm uppercase tracking-wider">
+                        <span className="inline-flex items-center px-3 py-1.5 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-slate-900 dark:text-white text-[10px] font-black rounded-xl shadow-lg uppercase tracking-wider">
                           {destination.category}
                         </span>
                       </div>
                     )}
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
-                    
-                    <div className="absolute bottom-4 left-4 right-4 z-10">
-                      <h3 className="font-bold text-xl text-white group-hover:text-emerald-400 transition-colors line-clamp-1 drop-shadow-md">
-                        {destination.name}
-                      </h3>
-                      {destination.location && (
-                        <div className="flex items-center gap-1.5 text-xs text-slate-200 font-medium mt-1 drop-shadow">
-                          <span>📍</span>
-                          <span className="truncate">{destination.location}</span>
-                        </div>
-                      )}
-                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </div>
 
-                  <CardContent className="p-5 flex-1 flex flex-col justify-between">
-                    <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
-                      {destination.description}
-                    </p>
+                  <CardContent className="p-6 md:p-8 flex-1 flex flex-col justify-between">
+                    <div>
+                      <h3 className="font-black text-xl text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-1 mb-3">
+                        {destination.name}
+                      </h3>
+                      <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                        {destination.description}
+                      </p>
+                    </div>
                     
-                    <div className="flex items-center justify-between mt-4">
-                      <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-500 uppercase tracking-wider flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                        Read more <ChevronRight className="w-3 h-3" />
+                    <div className="flex items-center justify-between mt-6 pt-6 border-t border-slate-100 dark:border-slate-800">
+                      {destination.location ? (
+                        <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 font-medium">
+                          <MapPin className="w-3.5 h-3.5 text-emerald-500" />
+                          <span className="truncate max-w-[120px]">{destination.location}</span>
+                        </div>
+                      ) : (
+                        <div /> // spacer
+                      )}
+                      <span className="text-xs font-bold text-emerald-600 dark:text-emerald-500 uppercase tracking-wider flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                        Explore <ChevronRight className="w-3.5 h-3.5" />
                       </span>
                     </div>
                   </CardContent>
