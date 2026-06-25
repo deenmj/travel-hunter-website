@@ -196,9 +196,9 @@ export default function AdminDashboard() {
                   className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
                 >
                   <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg shrink-0">
-                    {dest.category === 'visit'
+                    {dest.category === 'travel'
                       ? '🗺️'
-                      : dest.category === 'eat'
+                      : dest.category === 'food'
                         ? '🍽️'
                         : '🏨'}
                   </div>

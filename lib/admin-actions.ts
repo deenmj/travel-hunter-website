@@ -540,7 +540,7 @@ export async function updateAboutPageData(formData: {
     return { data: null, error: result.error.message }
   }
 
-  revalidatePath('/about')
+  revalidatePath('/about', 'layout')
   revalidatePath('/admin/about')
   return { data: result.data, error: null }
 }

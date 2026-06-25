@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Save, Plus, X, Image as ImageIcon } from 'lucide-react'
 import { createDestination } from '@/lib/admin-actions'
-import { ROUTES, CATEGORY_LABELS } from '@/lib/constants'
+import { ROUTES, CATEGORY_LABELS, ALL_DISTRICTS } from '@/lib/constants'
 import ImageUpload from '@/components/admin/ImageUpload'
 import VideoInput from '@/components/admin/VideoInput'
 import GalleryInput from '@/components/admin/GalleryInput'
@@ -29,6 +29,8 @@ export default function NewDestinationPage() {
     how_to_reach: '',
     entry_fees: '',
     location: '',
+    region: '',
+    budget: 'mid' as 'low' | 'mid' | 'luxury',
     highlights: [] as string[],
     images: [] as string[],
     is_top_pick: false,
@@ -80,6 +82,8 @@ export default function NewDestinationPage() {
       how_to_reach: form.how_to_reach || undefined,
       entry_fees: form.entry_fees || undefined,
       location: form.location || undefined,
+      region: form.region || undefined,
+      budget: form.budget || undefined,
       images: form.images.length > 0 ? form.images : undefined,
       highlights: form.highlights.length > 0 ? form.highlights : undefined,
       is_top_pick: form.is_top_pick,
@@ -212,18 +216,37 @@ export default function NewDestinationPage() {
             />
           </div>
 
-          {/* Location */}
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-              Location
-            </label>
-            <input
-              type="text"
-              value={form.location}
-              onChange={(e) => setForm((prev) => ({ ...prev, location: e.target.value }))}
-              placeholder="e.g., Central Province, Sri Lanka"
-              className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
-            />
+          {/* Location + District row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                Location
+              </label>
+              <input
+                type="text"
+                value={form.location}
+                onChange={(e) => setForm((prev) => ({ ...prev, location: e.target.value }))}
+                placeholder="e.g., Central Province, Sri Lanka"
+                className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                District / Region
+              </label>
+              <select
+                value={form.region}
+                onChange={(e) => setForm((prev) => ({ ...prev, region: e.target.value }))}
+                className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
+              >
+                <option value="">Select district...</option>
+                {ALL_DISTRICTS.map((d) => (
+                  <option key={d} value={d}>{d}</option>
+                ))}
+              </select>
+              <p className="text-xs text-slate-400">Used for district filtering on the Explore page.</p>
+            </div>
           </div>
 
           {/* Practical Info Grid */}

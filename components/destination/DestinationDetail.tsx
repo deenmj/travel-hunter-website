@@ -37,22 +37,28 @@ interface DestinationDetailProps {
   related: Destination[]
 }
 
-const categoryStyles = {
-  visit: {
+const categoryStyles: Record<string, { badge: string; accent: string; gradient: string }> = {
+  travel: {
     badge: 'bg-blue-500/90 text-white',
     accent: 'text-blue-600 dark:text-blue-400',
     gradient: 'from-blue-600/80 to-emerald-900/60',
   },
-  eat: {
+  food: {
     badge: 'bg-orange-500/90 text-white',
     accent: 'text-orange-600 dark:text-orange-400',
     gradient: 'from-orange-600/80 to-amber-900/60',
   },
-  stay: {
+  lifestyle: {
     badge: 'bg-emerald-500/90 text-white',
     accent: 'text-emerald-600 dark:text-emerald-400',
     gradient: 'from-emerald-600/80 to-teal-900/60',
   },
+}
+
+const DEFAULT_CATEGORY_STYLE = {
+  badge: 'bg-slate-500/90 text-white',
+  accent: 'text-slate-600 dark:text-slate-400',
+  gradient: 'from-slate-600/80 to-slate-900/60',
 }
 
 function SectionHeading({ label, title }: { label: string; title: string }) {
@@ -70,7 +76,7 @@ function SectionHeading({ label, title }: { label: string; title: string }) {
 export function DestinationDetail({ destination, related }: DestinationDetailProps) {
   const heroImage = getDestinationThumbnail(destination)
   const galleryImages = getGalleryImages(destination)
-  const styles = categoryStyles[destination.category]
+  const styles = categoryStyles[destination.category] ?? DEFAULT_CATEGORY_STYLE
   const rating = getRating(destination.slug)
   const budget = getBudgetLabel(destination.category)
   const videoSource = resolveVideoSource(destination.video_id, destination.video_url)

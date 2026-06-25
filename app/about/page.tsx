@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   description: "Meet Sri Lanka's Travel Hunter. Discover my story, passion for travel, and how we can collaborate to promote your business or destination.",
 }
 
+// Force fresh data on every request so admin changes appear immediately
+export const dynamic = 'force-dynamic'
+
 const TikTokIcon = ({ className }: { className?: string }) => (
   <svg className={className || "w-6 h-6"} fill="currentColor" viewBox="0 0 24 24">
     <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.68v13.67a2.4 2.4 0 0 1-2.4 2.4 2.4 2.4 0 0 1-2.4-2.4 2.4 2.4 0 0 1 2.4-2.4c.34 0 .67.05.98.15V9.41a5.64 5.64 0 0 0-.98-.08 5.976 5.976 0 0 0-5.965 6.01A5.976 5.976 0 0 0 12.75 22a5.976 5.976 0 0 0 5.825-5.83v-6.48a7.905 7.905 0 0 0 3.965-3.99v-3.99z" />

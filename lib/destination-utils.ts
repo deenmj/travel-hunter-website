@@ -22,9 +22,9 @@ export function getGalleryImages(destination: Destination): string[] {
 
 export function getBudgetLabel(category: Destination['category']): string {
   switch (category) {
-    case 'eat':
+    case 'food':
       return 'Moderate'
-    case 'stay':
+    case 'lifestyle':
       return 'Premium'
     default:
       return 'Budget Friendly'
@@ -43,9 +43,9 @@ export function getHowToReach(destination: Destination): string {
 
 export function getEntryFees(category: Destination['category']): string {
   switch (category) {
-    case 'eat':
+    case 'food':
       return 'Varies by venue — street food from LKR 200, restaurants LKR 1,500+'
-    case 'stay':
+    case 'lifestyle':
       return 'Room rates vary by season — book ahead during peak months'
     default:
       return 'Entry fees vary — many sites LKR 500–3,000 for foreign visitors'
