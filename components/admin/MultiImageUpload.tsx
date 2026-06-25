@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, ChangeEvent, DragEvent } from 'react'
+import { useState, useRef, useEffect, ChangeEvent, DragEvent } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Upload, X, Loader2, Image as ImageIcon, ChevronLeft, ChevronRight, CheckCircle2 } from 'lucide-react'
 import { optimizeImage, formatBytes } from '@/lib/image-utils'
@@ -26,6 +26,12 @@ export default function MultiImageUpload({ value = [], onChange, label = 'Galler
   const [isDragging, setIsDragging] = useState(false)
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
+  
+  // Track the latest value to avoid stale closures during async loops
+  const valueRef = useRef(value)
+  useEffect(() => {
+    valueRef.current = value
+  }, [value])
   
   const supabase = createClient()
 
@@ -68,7 +74,9 @@ export default function MultiImageUpload({ value = [], onChange, label = 'Galler
         const { data: { publicUrl } } = supabase.storage.from('media').getPublicUrl(data.path)
 
         // 3. Update main state
-        onChange([...value, publicUrl])
+        const newUrls = [...valueRef.current, publicUrl]
+        valueRef.current = newUrls // update ref immediately for next iteration in loop
+        onChange(newUrls)
         
         // Mark as done briefly before removing from uploading list
         setUploadingFiles(prev => prev.map(f => 
