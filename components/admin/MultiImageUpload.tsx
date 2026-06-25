@@ -192,14 +192,6 @@ export default function MultiImageUpload({ value = [], onChange, label = 'Galler
                   {file.status === 'uploading' && <span className="text-xs text-blue-600 font-medium flex items-center gap-1"><Loader2 className="w-3 h-3 animate-spin"/> Uploading...</span>}
                   {file.status === 'done' && <span className="text-xs text-emerald-600 font-medium">Complete</span>}
                   {file.status === 'error' && <span className="text-xs text-red-500 font-medium">{file.error}</span>}
-                  
-                  {file.originalSize && file.newSize && (
-                    <span className="text-[10px] text-slate-500 ml-auto">
-                      {file.skipped 
-                        ? `Under 2.5MB - Kept original (${formatBytes(file.originalSize)})` 
-                        : `Optimized from ${formatBytes(file.originalSize)} to ${formatBytes(file.newSize)}`}
-                    </span>
-                  )}
                 </div>
               </div>
             </div>
