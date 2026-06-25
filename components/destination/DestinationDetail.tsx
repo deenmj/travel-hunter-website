@@ -207,20 +207,20 @@ export function DestinationDetail({ destination, related }: DestinationDetailPro
       </section>
 
       {/* ── 2. Quick Info Row ── */}
-      <section className="border-b border-slate-200/50 dark:border-slate-800/50 bg-white dark:bg-slate-950 sticky top-[72px] z-40 shadow-sm w-full overflow-hidden">
+      <section className="border-b border-slate-200/50 dark:border-slate-800/50 bg-white dark:bg-slate-950 sticky top-[64px] md:top-[72px] z-40 shadow-sm w-full">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 md:py-4">
-          <div className="flex overflow-x-auto hide-scrollbar gap-3 md:gap-6 pb-2 -mb-2 snap-x snap-mandatory">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-4">
             {quickInfo.map(({ icon: Icon, label, value, highlight }) => (
               <div
                 key={label}
-                className="flex items-center gap-2 md:gap-3 p-2.5 md:p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm min-w-[140px] md:min-w-0 flex-1 shrink-0 snap-start"
+                className="flex items-center gap-2.5 md:gap-3 p-2.5 md:p-3 rounded-xl md:rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden"
               >
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-white dark:bg-slate-800 flex items-center justify-center shrink-0 shadow-sm border border-slate-100 dark:border-slate-700/50">
-                  <Icon className={`w-5 h-5 md:w-6 md:h-6 ${highlight ? 'text-amber-500 fill-amber-500' : 'text-emerald-600 dark:text-emerald-400'}`} />
+                <div className="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-white dark:bg-slate-800 flex items-center justify-center shrink-0 shadow-sm border border-slate-100 dark:border-slate-700/50">
+                  <Icon className={`w-4 h-4 md:w-6 md:h-6 ${highlight ? 'text-amber-500 fill-amber-500' : 'text-emerald-600 dark:text-emerald-400'}`} />
                 </div>
-                <div className="min-w-0">
-                  <p className="text-[10px] md:text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{label}</p>
-                  <p className="text-sm md:text-base font-bold text-slate-900 dark:text-slate-100 mt-0.5 truncate">{value}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[9px] md:text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider md:tracking-widest truncate">{label}</p>
+                  <p className="text-xs sm:text-sm md:text-base font-bold text-slate-900 dark:text-slate-100 mt-0.5 truncate">{value}</p>
                 </div>
               </div>
             ))}
