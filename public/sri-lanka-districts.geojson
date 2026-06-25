@@ -1,0 +1,205 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "district": "Colombo", "province": "Western", "labelLat": 6.9271, "labelLng": 79.9, "emoji": "🏙️" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[79.8, 6.78],[80.05, 6.78],[80.05, 7.02],[79.8, 7.02],[79.8, 6.78]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Gampaha", "province": "Western", "labelLat": 7.09, "labelLng": 80.0, "emoji": "🌿" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[79.84, 6.98],[80.22, 6.98],[80.22, 7.32],[79.84, 7.32],[79.84, 6.98]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Kalutara", "province": "Western", "labelLat": 6.585, "labelLng": 80.1, "emoji": "🌊" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[79.88, 6.38],[80.45, 6.38],[80.45, 6.8],[79.88, 6.8],[79.88, 6.38]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Kandy", "province": "Central", "labelLat": 7.295, "labelLng": 80.635, "emoji": "🏯" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[80.4, 7.07],[81.0, 7.07],[81.0, 7.52],[80.4, 7.52],[80.4, 7.07]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Matale", "province": "Central", "labelLat": 7.47, "labelLng": 80.62, "emoji": "🌄" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[80.4, 7.5],[81.05, 7.5],[81.05, 7.95],[80.4, 7.95],[80.4, 7.5]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Nuwara Eliya", "province": "Central", "labelLat": 6.97, "labelLng": 80.78, "emoji": "🍵" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[80.5, 6.78],[81.1, 6.78],[81.1, 7.08],[80.5, 7.08],[80.5, 6.78]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Galle", "province": "Southern", "labelLat": 6.05, "labelLng": 80.22, "emoji": "⛵" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[79.97, 5.92],[80.65, 5.92],[80.65, 6.38],[79.97, 6.38],[79.97, 5.92]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Matara", "province": "Southern", "labelLat": 5.95, "labelLng": 80.54, "emoji": "🐢" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[80.52, 5.9],[81.08, 5.9],[81.08, 6.18],[80.52, 6.18],[80.52, 5.9]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Hambantota", "province": "Southern", "labelLat": 6.12, "labelLng": 81.12, "emoji": "🦁" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[80.92, 5.98],[81.62, 5.98],[81.62, 6.5],[80.92, 6.5],[80.92, 5.98]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Jaffna", "province": "Northern", "labelLat": 9.66, "labelLng": 80.01, "emoji": "🕌" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[79.7, 9.5],[80.35, 9.5],[80.35, 9.88],[79.7, 9.88],[79.7, 9.5]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Kilinochchi", "province": "Northern", "labelLat": 9.38, "labelLng": 80.4, "emoji": "🏞️" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[80.15, 9.15],[80.65, 9.15],[80.65, 9.5],[80.15, 9.5],[80.15, 9.15]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Mannar", "province": "Northern", "labelLat": 8.98, "labelLng": 79.9, "emoji": "🦩" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[79.7, 8.6],[80.2, 8.6],[80.2, 9.2],[79.7, 9.2],[79.7, 8.6]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Vavuniya", "province": "Northern", "labelLat": 8.75, "labelLng": 80.5, "emoji": "🌾" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[80.15, 8.55],[80.78, 8.55],[80.78, 9.18],[80.15, 9.18],[80.15, 8.55]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Mullaitivu", "province": "Northern", "labelLat": 9.27, "labelLng": 80.82, "emoji": "🌊" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[80.6, 8.98],[81.05, 8.98],[81.05, 9.5],[80.6, 9.5],[80.6, 8.98]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Trincomalee", "province": "Eastern", "labelLat": 8.57, "labelLng": 81.23, "emoji": "🐬" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[80.82, 8.28],[81.35, 8.28],[81.35, 8.98],[80.82, 8.98],[80.82, 8.28]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Batticaloa", "province": "Eastern", "labelLat": 7.72, "labelLng": 81.7, "emoji": "🎭" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[81.22, 7.55],[81.85, 7.55],[81.85, 8.3],[81.22, 8.3],[81.22, 7.55]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Ampara", "province": "Eastern", "labelLat": 7.3, "labelLng": 81.67, "emoji": "🌅" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[81.35, 6.98],[81.9, 6.98],[81.9, 7.58],[81.35, 7.58],[81.35, 6.98]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Kurunegala", "province": "North Western", "labelLat": 7.49, "labelLng": 80.36, "emoji": "🐘" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[79.98, 7.28],[80.65, 7.28],[80.65, 7.88],[79.98, 7.88],[79.98, 7.28]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Puttalam", "province": "North Western", "labelLat": 8.03, "labelLng": 79.84, "emoji": "🦀" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[79.68, 7.75],[80.32, 7.75],[80.32, 8.45],[79.68, 8.45],[79.68, 7.75]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Anuradhapura", "province": "North Central", "labelLat": 8.31, "labelLng": 80.41, "emoji": "🏛️" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[80.1, 7.98],[81.0, 7.98],[81.0, 8.72],[80.1, 8.72],[80.1, 7.98]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Polonnaruwa", "province": "North Central", "labelLat": 7.94, "labelLng": 81.0, "emoji": "🗿" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[80.82, 7.72],[81.32, 7.72],[81.32, 8.25],[80.82, 8.25],[80.82, 7.72]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Badulla", "province": "Uva", "labelLat": 6.99, "labelLng": 81.06, "emoji": "🌿" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[80.98, 6.72],[81.5, 6.72],[81.5, 7.2],[80.98, 7.2],[80.98, 6.72]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Monaragala", "province": "Uva", "labelLat": 6.87, "labelLng": 81.35, "emoji": "🦚" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[81.22, 6.55],[81.88, 6.55],[81.88, 7.02],[81.22, 7.02],[81.22, 6.55]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Ratnapura", "province": "Sabaragamuwa", "labelLat": 6.68, "labelLng": 80.4, "emoji": "💎" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[80.18, 6.38],[81.0, 6.38],[81.0, 6.92],[80.18, 6.92],[80.18, 6.38]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Kegalle", "province": "Sabaragamuwa", "labelLat": 7.25, "labelLng": 80.35, "emoji": "🌺" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[80.18, 7.02],[80.68, 7.02],[80.68, 7.48],[80.18, 7.48],[80.18, 7.02]]]
+      }
+    }
+  ]
+}

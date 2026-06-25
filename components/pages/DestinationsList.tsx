@@ -37,6 +37,27 @@ export function DestinationsList() {
   
   const [loading, setLoading] = useState(true)
 
+  // ── Map state ──────────────────────────────────────────────────────────────
+  const [selectedMapDistrict, setSelectedMapDistrict] = useState<string | null>(null)
+  const [isMapModalOpen, setIsMapModalOpen] = useState(false)
+  const [MapComponents, setMapComponents] = useState<{
+    SriLankaMap: typeof import('@/components/destination/SriLankaMap').SriLankaMap
+    MapModal: typeof import('@/components/destination/MapModal').MapModal
+  } | null>(null)
+
+  // Lazy-load map components only on client
+  useEffect(() => {
+    Promise.all([
+      import('@/components/destination/SriLankaMap'),
+      import('@/components/destination/MapModal'),
+    ]).then(([mapMod, modalMod]) => {
+      setMapComponents({
+        SriLankaMap: mapMod.SriLankaMap,
+        MapModal: modalMod.MapModal,
+      })
+    })
+  }, [])
+
   const activeFilterCount = [
     activeFilters.category !== 'all' ? 1 : 0,
     activeFilters.region !== 'all' ? 1 : 0,
@@ -91,6 +112,19 @@ export function DestinationsList() {
   const clearFilters = useCallback(() => {
     setSearchQuery('')
     setActiveFilters(DEFAULT_FILTERS)
+    setSelectedMapDistrict(null)
+  }, [])
+
+  // ── Handle map district selection ─────────────────────────────────────────
+  const handleDistrictSelect = useCallback((district: string | null) => {
+    setSelectedMapDistrict(district)
+    setActiveFilters((prev) => ({ ...prev, region: district ?? 'all' }))
+  }, [])
+
+  // Sync region dropdown → map (clear map selection if user picks dropdown manually)
+  const handleRegionFilterChange = useCallback((val: string) => {
+    setActiveFilters((prev) => ({ ...prev, region: val }))
+    setSelectedMapDistrict(val === 'all' ? null : val)
   }, [])
 
   return (
@@ -126,10 +160,63 @@ export function DestinationsList() {
               </button>
             )}
           </div>
+
+          {/* Mobile: Browse on Map button */}
+          <div className="md:hidden mt-4">
+            <button
+              id="browse-on-map-btn"
+              onClick={() => setIsMapModalOpen(true)}
+              className={`inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-bold text-sm transition-all active:scale-95 shadow-sm ${
+                selectedMapDistrict
+                  ? 'bg-emerald-600 text-white shadow-emerald-200 dark:shadow-emerald-900'
+                  : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-2 border-slate-200 dark:border-slate-700 hover:border-emerald-400 hover:text-emerald-600'
+              }`}
+            >
+              <span className="text-base">🗺️</span>
+              {selectedMapDistrict ? `Map: ${selectedMapDistrict}` : 'Browse on Map'}
+              {selectedMapDistrict && (
+                <span
+                  role="button"
+                  tabIndex={0}
+                  onClick={(e) => { e.stopPropagation(); handleDistrictSelect(null) }}
+                  className="ml-0.5 bg-white/25 hover:bg-white/40 rounded-full p-0.5"
+                >
+                  <X className="w-3 h-3" />
+                </span>
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+
+        {/* ── Desktop: Inline Map ── */}
+        {MapComponents && (
+          <div className="hidden md:block mb-8">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                <span>🗺️</span> Browse by District
+              </h2>
+              {selectedMapDistrict && (
+                <button
+                  onClick={() => handleDistrictSelect(null)}
+                  className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-200 transition-colors bg-emerald-50 dark:bg-emerald-950 px-3 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-800"
+                >
+                  <X className="w-3 h-3" />
+                  Clear map selection
+                </button>
+              )}
+            </div>
+            <MapComponents.SriLankaMap
+              destinations={destinations}
+              selectedDistrict={selectedMapDistrict}
+              onDistrictSelect={handleDistrictSelect}
+              height={330}
+              className="w-full"
+            />
+          </div>
+        )}
 
         {/* ── Compact Professional Filter Toolbar ── */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl md:rounded-full p-3 md:p-4 shadow-sm border border-slate-200 dark:border-slate-800 mb-8">
@@ -156,12 +243,16 @@ export function DestinationsList() {
               </Select>
             </div>
 
-            {/* Region Filter */}
+            {/* Region Filter — synced with map */}
             <div className="w-full">
-              <Select value={activeFilters.region} onValueChange={(val) => setActiveFilters({ ...activeFilters, region: val })}>
-                <SelectTrigger className="w-full h-12 rounded-xl md:rounded-full bg-slate-50 dark:bg-slate-800 border-none font-semibold px-5">
+              <Select value={activeFilters.region} onValueChange={handleRegionFilterChange}>
+                <SelectTrigger className={`w-full h-12 rounded-xl md:rounded-full border-none font-semibold px-5 transition-colors ${
+                  selectedMapDistrict
+                    ? 'bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300'
+                    : 'bg-slate-50 dark:bg-slate-800'
+                }`}>
                   <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-emerald-500" />
+                    <MapPin className={`w-4 h-4 ${selectedMapDistrict ? 'text-emerald-500' : 'text-emerald-500'}`} />
                     <SelectValue placeholder="All Districts" />
                   </div>
                 </SelectTrigger>
@@ -198,7 +289,7 @@ export function DestinationsList() {
             <div className="w-full">
               <Button 
                 onClick={clearFilters}
-                disabled={activeFilterCount === 0}
+                disabled={activeFilterCount === 0 && !selectedMapDistrict}
                 variant="ghost"
                 className="w-full h-12 rounded-xl md:rounded-full font-bold text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               >
@@ -212,12 +303,28 @@ export function DestinationsList() {
 
         {/* ── Results Header ── */}
         <div className="flex items-center justify-between mb-6 gap-3">
-          <div className="text-base md:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300 py-1 px-3 rounded-full text-sm">
-              {filteredDestinations.length}
-            </span>
-            <span className="hidden sm:inline">Places Found</span>
-            <span className="sm:hidden">Found</span>
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="text-base md:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300 py-1 px-3 rounded-full text-sm">
+                {filteredDestinations.length}
+              </span>
+              <span className="hidden sm:inline">Places Found</span>
+              <span className="sm:hidden">Found</span>
+            </div>
+            {/* Map selection active indicator (desktop) */}
+            {selectedMapDistrict && (
+              <span className="hidden md:inline-flex items-center gap-1.5 text-xs font-bold bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 px-3 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+                <MapPin className="w-3 h-3" />
+                {selectedMapDistrict}
+                <button
+                  onClick={() => handleDistrictSelect(null)}
+                  className="hover:text-emerald-900 dark:hover:text-emerald-100 ml-0.5"
+                  aria-label="Clear district filter"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
           </div>
           <div className="w-40 sm:w-48 shrink-0">
             <Select value={sortBy} onValueChange={(val) => setSortBy(val as any)}>
@@ -361,6 +468,17 @@ export function DestinationsList() {
           )}
         </div>
       </div>
+
+      {/* ── Mobile: Map Modal ── */}
+      {MapComponents && (
+        <MapComponents.MapModal
+          isOpen={isMapModalOpen}
+          onClose={() => setIsMapModalOpen(false)}
+          destinations={destinations}
+          selectedDistrict={selectedMapDistrict}
+          onDistrictSelect={handleDistrictSelect}
+        />
+      )}
     </section>
   )
 }
