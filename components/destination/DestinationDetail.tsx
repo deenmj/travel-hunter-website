@@ -13,6 +13,8 @@ import {
   ChevronRight,
   Play,
   ShieldCheck,
+  Map as MapIcon,
+  ExternalLink,
 } from 'lucide-react'
 import { VideoEmbed } from '@/components/destination/VideoEmbed'
 import { ShareButton } from '@/components/ui/ShareButton'
@@ -55,11 +57,12 @@ const categoryStyles = {
 
 function SectionHeading({ label, title }: { label: string; title: string }) {
   return (
-    <div className="mb-6">
-      <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">
+    <div className="mb-8">
+      <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest flex items-center gap-2">
+        <span className="w-6 h-px bg-emerald-600/50 dark:bg-emerald-400/50"></span>
         {label}
       </span>
-      <h2 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white mt-1">{title}</h2>
+      <h2 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white mt-2">{title}</h2>
     </div>
   )
 }
@@ -117,10 +120,14 @@ export function DestinationDetail({ destination, related }: DestinationDetailPro
     },
   ]
 
+  const mapSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    destination.name + ' ' + (destination.location || 'Sri Lanka')
+  )}`
+
   return (
-    <article className="bg-white dark:bg-slate-950">
+    <article className="bg-white dark:bg-slate-950 min-h-screen">
       {/* ── 1. Hero ── */}
-      <section className="relative w-full min-h-[45vh] md:min-h-[55vh] flex items-end overflow-hidden">
+      <section className="relative w-full min-h-[50vh] md:min-h-[60vh] flex items-end overflow-hidden">
         {heroImage ? (
           <img
             src={heroImage}
@@ -130,18 +137,18 @@ export function DestinationDetail({ destination, related }: DestinationDetailPro
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-emerald-600 to-teal-800" />
         )}
-        <div className={`absolute inset-0 bg-gradient-to-t ${styles.gradient} via-slate-900/60 to-slate-900/30`} />
+        <div className={`absolute inset-0 bg-gradient-to-t ${styles.gradient} via-slate-900/60 to-slate-900/40`} />
 
-        <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 md:pb-20 pt-28">
+        <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 pt-28">
           <Link
             href={ROUTES.DESTINATIONS}
-            className="inline-flex items-center gap-1.5 text-white/80 hover:text-white text-sm font-semibold mb-8 transition-colors bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full backdrop-blur-md"
+            className="inline-flex items-center gap-1.5 text-white/80 hover:text-white text-sm font-semibold mb-6 md:mb-8 transition-colors bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full backdrop-blur-md"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Destinations
           </Link>
 
-          <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-6">
+          <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-5 md:mb-6">
             <span
               className={`inline-flex items-center gap-1.5 px-3 md:px-4 py-1.5 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-wider shadow-lg whitespace-nowrap ${styles.badge}`}
             >
@@ -154,13 +161,17 @@ export function DestinationDetail({ destination, related }: DestinationDetailPro
             )}
           </div>
 
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <h1 className="text-3xl sm:text-5xl md:text-7xl font-black text-white leading-[1.1] drop-shadow-2xl max-w-4xl break-words">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] drop-shadow-2xl max-w-4xl break-words">
               {destination.name}
             </h1>
             
-            <div className="flex items-center gap-3 shrink-0">
-              <ShareButton url={`${typeof window !== 'undefined' ? window.location.origin : ''}${getDestinationHref(destination)}`} title={destination.name} className="h-12 px-6 rounded-full" />
+            <div className="shrink-0 flex items-center">
+              <ShareButton 
+                url={`${typeof window !== 'undefined' ? window.location.origin : ''}${getDestinationHref(destination)}`} 
+                title={destination.name} 
+                className="h-12 px-6 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-md border border-white/20" 
+              />
             </div>
           </div>
         </div>
@@ -176,11 +187,11 @@ export function DestinationDetail({ destination, related }: DestinationDetailPro
                 className="flex items-center gap-2 md:gap-3 p-2.5 md:p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm min-w-[140px] md:min-w-0 flex-1 shrink-0 snap-start"
               >
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-white dark:bg-slate-800 flex items-center justify-center shrink-0 shadow-sm border border-slate-100 dark:border-slate-700/50">
-                  <Icon className={`w-6 h-6 ${highlight ? 'text-amber-500 fill-amber-500' : 'text-emerald-600 dark:text-emerald-400'}`} />
+                  <Icon className={`w-5 h-5 md:w-6 md:h-6 ${highlight ? 'text-amber-500 fill-amber-500' : 'text-emerald-600 dark:text-emerald-400'}`} />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{label}</p>
-                  <p className="text-sm font-bold text-slate-900 dark:text-slate-100 mt-0.5 truncate">{value}</p>
+                  <p className="text-[10px] md:text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{label}</p>
+                  <p className="text-sm md:text-base font-bold text-slate-900 dark:text-slate-100 mt-0.5 truncate">{value}</p>
                 </div>
               </div>
             ))}
@@ -188,10 +199,12 @@ export function DestinationDetail({ destination, related }: DestinationDetailPro
         </div>
       </section>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 space-y-16 md:space-y-24">
+      {/* Main Content Container - We removed the massive space-y here to use custom section padding */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        
         {/* ── 3. Main Video ── */}
         {showVideo && videoSource && (
-          <section className="max-w-5xl mx-auto">
+          <section className="py-12 md:py-16 border-b border-slate-100 dark:border-slate-800/60 max-w-5xl mx-auto">
             <SectionHeading label="Watch" title="Experience It First" />
             <div className="rounded-[2rem] overflow-hidden shadow-2xl shadow-slate-200/50 dark:shadow-none ring-1 ring-slate-200/60 dark:ring-slate-800 bg-black">
               <VideoEmbed
@@ -201,53 +214,81 @@ export function DestinationDetail({ destination, related }: DestinationDetailPro
                 className="rounded-[2rem] scale-[1.01]"
               />
             </div>
-            <p className="mt-4 text-xs md:text-sm font-semibold text-slate-500 dark:text-slate-400 flex items-center justify-center gap-2 px-4 text-center">
+            <p className="mt-5 text-xs md:text-sm font-semibold text-slate-500 dark:text-slate-400 flex items-center justify-center gap-2 px-4 text-center bg-slate-50 dark:bg-slate-900 py-3 rounded-full w-max mx-auto border border-slate-100 dark:border-slate-800">
               <Play className="w-3.5 h-3.5 md:w-4 md:h-4 text-emerald-500 fill-emerald-500 shrink-0" />
               Travel Hunter&apos;s video guide to {destination.name}
             </p>
           </section>
         )}
 
-        {/* ── 4. Travel Hunter's Story ── */}
-        <section className="max-w-4xl">
-          <SectionHeading label="Our Take" title="Travel Hunter's Story" />
-          <div className="prose prose-base md:prose-lg prose-slate dark:prose-invert max-w-none">
-            <div className="relative pl-5 md:pl-8 border-l-4 border-emerald-500">
-              <p className="text-base md:text-xl text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line font-medium break-words">
-                {destination.description}
-              </p>
+        {/* ── 4. Travel Hunter's Story & Map Integration ── */}
+        <section className="py-12 md:py-16 border-b border-slate-100 dark:border-slate-800/60">
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
+            <div className="flex-1 max-w-4xl">
+              <SectionHeading label="Our Take" title="Travel Hunter's Story" />
+              <div className="prose prose-base md:prose-lg prose-slate dark:prose-invert max-w-none">
+                <div className="relative pl-5 md:pl-8 border-l-4 border-emerald-500">
+                  <p className="text-base md:text-xl text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line font-medium break-words">
+                    {destination.description}
+                  </p>
+                </div>
+              </div>
+
+              {destination.highlights && destination.highlights.length > 0 && (
+                <div className="mt-10 p-6 md:p-8 rounded-3xl bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 border border-amber-200/60 dark:border-amber-900/40 shadow-sm">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center">
+                      <Lightbulb className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                    </div>
+                    <h3 className="font-black text-lg text-slate-900 dark:text-white">Pro Tip from Travel Hunter</h3>
+                  </div>
+                  <p className="text-base md:text-lg text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
+                    {destination.highlights[0]}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Quick Actions Sidebar */}
+            <div className="w-full lg:w-80 shrink-0">
+              <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200/60 dark:border-slate-800 p-6 rounded-3xl sticky top-[160px]">
+                <h3 className="font-black text-lg text-slate-900 dark:text-white mb-4">Location Details</h3>
+                <div className="flex items-start gap-3 mb-6">
+                  <MapPin className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                  <p className="text-slate-600 dark:text-slate-300 font-medium text-sm leading-relaxed">
+                    {destination.location || 'Sri Lanka'}
+                  </p>
+                </div>
+                
+                <a 
+                  href={mapSearchUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm h-12 rounded-xl transition-all shadow-sm hover:shadow-md active:scale-[0.98]"
+                >
+                  <MapIcon className="w-4 h-4" />
+                  View on Google Maps
+                  <ExternalLink className="w-3 h-3 ml-1 opacity-70" />
+                </a>
+              </div>
             </div>
           </div>
-
-          {destination.highlights && destination.highlights.length > 0 && (
-            <div className="mt-10 p-6 md:p-8 rounded-3xl bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 border border-amber-200/60 dark:border-amber-900/40 shadow-sm">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center">
-                  <Lightbulb className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-                </div>
-                <h3 className="font-black text-lg text-slate-900 dark:text-white">Pro Tip from Travel Hunter</h3>
-              </div>
-              <p className="text-base md:text-lg text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
-                {destination.highlights[0]}
-              </p>
-            </div>
-          )}
         </section>
 
         {/* ── 5. Highlights ── */}
         {destination.highlights && destination.highlights.length > 0 && (
-          <section>
+          <section className="py-12 md:py-16 border-b border-slate-100 dark:border-slate-800/60">
             <SectionHeading label="Must-See" title="Highlights" />
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {destination.highlights.map((item, i) => (
                 <li
                   key={i}
-                  className="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800"
+                  className="flex items-start gap-4 p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 hover:shadow-md transition-shadow"
                 >
-                  <span className="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-950/50 flex items-center justify-center shrink-0">
-                    <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <span className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/50 flex items-center justify-center shrink-0">
+                    <Sparkles className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                   </span>
-                  <span className="text-sm md:text-base text-slate-700 dark:text-slate-200 font-medium pt-1">
+                  <span className="text-sm md:text-base text-slate-700 dark:text-slate-200 font-medium pt-1 leading-relaxed">
                     {item}
                   </span>
                 </li>
@@ -258,45 +299,48 @@ export function DestinationDetail({ destination, related }: DestinationDetailPro
 
         {/* ── 6. Image Gallery ── */}
         {galleryImages.length > 0 && (
-          <section>
+          <section className="py-12 md:py-16 border-b border-slate-100 dark:border-slate-800/60">
             <SectionHeading label="Gallery" title="Photos & Views" />
             <DestinationGallery images={galleryImages} name={destination.name} />
           </section>
         )}
 
         {/* ── 7. Practical Info ── */}
-        <section>
+        <section className="py-12 md:py-16">
           <SectionHeading label="Plan Your Visit" title="Practical Info" />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
             {practicalItems.map(({ icon: Icon, title, content }) => (
               <div
                 key={title}
-                className="p-6 md:p-8 rounded-[2rem] border border-slate-200/60 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm hover:shadow-md transition-shadow"
+                className="p-6 md:p-8 rounded-[2rem] border border-slate-200/60 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/30 hover:bg-white dark:hover:bg-slate-900 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
               >
-                <div className="w-14 h-14 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center mb-6 border border-emerald-100 dark:border-emerald-900/50">
+                <div className="w-14 h-14 rounded-2xl bg-emerald-100 dark:bg-emerald-950/40 flex items-center justify-center mb-6 border border-emerald-200/50 dark:border-emerald-900/50 shadow-inner">
                   <Icon className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
                 </div>
                 <h3 className="text-xl font-black text-slate-900 dark:text-white mb-3">{title}</h3>
-                <p className="text-base text-slate-600 dark:text-slate-400 leading-relaxed">{content}</p>
+                <p className="text-base text-slate-600 dark:text-slate-400 leading-relaxed font-medium">{content}</p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* ── 8. Related Places ── */}
-        {related.length > 0 && (
-          <section className="pb-8">
-            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-6">
-              <SectionHeading label="Explore More" title="Related Places" />
+      </div>
+
+      {/* ── 8. Related Places (MOVED OUTSIDE MAIN CONTAINER) ── */}
+      {related.length > 0 && (
+        <section className="bg-slate-50 dark:bg-slate-900/50 py-16 md:py-24 border-t border-slate-200 dark:border-slate-800">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+              <SectionHeading label="Explore More" title="Suggested Places" />
               <Link
                 href={ROUTES.DESTINATIONS}
-                className="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 hover:text-emerald-500 transition-colors sm:mb-6"
+                className="inline-flex items-center justify-center gap-2 text-sm font-bold text-white bg-slate-900 dark:bg-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 px-6 py-3 rounded-full transition-all active:scale-95 shadow-md mb-8 sm:mb-8"
               >
-                View all <ChevronRight className="w-4 h-4" />
+                View all destinations <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
               {related.map((place) => {
                 const thumb = getDestinationThumbnail(place)
                 const placeRating = getRating(place.slug || place.id)
@@ -304,9 +348,9 @@ export function DestinationDetail({ destination, related }: DestinationDetailPro
                   <div key={place.id} className="group relative">
                     <Link
                       href={getDestinationHref(place)}
-                      className="block rounded-[2rem] overflow-hidden border-0 bg-white dark:bg-slate-900 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:shadow-xl hover:-translate-y-2 transition-all duration-500 ring-1 ring-slate-100 dark:ring-slate-800 hover:ring-emerald-500/50"
+                      className="block rounded-[2rem] overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 hover:border-emerald-300 dark:hover:border-emerald-700"
                     >
-                      <div className="relative h-48 overflow-hidden bg-slate-100 dark:bg-slate-800">
+                      <div className="relative h-56 overflow-hidden bg-slate-100 dark:bg-slate-800">
                         {thumb ? (
                           <img
                             src={thumb}
@@ -315,7 +359,7 @@ export function DestinationDetail({ destination, related }: DestinationDetailPro
                             loading="lazy"
                           />
                         ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-4xl">
+                          <div className="w-full h-full bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-5xl">
                             {CATEGORY_ICONS[place.category]}
                           </div>
                         )}
@@ -323,19 +367,19 @@ export function DestinationDetail({ destination, related }: DestinationDetailPro
                           {place.category}
                         </span>
                       </div>
-                      <div className="p-6">
-                        <h3 className="font-black text-xl text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-1 mb-2">
+                      <div className="p-6 md:p-8">
+                        <h3 className="font-black text-xl md:text-2xl text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-1 mb-3">
                           {place.name}
                         </h3>
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between mt-auto">
                           {place.location && (
-                            <div className="flex items-center gap-1 text-sm text-slate-500 dark:text-slate-400">
-                              <MapPin className="w-3.5 h-3.5 text-emerald-500" />
+                            <div className="flex items-center gap-1.5 text-sm font-medium text-slate-500 dark:text-slate-400">
+                              <MapPin className="w-4 h-4 text-emerald-500 shrink-0" />
                               <span className="truncate">{place.location}</span>
                             </div>
                           )}
-                          <div className="flex items-center gap-1 text-sm text-amber-500 font-bold">
-                            <Star className="w-3.5 h-3.5 fill-amber-500" />
+                          <div className="flex items-center gap-1.5 text-sm text-amber-500 font-black bg-amber-50 dark:bg-amber-950/30 px-2.5 py-1 rounded-lg">
+                            <Star className="w-4 h-4 fill-amber-500" />
                             {placeRating}
                           </div>
                         </div>
@@ -345,9 +389,9 @@ export function DestinationDetail({ destination, related }: DestinationDetailPro
                 )
               })}
             </div>
-          </section>
-        )}
-      </div>
+          </div>
+        </section>
+      )}
     </article>
   )
 }
