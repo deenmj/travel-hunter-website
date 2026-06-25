@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Hop as Home, Compass, Video, Info } from 'lucide-react'
+import { Hop as Home, Compass, Video, Info, BookOpen } from 'lucide-react'
 import { ROUTES } from '@/lib/constants'
 
 export function BottomNav() {
@@ -12,6 +12,7 @@ export function BottomNav() {
     { href: ROUTES.HOME, icon: Home, label: 'Home' },
     { href: ROUTES.DESTINATIONS, icon: Compass, label: 'Explore' },
     { href: ROUTES.VIDEOS, icon: Video, label: 'Video' },
+    { href: ROUTES.BLOG, icon: BookOpen, label: 'Blog' },
     { href: ROUTES.ABOUT, icon: Info, label: 'About' },
   ]
 
@@ -19,7 +20,7 @@ export function BottomNav() {
 
   return (
     <nav className="bottom-nav-root fixed bottom-0 left-0 right-0 md:hidden bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl border-t border-slate-200/50 dark:border-slate-800/50 z-40 pb-safe">
-      <div className="flex items-center justify-around h-16 px-2">
+      <div className="flex items-center justify-around h-16 px-1">
         {navItems.map((item) => {
           const Icon = item.icon
           const active = isActive(item.href)
@@ -35,7 +36,7 @@ export function BottomNav() {
               }`}
             >
               <Icon className={`w-5 h-5 mb-1 ${active ? 'stroke-[2.5px]' : ''}`} />
-              <span className={`text-[10px] ${active ? 'font-bold' : 'font-medium'}`}>{item.label}</span>
+              <span className={`text-[9px] sm:text-[10px] ${active ? 'font-bold' : 'font-medium'}`}>{item.label}</span>
               {active && (
                 <span className="absolute -bottom-1 w-1 h-1 rounded-full bg-emerald-500" />
               )}
