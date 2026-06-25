@@ -133,53 +133,76 @@ export function DestinationDetail({ destination, related }: DestinationDetailPro
   return (
     <article className="bg-white dark:bg-slate-950 min-h-screen">
       {/* ── 1. Hero ── */}
-      <section className="relative w-full min-h-[50vh] md:min-h-[60vh] flex items-end overflow-hidden">
-        {heroImage ? (
-          <img
-            src={heroImage}
-            alt={destination.name}
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-600 to-teal-800" />
-        )}
-        <div className={`absolute inset-0 bg-gradient-to-t ${styles.gradient} via-slate-900/60 to-slate-900/40`} />
+      <section className="relative w-full min-h-[60vh] md:min-h-[70vh] flex flex-col justify-between overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          {heroImage ? (
+            <img
+              src={heroImage}
+              alt={destination.name}
+              className="w-full h-full object-cover object-center scale-[1.02] transform transition-transform duration-1000"
+            />
+          ) : (
+            <div className="w-full h-full bg-slate-900" />
+          )}
+          
+          {/* Refined Premium Gradients for Text Readability */}
+          {/* Top gradient for nav bar visibility */}
+          <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-black/70 via-black/30 to-transparent" />
+          
+          {/* Bottom gradient for title visibility */}
+          <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+          
+          {/* Subtle colored tint based on category */}
+          <div className={`absolute inset-0 mix-blend-overlay opacity-30 bg-gradient-to-tr ${styles.gradient}`} />
+        </div>
 
-        <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 pt-28">
+        {/* Top Navigation Bar */}
+        <div className="relative z-20 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 flex items-center justify-between">
           <Link
             href={ROUTES.DESTINATIONS}
-            className="inline-flex items-center gap-1.5 text-white/80 hover:text-white text-sm font-semibold mb-6 md:mb-8 transition-colors bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full backdrop-blur-md"
+            className="group flex items-center gap-2 text-white text-sm font-semibold transition-all bg-black/20 hover:bg-black/40 px-4 sm:px-5 py-2.5 rounded-full backdrop-blur-md border border-white/10"
           >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Destinations
+            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+            <span className="hidden sm:inline">Back to Destinations</span>
+            <span className="inline sm:hidden">Back</span>
           </Link>
 
-          <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-5 md:mb-6">
+          <ShareButton 
+            url={`${typeof window !== 'undefined' ? window.location.origin : ''}${getDestinationHref(destination)}`} 
+            title={destination.name} 
+            className="flex items-center gap-2 h-10 sm:h-11 px-4 sm:px-5 rounded-full bg-black/20 hover:bg-black/40 text-white font-medium text-sm backdrop-blur-md border border-white/10 transition-all"
+          />
+        </div>
+
+        {/* Bottom Content Area */}
+        <div className="relative z-20 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 sm:pb-12 mt-auto">
+          {/* Branding Subtitle */}
+          <div className="flex items-center gap-2 mb-4 opacity-90">
+            <span className="w-6 h-px bg-white/60"></span>
+            <span className="text-[10px] sm:text-xs font-bold text-white uppercase tracking-[0.2em]">
+              Travel Hunter Guide
+            </span>
+          </div>
+
+          {/* Badges */}
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4 sm:mb-5">
             <span
-              className={`inline-flex items-center gap-1.5 px-3 md:px-4 py-1.5 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-wider shadow-lg whitespace-nowrap ${styles.badge}`}
+              className={`inline-flex items-center gap-1.5 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-widest shadow-lg border border-white/20 backdrop-blur-md ${styles.badge}`}
             >
               {CATEGORY_ICONS[destination.category]} {CATEGORY_LABELS[destination.category]}
             </span>
             {destination.is_top_pick && (
-              <span className="inline-flex items-center gap-1.5 px-3 md:px-4 py-1.5 bg-amber-500/95 backdrop-blur-md text-white text-[10px] md:text-xs font-black rounded-xl shadow-lg uppercase tracking-wider whitespace-nowrap">
-                <ShieldCheck className="w-3.5 h-3.5 md:w-4 md:h-4" /> Travel Hunter Approved
+              <span className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1 sm:py-1.5 bg-amber-500/95 border border-amber-400/50 backdrop-blur-md text-white text-[10px] sm:text-xs font-bold rounded-full shadow-lg uppercase tracking-widest">
+                <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> Top Pick
               </span>
             )}
           </div>
 
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] drop-shadow-2xl max-w-4xl break-words">
-              {destination.name}
-            </h1>
-            
-            <div className="shrink-0 flex items-center">
-              <ShareButton 
-                url={`${typeof window !== 'undefined' ? window.location.origin : ''}${getDestinationHref(destination)}`} 
-                title={destination.name} 
-                className="h-12 px-6 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-md border border-white/20" 
-              />
-            </div>
-          </div>
+          {/* Title */}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.05] tracking-tight drop-shadow-2xl max-w-4xl break-words">
+            {destination.name}
+          </h1>
         </div>
       </section>
 
