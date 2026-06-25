@@ -193,7 +193,7 @@ export function SriLankaMap({
         })
 
         const map = L.map(containerRef.current, {
-          zoomControl:       true,
+          zoomControl:       false,
           scrollWheelZoom:   false,
           attributionControl: false,
           dragging:          true,
@@ -201,6 +201,8 @@ export function SriLankaMap({
           doubleClickZoom:   true,
         })
         mapRef.current = map
+        
+        L.control.zoom({ position: 'bottomright' }).addTo(map)
 
         // Note: Removed the tile layer for a cleaner, premium "floating island" look.
         // It helps focus entirely on the districts without distracting terrain.

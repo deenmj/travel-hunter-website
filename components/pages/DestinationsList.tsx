@@ -193,7 +193,7 @@ export function DestinationsList() {
 
         {/* ── Desktop: Inline Map ── */}
         {MapComponents && (
-          <div className="hidden md:block mb-8">
+          <div className="hidden md:block mb-6">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest flex items-center gap-2">
                 <span>🗺️</span> Browse by District
@@ -212,7 +212,7 @@ export function DestinationsList() {
               destinations={destinations}
               selectedDistrict={selectedMapDistrict}
               onDistrictSelect={handleDistrictSelect}
-              height={330}
+              height={450}
               className="w-full"
             />
           </div>
