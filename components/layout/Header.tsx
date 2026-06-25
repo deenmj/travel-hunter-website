@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Search, Sun, Moon } from 'lucide-react'
+import { Search, Sun, Moon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/lib/constants'
@@ -11,7 +11,6 @@ import { SearchModal } from '@/components/ui/SearchModal'
 
 export function Header() {
   const pathname = usePathname()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const { theme, setTheme } = useTheme()
 
@@ -39,7 +38,7 @@ export function Header() {
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation (Hidden on Mobile) */}
           <nav className="hidden md:flex items-center gap-1 bg-slate-50 dark:bg-slate-900 px-1.5 py-1.5 rounded-full border border-slate-200/50 dark:border-slate-800/50 mx-auto">
             {navLinks.map((link) => (
               <Link key={link.href} href={link.href}>
@@ -57,12 +56,12 @@ export function Header() {
             ))}
           </nav>
 
-          {/* Right actions */}
+          {/* Right actions (Search & Theme - Visible everywhere) */}
           <div className="flex items-center gap-1.5 sm:gap-2 ml-auto md:ml-0">
-            {/* Search trigger */}
+            {/* Desktop Search */}
             <Button 
               variant="outline" 
-              className="hidden lg:flex h-10 w-64 justify-between items-center px-4 rounded-full border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+              className="hidden lg:flex h-10 w-64 justify-between items-center px-4 rounded-full border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 shadow-sm hover:shadow-md transition-all"
               onClick={() => setSearchOpen(true)}
             >
               <div className="flex items-center gap-2">
@@ -74,57 +73,27 @@ export function Header() {
               </kbd>
             </Button>
 
+            {/* Mobile Search Icon */}
             <Button 
               variant="ghost" 
               size="icon" 
-              className="lg:hidden h-10 w-10 rounded-full"
+              className="lg:hidden h-10 w-10 rounded-full bg-slate-50 dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/50 shadow-sm"
               onClick={() => setSearchOpen(true)}
             >
-              <Search className="w-5 h-5" />
+              <Search className="w-5 h-5 text-slate-600 dark:text-slate-400" />
             </Button>
 
+            {/* Theme Toggle */}
             <Button
               variant="ghost"
               size="icon"
-              className="h-10 w-10 rounded-full text-slate-500"
+              className="h-10 w-10 rounded-full bg-slate-50 dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/50 shadow-sm text-slate-600 dark:text-slate-400"
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             >
               {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </Button>
-
-            {/* Mobile menu button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden h-10 w-10 rounded-full text-slate-500"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </Button>
           </div>
         </div>
-
-        {/* Mobile Navigation */}
-        {mobileMenuOpen && (
-          <nav className="md:hidden border-t border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-950 absolute w-full left-0 shadow-xl pb-6 rounded-b-3xl">
-            <div className="px-4 py-4 space-y-2">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-5 py-3 rounded-xl font-semibold transition-all ${
-                    isActive(link.href)
-                      ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400'
-                      : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900'
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </nav>
-        )}
       </header>
 
       {/* Search Modal */}
