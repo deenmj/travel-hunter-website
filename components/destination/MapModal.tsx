@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { X, Map } from 'lucide-react'
+import { X } from 'lucide-react'
 import { SriLankaMap } from './SriLankaMap'
 import type { Destination } from '@/lib/types'
 
@@ -20,15 +20,19 @@ export function MapModal({
   selectedDistrict,
   onDistrictSelect,
 }: MapModalProps) {
-  // Prevent body scroll when modal is open
+  // Lock scroll + hide site header/footer while modal is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
+      // Add class so global CSS can hide header/footer/bottom-nav
+      document.documentElement.classList.add('map-modal-open')
     } else {
       document.body.style.overflow = ''
+      document.documentElement.classList.remove('map-modal-open')
     }
     return () => {
       document.body.style.overflow = ''
+      document.documentElement.classList.remove('map-modal-open')
     }
   }, [isOpen])
 
@@ -36,7 +40,6 @@ export function MapModal({
   const handleDistrictSelect = (district: string | null) => {
     onDistrictSelect(district)
     if (district) {
-      // Small delay so the selection animation shows before closing
       setTimeout(onClose, 350)
     }
   }
@@ -45,53 +48,50 @@ export function MapModal({
 
   return (
     <>
-      {/* Full-screen Modal Panel */}
+      {/* True full-screen overlay — sits ABOVE everything */}
       <div
-        className="fixed inset-0 z-[9999] flex flex-col bg-slate-50 dark:bg-slate-950 animate-in slide-in-from-bottom duration-300 ease-out"
-        style={{ height: '100dvh' }}
+        className="map-modal-overlay"
         role="dialog"
         aria-modal="true"
         aria-label="Browse destinations on map"
       >
-        {/* ── Map Area (100% height) ── */}
-        <div className="relative flex-1 overflow-hidden">
-          
-          {/* ── Floating Header ── */}
-          <div className="absolute top-4 inset-x-4 z-[1001] flex justify-between items-start pointer-events-none">
-            <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-lg rounded-2xl px-4 py-2 pointer-events-auto border border-slate-200/50 dark:border-slate-800/50">
-              <h2 className="font-bold text-sm text-slate-900 dark:text-white leading-tight">Sri Lanka Map</h2>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">Tap to filter</p>
+        {/* ── Compact Top Bar ── */}
+        <div className="map-modal-topbar">
+          <div className="map-modal-title">
+            <span className="map-modal-title-icon">🗺️</span>
+            <div>
+              <div className="map-modal-title-text">Sri Lanka Map</div>
+              <div className="map-modal-title-sub">Tap a district to filter</div>
             </div>
-            <button
-              onClick={onClose}
-              className="w-10 h-10 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-full flex items-center justify-center pointer-events-auto transition-all active:scale-95 border border-slate-200/50 dark:border-slate-800/50"
-              aria-label="Close map"
-            >
-              <X className="w-5 h-5" />
-            </button>
           </div>
+          <button
+            onClick={onClose}
+            className="map-modal-close-x"
+            aria-label="Close map"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
 
+        {/* ── Full Map Area ── */}
+        <div className="map-modal-map-area">
           <SriLankaMap
             destinations={destinations}
             selectedDistrict={selectedDistrict}
             onDistrictSelect={handleDistrictSelect}
             height={undefined}
-            className="h-full w-full !rounded-none !border-0"
+            className="map-modal-map"
           />
+        </div>
 
-          {/* ── Bottom Floating Action Button ── */}
-          <div className="absolute bottom-8 inset-x-6 z-[1000]">
-            <button
-              onClick={onClose}
-              className={`w-full h-14 rounded-2xl font-bold text-[15px] shadow-2xl transition-all active:scale-[0.98] flex items-center justify-center ${
-                selectedDistrict 
-                  ? 'bg-emerald-600 text-white shadow-emerald-900/20' 
-                  : 'bg-slate-900 dark:bg-white text-white dark:text-slate-900'
-              }`}
-            >
-              {selectedDistrict ? `Show Results (${selectedDistrict})` : 'Close Map'}
-            </button>
-          </div>
+        {/* ── Bottom Action Button ── */}
+        <div className="map-modal-footer">
+          <button
+            onClick={onClose}
+            className={`map-modal-cta ${selectedDistrict ? 'map-modal-cta--selected' : ''}`}
+          >
+            {selectedDistrict ? `✓ Show results for ${selectedDistrict}` : 'Close Map'}
+          </button>
         </div>
       </div>
     </>
