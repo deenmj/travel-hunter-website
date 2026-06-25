@@ -207,7 +207,7 @@ export function DestinationDetail({ destination, related }: DestinationDetailPro
       </section>
 
       {/* ── 2. Quick Info Row ── */}
-      <section className="border-b border-slate-200/50 dark:border-slate-800/50 bg-white dark:bg-slate-950 sticky top-[64px] md:top-[72px] z-40 shadow-sm w-full">
+      <section className="border-b border-slate-200/50 dark:border-slate-800/50 bg-white dark:bg-slate-950 shadow-sm w-full">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 md:py-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-4">
             {quickInfo.map(({ icon: Icon, label, value, highlight }) => (
